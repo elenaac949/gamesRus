@@ -8,9 +8,14 @@ class Controlador
 {
     public function __construct() {}
 
+    public function entrar()
+    {
+        Vista::entrar();
+    }
+
     public function inicia()
     {
-        Vista::Inicio();
+        Vista::inicio();
     }
 
     public function registra()
@@ -21,9 +26,14 @@ class Controlador
 
 $programa = new Controlador();
 
-$programa->inicia();
+$programa->entrar();
 
-$programa->registra();
+if(isset($_POST['entrar'])){
+    $programa->inicia();
+}
+/* $programa->inicia();
+
+$programa->registra(); */
 
 
 if (isset($_POST['enviar'])) {
