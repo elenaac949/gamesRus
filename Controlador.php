@@ -48,9 +48,7 @@ if (isset($_POST['registrar'])) {
 
         // Registrar al usuario
         $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword);
-        echo 'Usuario registrado correctamente.';
     } else {
         echo 'Las contraseñas no coinciden.';
     }
 }
-

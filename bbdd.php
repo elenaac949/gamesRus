@@ -80,7 +80,6 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
-    
 }
 
 // Uso de la clase
