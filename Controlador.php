@@ -30,7 +30,7 @@ $programa->entrar();
 
 if(isset($_POST['entrar'])){
     $programa->inicia();
-}
+}//no se como hacer que se deje de llamar a la pagina de landing
 /* $programa->inicia();
 
 $programa->registra(); */

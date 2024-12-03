@@ -8,10 +8,7 @@
 </head>
 
 <body>
-    <?php
-        
 
-    ?>
     <form action="" method="post">
         <input type="submit" name="entrar" value ="Entrar">
     </form>
