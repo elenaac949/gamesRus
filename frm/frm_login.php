@@ -8,8 +8,8 @@
 <body>
     <div class="layout">
         <form action="#" method="post">
-            <input type="text" name="usuario" id="nombre" placeholder="Introduce nick o correo">
-            <input type="password" name="password" id="password" placeholder="Contraseña">
+            <input type="text" name="usuario" id="usuario" placeholder="Introduce nick o correo">
+            <input type="password" name="contrasenia" id="password" placeholder="Contraseña">
             <input type="submit" value="Entrar" name="enviar">
         </form>
 

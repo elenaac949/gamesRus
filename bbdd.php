@@ -14,6 +14,7 @@ class Database
         }
     }
 
+    //Mostramos toda la tabla de usuarios
     public function mostrarProductos()
     {
         try {
@@ -45,28 +46,41 @@ class Database
             $sql = "SELECT `nick`, `email`, `contrasenia` FROM `usuario`;";
             $consulta = $this->conexion->query($sql);
             foreach ($consulta as $fila) {
-                if ($fila['nick'] == $credencial || $fila['email'] == $credencial ) {
+                if ($fila['nick'] == $credencial || $fila['email'] == $credencial) {
                     echo 'usuario correcto';
-                    
+
                     if ($fila['contrasenia'] == $password) {
                         echo 'Contraseña correcta';
                     }
-                }else{
+                } else {
                     echo 'error';
                 }
-                
-                
-                
-
-                // echo "Nick: " . $fila['nick'] . '<br>';
-                // echo "Email: " . $fila['email'] . '<br>';
-
-                // echo "----------------<br>";
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+
+    //Registro de usuario
+    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia)
+    {
+        try {
+            $sql = "INSERT INTO `usuario` (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`) 
+                    VALUES (:nick, :correo, :nombre, :apellidos, :contrasenia)";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute([
+                ':nick' => $nick,
+                ':correo' => $correo,
+                ':nombre' => $nombre,
+                ':apellidos' => $apellidos,
+                ':contrasenia' => $contrasenia,
+            ]);
+            echo "Usuario registrado correctamente.";
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    
 }
 
 // Uso de la clase
