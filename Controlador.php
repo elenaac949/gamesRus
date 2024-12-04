@@ -8,35 +8,47 @@ class Controlador
 {
     public function __construct() {}
 
+
     public function entrar()
     {
+        //Llamamos a la clase vista y usamos el metodo entrar -> nos muestra el landing
         Vista::entrar();
     }
 
     public function inicia()
     {
+        //Llamamos a la clase vista y usamos el metodo inicio -> nos muestra el formulario inicio
+
         Vista::inicio();
     }
 
     public function registra()
     {
+         //Llamamos a la clase vista y usamos el metodo inicio -> nos muestra el formulario inicio
         Vista::registro();
     }
 }
 
 $programa = new Controlador();
 
-$programa->entrar();
+//Mostramos el landing
+if(!isset($_POST['entrar'])){
+    $programa->entrar();
+}
 
-if(isset($_POST['entrar'])){
+
+//si existe la variable entrar nos muestra el formulario de login
+if (isset($_POST['entrar'])) {
     $programa->inicia();
-}//no se como hacer que se deje de llamar a la pagina de landing
-/* $programa->inicia();
+} //no se como hacer que se deje de llamar a la pagina de landing
+/* $programa->inicia();*/
 
-$programa->registra(); */
+// $programa->registra();
 
-// Si enviamos las credenciales de usuario y contraseña
+//si existe la variable enviar nos muestra el formulario de login
+
 if (isset($_POST['enviar'])) {
+    // Si enviamos las credenciales de usuario y contraseña
     $usuario = $_POST['usuario']; // validamos el nombre de usuario, nick o contraseña
     $contrasenia = $_POST['contrasenia'];
     $contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT);
@@ -45,7 +57,8 @@ if (isset($_POST['enviar'])) {
     $baseDatos->controlLogin($usuario, $contraseniaHasheada);
 }
 
-//Si registramos usuario nuevo
+
+//si existe la variable registrar nos muestra el formulario de login
 if (isset($_POST['registrar'])) {
     $nombre = $_POST['nombre'];
     $apellidos = $_POST['apellidos'];
