@@ -35,14 +35,17 @@ if(isset($_POST['entrar'])){
 
 $programa->registra(); */
 
-
+// Si enviamos las credenciales de usuario y contraseña
 if (isset($_POST['enviar'])) {
     $usuario = $_POST['usuario']; // validamos el nombre de usuario, nick o contraseña
     $contrasenia = $_POST['contrasenia'];
-    echo $usuario . " " . $contrasenia;
-    $baseDatos->controlLogin($usuario, $contrasenia);
+    $contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT);
+    //Para controlar que funciona
+    // echo $usuario . " " . $contrasenia; 
+    $baseDatos->controlLogin($usuario, $contraseniaHasheada);
 }
 
+//Si registramos usuario nuevo
 if (isset($_POST['registrar'])) {
     $nombre = $_POST['nombre'];
     $apellidos = $_POST['apellidos'];

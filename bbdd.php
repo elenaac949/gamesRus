@@ -7,7 +7,7 @@ class Database
     public function __construct($dsn, $usuario, $password)
     {
         try {
-            $this->conexion = new PDO($dsn, $usuario, $password);
+            $this->conexion = new PDO($dsn, $usuario, $password, array(PDO::ATTR_PERSISTENT => true));
         } catch (PDOException $e) {
             echo "Error (" . $e->getCode() . ") al abrir la base de datos: " . $e->getMessage();
             exit;
@@ -43,30 +43,40 @@ class Database
     public function controlLogin($credencial, $password)
     {
         try {
-            $sql = "SELECT `nick`, `email`, `contrasenia` FROM `usuario`;";
-            $consulta = $this->conexion->query($sql);
-            foreach ($consulta as $fila) {
-                if ($fila['nick'] == $credencial || $fila['email'] == $credencial) {
-                    echo 'usuario correcto';
-
-                    if ($fila['contrasenia'] == $password) {
-                        echo 'Contraseña correcta';
-                    }
+            $sql = "SELECT `nick`, `email`, `contrasenia` FROM `usuario` 
+                    WHERE `nick` = :credencial OR `email` = :credencial";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':credencial', $credencial);
+            $stmt->execute();
+    
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if ($usuario) {
+                // Verificar la contraseña
+                if (password_verify($password, $usuario['contrasenia'])) {
+                    echo 'Usuario y contraseña correctos.';
+                    return true; // Retornar un valor en lugar de seguir con echo
                 } else {
-                    echo 'error';
+                    echo 'Contraseña incorrecta.';
+                    return false;
                 }
+            } else {
+                echo 'Usuario no registrado.';
+                return false;
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
+            return false;
         }
     }
+    
 
     //Registro de usuario
     public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia)
     {
         try {
             $sql = "INSERT INTO `usuario` (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`) 
-                    VALUES (:nick, :correo, :nombre, :apellidos, :contrasenia)";
+                    VALUES (:nick, :correo, :nombre, :apellidos, :contrasenia)"; //etiquetas para que luego se cambien son valores predeterminado consultas preparadas 
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([
                 ':nick' => $nick,
@@ -80,6 +90,8 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
+
+   
 }
 
 // Uso de la clase
