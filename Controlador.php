@@ -30,10 +30,12 @@ class Controlador
     {
         global $baseDatos;
         Vista::MuestraLogin();
+
         if (isset($_POST['enviar'])) {
-            // Si enviamos las credenciales de usuario y contraseña
+            
             $usuario = $_POST['usuario']; // validamos el nombre de usuario, nick o contraseña
             $contrasenia = $_POST['contrasenia'];
+            
             $contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT);
             //Para controlar que funciona
             // echo $usuario . " " . $contrasenia; 

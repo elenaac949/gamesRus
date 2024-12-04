@@ -43,33 +43,6 @@ class Database
     public function controlLogin($credencial, $password)
     {
         try {
-            $sql = "SELECT nick, email, contrasenia FROM usuario 
-                    WHERE nick = :credencial OR email = :credencial";
-            $stm = $this->conexion->prepare($sql);
-            $stm->execute([
-                ':credencial' => $credencial, // Usamos un marcador coherente
-            ]);
-    
-            $usuario = $stm->fetch(PDO::FETCH_ASSOC);
-    
-            if ($usuario) { // Si se encontró un usuario
-                if (password_verify($usuario['contrasenia'],$password)) {
-                    echo 'Usuario y contraseña correctos';
-                } else {
-                    echo 'Contraseña incorrecta';
-                }
-            } else {
-                echo 'Usuario no registrado';
-            }
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
-    
-
-       
-
-        /* try {
             $sql = "SELECT `nick`, `email`, `contrasenia` FROM `usuario` 
                     WHERE `nick` = :credencial OR `email` = :credencial";
             $stmt = $this->conexion->prepare($sql);
@@ -94,7 +67,13 @@ class Database
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
             return false;
-        } */
+        } 
+    }
+    
+
+       
+
+         
     
     
 
