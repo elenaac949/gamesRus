@@ -15,34 +15,61 @@ class Database
     }
 
     //Mostramos toda la tabla de usuarios
-    public function mostrarProductos()
+    // public function mostrarProductos()
+    // {
+    //     try {
+    //         $sql = "SELECT * FROM USUARIO;";
+    //         $consulta = $this->conexion->query($sql);
+
+    //         if ($consulta === false) {
+    //             throw new Exception("Error al ejecutar la consulta SQL.");
+    //         }
+
+    //         // Iterar y mostrar los resultados
+    //         foreach ($consulta as $fila) {
+    //             echo "idUsuario: " . $fila['idUsuario'] . '<br>';
+    //             echo "Nick: " . $fila['nick'] . '<br>';
+    //             echo "Email: " . $fila['email'] . '<br>';
+    //             echo "Nombre: " . $fila['nombre'] . '<br>';
+    //             echo "Apellidos: " . $fila['apellidos'] . '<br>';
+    //             echo "Contraseña: " . $fila['contrasenia'] . '<br>';
+    //             echo "----------------<br>";
+    //         }
+    //     } catch (Exception $e) {
+    //         echo "Error: " . $e->getMessage();
+    //     }
+    // }
+
+    public function controlLogin($credencial, $password)
     {
         try {
-            $sql = "SELECT * FROM USUARIO;";
-            $consulta = $this->conexion->query($sql);
-
-            if ($consulta === false) {
-                throw new Exception("Error al ejecutar la consulta SQL.");
-            }
-
-            // Iterar y mostrar los resultados
-            foreach ($consulta as $fila) {
-                echo "idUsuario: " . $fila['idUsuario'] . '<br>';
-                echo "Nick: " . $fila['nick'] . '<br>';
-                echo "Email: " . $fila['email'] . '<br>';
-                echo "Nombre: " . $fila['nombre'] . '<br>';
-                echo "Apellidos: " . $fila['apellidos'] . '<br>';
-                echo "Contraseña: " . $fila['contrasenia'] . '<br>';
-                echo "----------------<br>";
+            $sql = "SELECT nick, email, contrasenia FROM usuario 
+                    WHERE nick = :credencial OR email = :credencial";
+            $stm = $this->conexion->prepare($sql);
+            $stm->execute([
+                ':credencial' => $credencial, // Usamos un marcador coherente
+            ]);
+    
+            $usuario = $stm->fetch(PDO::FETCH_ASSOC);
+    
+            if ($usuario) { // Si se encontró un usuario
+                if (password_verify($usuario['contrasenia'],$password)) {
+                    echo 'Usuario y contraseña correctos';
+                } else {
+                    echo 'Contraseña incorrecta';
+                }
+            } else {
+                echo 'Usuario no registrado';
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+    
 
-    public function controlLogin($credencial, $password)
-    {
-        try {
+       
+
+        /* try {
             $sql = "SELECT `nick`, `email`, `contrasenia` FROM `usuario` 
                     WHERE `nick` = :credencial OR `email` = :credencial";
             $stmt = $this->conexion->prepare($sql);
@@ -53,7 +80,7 @@ class Database
     
             if ($usuario) {
                 // Verificar la contraseña
-                if (password_verify($password, $usuario['contrasenia'])) {
+                if ($password === $usuario['contrasenia']) {
                     echo 'Usuario y contraseña correctos.';
                     return true; // Retornar un valor en lugar de seguir con echo
                 } else {
@@ -67,8 +94,8 @@ class Database
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
             return false;
-        }
-    }
+        } */
+    
     
 
     //Registro de usuario
