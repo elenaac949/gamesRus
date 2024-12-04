@@ -37,12 +37,12 @@ $programa->registra(); */
 
 // Si enviamos las credenciales de usuario y contraseña
 if (isset($_POST['enviar'])) {
-    $usuario = $_POST['usuario']; // validamos el nombre de usuario, nick o contraseña
-    $contrasenia = $_POST['contrasenia'];
-    $contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT);
+    $usuario = trim($_POST['usuario']); // validamos el nombre de usuario, nick o contraseña
+    $contrasenia = trim($_POST['contrasenia']);
+    /* $contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT);  ESTA CONTRASEÑA NO SE HASHEA AGAIN*/
     //Para controlar que funciona
-    echo $usuario . " " . $contraseniaHasheada; 
-    $baseDatos->controlLogin($usuario, $contraseniaHasheada);
+    echo $usuario . " " . $contrasenia; 
+    $baseDatos->controlLogin( $usuario,$contrasenia);
 }
 
 //Si registramos usuario nuevo
