@@ -13,7 +13,7 @@ body{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('/images/fondo.jpg') no-repeat;
+    background: url('/gamesRus/img/fondo.jpg') no-repeat;
     background-size: cover;
     background-position: center;
 
