@@ -47,16 +47,16 @@
 
     <div class="banner">
         <div class="slider" style="--quantity: 10">
-            <div class="item" style="--position: 1"><img src="images/juego1.jpg" alt=""></div>
-            <div class="item" style="--position: 2"><img src="images/juego2.jpg" alt=""></div>
-            <div class="item" style="--position: 3"><img src="images/juego3.jpg" alt=""></div>
-            <div class="item" style="--position: 4"><img src="images/juego4.jpg" alt=""></div>
-            <div class="item" style="--position: 5"><img src="images/juego5.jpg" alt=""></div>
-            <div class="item" style="--position: 6"><img src="images/juego6.jpg" alt=""></div>
-            <div class="item" style="--position: 7"><img src="images/juego7.jpg" alt=""></div>
-            <div class="item" style="--position: 8"><img src="images/juego8.jpg" alt=""></div>
-            <div class="item" style="--position: 9"><img src="images/juego9.jpg" alt=""></div>
-            <div class="item" style="--position: 10"><img src="images/juego10.jpg" alt=""></div>
+            <div class="item" style="--position: 1"><img src="img/juego1.jpg" alt=""></div>
+            <div class="item" style="--position: 2"><img src="img/juego2.jpg" alt=""></div>
+            <div class="item" style="--position: 3"><img src="img/juego3.jpg" alt=""></div>
+            <div class="item" style="--position: 4"><img src="img/juego4.jpg" alt=""></div>
+            <div class="item" style="--position: 5"><img src="img/juego5.jpg" alt=""></div>
+            <div class="item" style="--position: 6"><img src="img/juego6.jpg" alt=""></div>
+            <div class="item" style="--position: 7"><img src="img/juego7.jpg" alt=""></div>
+            <div class="item" style="--position: 8"><img src="img/juego8.jpg" alt=""></div>
+            <div class="item" style="--position: 9"><img src="img/juego9.jpg" alt=""></div>
+            <div class="item" style="--position: 10"><img src="img/juego10.jpg" alt=""></div>
            
         </div>
         <div class="content">
