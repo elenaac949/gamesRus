@@ -41,7 +41,7 @@ if (isset($_POST['enviar'])) {
     $contrasenia = $_POST['contrasenia'];
     $contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT);
     //Para controlar que funciona
-    // echo $usuario . " " . $contrasenia; 
+    echo $usuario . " " . $contraseniaHasheada; 
     $baseDatos->controlLogin($usuario, $contraseniaHasheada);
 }
 
