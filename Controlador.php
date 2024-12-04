@@ -7,6 +7,7 @@ require_once "bbdd.php";
 class Controlador
 {
     private $modelo;
+    
     public function __construct()
     {
         // $this->modelo= new Modelo();
@@ -27,13 +28,24 @@ class Controlador
 
     function entrarLogin()
     {
+        global $baseDatos;
         Vista::MuestraLogin();
+        if (isset($_POST['enviar'])) {
+            // Si enviamos las credenciales de usuario y contraseña
+            $usuario = $_POST['usuario']; // validamos el nombre de usuario, nick o contraseña
+            $contrasenia = $_POST['contrasenia'];
+            $contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT);
+            //Para controlar que funciona
+            // echo $usuario . " " . $contrasenia; 
+            $baseDatos->controlLogin($usuario, $contraseniaHasheada);
+        }
     }
 
 }
 
 $programa=new Controlador();
 $programa->Inicio();
+
 
 
 
@@ -61,17 +73,9 @@ if (isset($_POST['entrar'])) {
 
 // $programa->registra();
 
-//si existe la variable enviar nos muestra el formulario de login
 
-if (isset($_POST['enviar'])) {
-    // Si enviamos las credenciales de usuario y contraseña
-    /* $usuario = $_POST['usuario']; // validamos el nombre de usuario, nick o contraseña
-    $contrasenia = $_POST['contrasenia'];
-    $contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT); */
-    //Para controlar que funciona
-    // echo $usuario . " " . $contrasenia; 
-   /*  $baseDatos->controlLogin($usuario, $contraseniaHasheada); */
-}
+
+
 
 
 //si existe la variable registrar nos muestra el formulario de login
