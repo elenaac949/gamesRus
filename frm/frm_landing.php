@@ -41,22 +41,22 @@
             pointer-events: none;
         }
     </style>
-    <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="/gamesRus/css/frm_landing.css">
 </head>
 <body>
 
     <div class="banner">
         <div class="slider" style="--quantity: 10">
-            <div class="item" style="--position: 1"><img src="img/juego1.jpg" alt=""></div>
-            <div class="item" style="--position: 2"><img src="img/juego2.jpg" alt=""></div>
-            <div class="item" style="--position: 3"><img src="img/juego3.jpg" alt=""></div>
-            <div class="item" style="--position: 4"><img src="img/juego4.jpg" alt=""></div>
-            <div class="item" style="--position: 5"><img src="img/juego5.jpg" alt=""></div>
-            <div class="item" style="--position: 6"><img src="img/juego6.jpg" alt=""></div>
-            <div class="item" style="--position: 7"><img src="img/juego7.jpg" alt=""></div>
-            <div class="item" style="--position: 8"><img src="img/juego8.jpg" alt=""></div>
-            <div class="item" style="--position: 9"><img src="img/juego9.jpg" alt=""></div>
-            <div class="item" style="--position: 10"><img src="img/juego10.jpg" alt=""></div>
+            <div class="item" style="--position: 1"><img src="/gamesRus/img/juego1.jpg" alt=""></div>
+            <div class="item" style="--position: 2"><img src="/gamesRus/img/juego2.jpg" alt=""></div>
+            <div class="item" style="--position: 3"><img src="/gamesRus/img/juego3.jpg" alt=""></div>
+            <div class="item" style="--position: 4"><img src="/gamesRus/img/juego4.jpg" alt=""></div>
+            <div class="item" style="--position: 5"><img src="/gamesRus/img/juego5.jpg" alt=""></div>
+            <div class="item" style="--position: 6"><img src="/gamesRus/img/juego6.jpg" alt=""></div>
+            <div class="item" style="--position: 7"><img src="/gamesRus/img/juego7.jpg" alt=""></div>
+            <div class="item" style="--position: 8"><img src="/gamesRus/img/juego8.jpg" alt=""></div>
+            <div class="item" style="--position: 9"><img src="/gamesRus/img/juego9.jpg" alt=""></div>
+            <div class="item" style="--position: 10"><img src="/gamesRus/img/juego10.jpg" alt=""></div>
            
         </div>
         <div class="content">

@@ -18,7 +18,7 @@ class Controlador
     public function inicia()
     {
         //Llamamos a la clase vista y usamos el metodo inicio -> nos muestra el formulario inicio
-
+        
         Vista::inicio();
     }
 
