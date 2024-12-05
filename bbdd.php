@@ -53,7 +53,7 @@ class Database
     
             if ($usuario) {
                 // Verificar la contraseña
-                if ($password === $usuario['contrasenia']) {
+                if (password_verify($password,$usuario['contrasenia'])) {
                     echo 'Usuario y contraseña correctos.';
                     return true; // Retornar un valor en lugar de seguir con echo
                 } else {
