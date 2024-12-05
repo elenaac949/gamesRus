@@ -40,7 +40,7 @@ class Database
     //     }
     // }
 
-    public function controlLogin($credencial, $password)
+    public function controlLogin($credencial)
     {
         try {
             $sql = "SELECT `nick`, `email`, `contrasenia` FROM `usuario` 
