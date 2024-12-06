@@ -14,68 +14,20 @@ class Database
         }
     }
 
-    //Mostramos toda la tabla de usuarios
-    // public function mostrarProductos()
-    // {
-    //     try {
-    //         $sql = "SELECT * FROM USUARIO;";
-    //         $consulta = $this->conexion->query($sql);
-
-    //         if ($consulta === false) {
-    //             throw new Exception("Error al ejecutar la consulta SQL.");
-    //         }
-
-    //         // Iterar y mostrar los resultados
-    //         foreach ($consulta as $fila) {
-    //             echo "idUsuario: " . $fila['idUsuario'] . '<br>';
-    //             echo "Nick: " . $fila['nick'] . '<br>';
-    //             echo "Email: " . $fila['email'] . '<br>';
-    //             echo "Nombre: " . $fila['nombre'] . '<br>';
-    //             echo "Apellidos: " . $fila['apellidos'] . '<br>';
-    //             echo "Contraseña: " . $fila['contrasenia'] . '<br>';
-    //             echo "----------------<br>";
-    //         }
-    //     } catch (Exception $e) {
-    //         echo "Error: " . $e->getMessage();
-    //     }
-    // }
-
     public function controlLogin($credencial)
     {
         try {
-            $sql = "SELECT `nick`, `email`, `contrasenia` FROM `usuario` 
+            $sql = "SELECT `idUsuario`,`nick`, `email`, `contrasenia` FROM `usuario` 
                     WHERE `nick` = :credencial OR `email` = :credencial";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':credencial', $credencial);
             $stmt->execute();
-    
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-            if ($usuario) {
-                // Verificar la contraseña
-                if (password_verify($password,$usuario['contrasenia'])) {
-                    echo 'Usuario y contraseña correctos.';
-                    return true; // Retornar un valor en lugar de seguir con echo
-                } else {
-                    echo 'Contraseña incorrecta.';
-                    return false;
-                }
-            } else {
-                echo 'Usuario no registrado.';
-                return false;
-            }
+            return $usuario;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
-            return false;
-        } 
+        }
     }
-    
-
-       
-
-         
-    
-    
 
     //Registro de usuario
     public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia)
@@ -96,8 +48,29 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
+    //Función para mostrar los juegos comprados por un usuario en concreto
 
-   
+    public function mostrarBiblioteca($idUsuario)
+    {
+        try {
+            $sql = "SELECT * FROM juego j INNER JOIN comprado c ON j.idJuego = c.idJuego WHERE c.idUsuario = :idUsuario;";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $biblioteca = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+            return $biblioteca;
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+    // Este metodo se ejecuta al finalizar la ejecución de la web,
+    // eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido
+    function __destruct()
+    {
+        $this->conexion = null;
+    }
 }
 
 // Uso de la clase

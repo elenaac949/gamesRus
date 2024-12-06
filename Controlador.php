@@ -10,56 +10,82 @@ include "./env/conf.env";
 class Controlador
 {
     private $modelo;
-    
+
+    private $action;
+
+    private $data;
+
     public function __construct()
     {
         // $this->modelo= new Modelo();
         session_start();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            if (isset($_POST['irInicioSesion'])) {
+                $this->action = 'login';
+            }
+        } else {
+            $this->action = 'landing';
+        }
     }
 
     public function Inicio()
     {
-        if($_SERVER['REQUEST_METHOD']==='POST'){
-            $this->mostrarLogin();
-        }else{
-           Vista::MuestraLanding(); 
-        }
-        
-    }
-
-
-     function mostrarLogin(){
-        
-        Vista::MuestraLogin();
-        if (isset($_POST['enviar'])) {
-            
-            
-            
-            
+        // var_dump($this->action);
+        switch ($this->action) {
+            case 'login':
+                Vista::MuestraLogin($this->data);
+                break;
+            case 'landing':
+                Vista::MuestraLanding();
+                break;
+            case 'biblioteca':
+                $this->datosBiblioteca();
+                Vista::MuestraBiblioteca($this->data);
+                break;
         }
     }
-    public function verificarUsuario() {
+
+    private function datosBiblioteca()
+    {
+        global $baseDatos;
+        $idUsuario = $_SESSION['idUsuario'];
+        $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
+    }
+    public function verificarUsuario()
+    {
         global $baseDatos;
         $usuario = trim($_POST['usuario']); // validamos el nombre de usuario, nick o contraseña
-            $contrasenia = trim($_POST['contrasenia']); 
-        //$contraseniaHasheada = password_hash($contrasenia, PASSWORD_DEFAULT);  //ESTA CONTRASEÑA NO SE HASHEA AGAIN
-            //Para controlar que funciona
-            echo $usuario . " " . $contrasenia; 
-            if (($baseDatos->controlLogin($usuario)) == $contrasenia) {
-
+        $contrasenia = trim($_POST['contrasenia']);
+        $usuarioCorrecto = $baseDatos->controlLogin($usuario);
+        if ($usuarioCorrecto) {
+            // Verificar la contraseña
+            if (password_verify($contrasenia, $usuarioCorrecto['contrasenia'])) {
+                $_SESSION['idUsuario'] = $usuarioCorrecto['idUsuario'];
+                $this->action = 'biblioteca';
+                return;
+            } else {
+                $this->data = 'Contraseña incorrecta';
             }
+        } else {
+            $this->data = 'Usuario no existe';
+        }
+        $this->action = 'login';
+        return;
     }
-    }
+}
 
 
 $programa = new Controlador();
 
 
-$programa->Inicio();
-
-if (isset($_POST['enviar'])) {
+if (isset($_POST['loginUsuario'])) {
     $programa->verificarUsuario();
 }
+
+$programa->Inicio();
+
+
 /* if(isset($_POST['entrar'])){
     $programa->inicia();
 } *///no se como hacer que se deje de llamar a la pagina de landing

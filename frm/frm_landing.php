@@ -1,32 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        body{
+
+        body {
             /* c2a5df */
             background-color: #010002;
             background-image:
-            repeating-linear-gradient(
-                to right, transparent 0 100px,
-                #ffffff 100px 102px
-            ),
-            repeating-linear-gradient(
-                to bottom, transparent 0 100px,
-                #ffffff 100px 101px
-            );
+                repeating-linear-gradient(to right, transparent 0 100px,
+                    #ffffff 100px 102px),
+                repeating-linear-gradient(to bottom, transparent 0 100px,
+                    #ffffff 100px 101px);
         }
-        
-        body::before{
+
+        body::before {
             position: absolute;
             width: min(1400px, 90vw);
             top: 10%;
@@ -43,6 +39,7 @@
     </style>
     <link rel="stylesheet" href="/gamesRus/css/frm_landing.css">
 </head>
+
 <body>
 
     <div class="banner">
@@ -57,7 +54,7 @@
             <div class="item" style="--position: 8"><img src="/gamesRus/img/juego8.jpg" alt=""></div>
             <div class="item" style="--position: 9"><img src="/gamesRus/img/juego9.jpg" alt=""></div>
             <div class="item" style="--position: 10"><img src="/gamesRus/img/juego10.jpg" alt=""></div>
-           
+
         </div>
         <div class="content">
             <h1 data-content="GamesR`us">
@@ -65,7 +62,7 @@
             </h1>
             <div class="author">
                 <form action="" method="post" class="styled-form">
-                    <input type="submit" name="entrar" value="Entrar">
+                    <input type="submit" name="irInicioSesion" value="Entrar">
                 </form>
                 <!-- <h2>LUN DEV</h2>
                 <p><b>Web Design</b></p>
@@ -76,6 +73,7 @@
             <!-- <div class="model"></div> -->
         </div>
     </div>
-    
+
 </body>
+
 </html>

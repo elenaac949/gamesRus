@@ -19,7 +19,7 @@
             </div>
             <div class="input-box">
                 <input type="password" name="contrasenia" id="password" placeholder="Contraseña" required>
-                <i class='bx bxs-lock-alt' ></i>
+                <i class='bx bxs-lock-alt'></i>
             </div>
             <div class="remember-forgot">
                 <label>
@@ -28,13 +28,14 @@
                 <a href="#">¿Olvidaste la contraseña?</a>
             </div>
 
-            <input type="submit" value="Entrar" name="enviar" class="enviar">
+            <input type="submit" value="Entrar" name="loginUsuario" class="enviar">
 
             <div class="link-registro">
                 <p>¿No tienes cuenta? <a href="#">Registrar</a> </p>
             </div>
 
         </form>
+        <p><?= $data ?></p>
 
     </div>
 
