@@ -15,7 +15,7 @@
             <h1>GamesRus</h1>
             <p>Bienvenido <?php echo $_SESSION['idUsuario'];  ?></p>
         </div>
-        <nav>
+        <!-- <nav>
             <ul>
                 <li>Perfil</li>
                 <li>Catálogo</li>
@@ -24,6 +24,16 @@
                 <li>Buscador</li>
                 <li>Salir</li>
             </ul>
+        </nav> -->
+        <nav>
+            <form action="" method="post">
+                <input type="text" class="buscardor" placeholder="Bucar...">
+                <input type="submit" name="irAlPerfil" class="perfil" value="Perfil">
+                <input type="submit" name="irAlCatalogo" class="catalogo" value="Catálogo">
+                <input type="submit" name="irBiblioteca" class="biblioteca" value="Biblioteca">
+                <input type="submit" name="irAlCarrito" class="carrito" value="Carrito">
+                <input type="submit" name="cerrar_sesion" class="salir" value="Cerrar Sesión">
+            </form>
         </nav>
     </header>
 
@@ -50,7 +60,9 @@
                 </div>
             <?php endforeach; ?>
         </div>
-        <div class="boton_administrador" style="display: <?php if($_SESSION['idUsuario']!=4){echo 'none';}  ?>;">
+        <div class="boton_administrador" style="display: <?php if ($_SESSION['idUsuario'] != 4) {
+                                                                echo 'none';
+                                                            }  ?>;">
             <form action="" method="post">
                 <input type="submit" name="administrar" value="Administrar">
             </form>
