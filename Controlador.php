@@ -67,7 +67,7 @@ class Controlador
         $this->action = 'registro';
     }
 
-    
+
     private function datosBiblioteca()
     {
         global $baseDatos;
@@ -95,6 +95,29 @@ class Controlador
         $this->action = 'login';
         return;
     }
+    public function anadirUsuario()
+    {
+        global $baseDatos;
+
+        $nombre = $_POST['nombre'];
+        $apellidos = $_POST['apellidos'];
+        $correo = $_POST['correo'];
+        $nick = $_POST['nick'];
+        $contrasenia = $_POST['contrasenia'];
+        $contrasenia2 = $_POST['contrasenia2'];
+
+        // Validar si las contraseñas coinciden
+        if ($contrasenia === $contrasenia2) {
+            // Hashear la contraseña
+            $hashedPassword = password_hash($contrasenia, PASSWORD_DEFAULT);
+
+            // Registrar al usuario
+            $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword);
+            
+        } else {
+            $this->data= 'Las contraseñas no coinciden.';
+        }
+    }
 }
 
 
@@ -103,11 +126,23 @@ $programa = new Controlador();
 
 if (isset($_POST['loginUsuario'])) {
     $programa->verificarUsuario();
-} elseif (isset($_POST['registroUsuario'])) {
+} elseif (isset($_POST['irRegistro'])) {
     $programa->irAlRegistro();
+} else if (isset($_POST['registroUsuario'])) {
+    $programa->anadirUsuario();
 }
 
 $programa->Inicio();
+
+
+
+
+
+
+
+
+
+
 
 
 /* if(isset($_POST['entrar'])){

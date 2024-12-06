@@ -63,8 +63,11 @@ form input:focus {
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
-form .registrar {
-    width: 100%;
+
+
+/* NO SE QUE PASA POR QUE COÑO NO FUNCIONA ESTO */
+form .registrar, .boton-login{
+    width: 50%;
     height: 45px;
     background-color: #fff;
     border: none;
@@ -77,24 +80,14 @@ form .registrar {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-form .registrar:hover {
+form .registrar, .boton-login:hover {
     transform: scale(0.98);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
 
-form .link-login {
-    font-size: 1rem;
-    text-align: center;
-    margin: 15px 0;
-}
 
-form .link-login p a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-}
 
-form .link-login p a:hover {
-    text-decoration: underline;
-}
+/* QUEEEEE ESTA PASANDOOOOOOOOO */
+
+/* vale es porque va con retraso y hay qur recargar  mazo las paginas */

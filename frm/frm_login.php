@@ -35,7 +35,7 @@
 
             <div class="link-registro">
                 <p>¿No tienes cuenta? </p>
-                <input type="submit" value="Registrate" name="registroUsuario" class="boton_registro">
+                <input type="submit" value="Registrate" name="irRegistro" class="boton-registro">
             </div>
 
         </form>
