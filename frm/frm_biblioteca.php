@@ -50,7 +50,7 @@
                 </div>
             <?php endforeach; ?>
         </div>
-        <div class="boton_administrador">
+        <div class="boton_administrador" style="display: <?php if($_SESSION['idUsuario']!=4){echo 'none';}  ?>;">
             <form action="" method="post">
                 <input type="submit" name="administrar" value="Administrar">
             </form>
