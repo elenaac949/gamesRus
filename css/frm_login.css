@@ -117,14 +117,12 @@ form{
     font-size: 1rem;
     text-align: center;
     margin:10px 0 15px;
-}
-.link-registro p a{
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
-.link-registro p a:hover{
-    text-decoration: underline;
+.layout .link-registro{
+    color: red;
 }
+
