@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Registro</title>
+    <link rel="stylesheet" href="/gamesRus/css/frm_signup.css">
 </head>
 <body>
     <form action="" method="post">
@@ -26,7 +27,12 @@
             <input type="password" name="contrasenia2" id="contrasenia2" placeholder="Contraseña">
         </label>
 
-        <input type="submit" name="registrar" value="Enviar">
+        <input type="submit" name="registrar" value="Registrarse">
+
+        <div class="link-login">
+            <p>¿Ya tienes cuenta? </p>
+            <input type="submit" name="irInicioSesion" value="Login" class="boton_login">
+        </div>
 
     </form>
 </body>

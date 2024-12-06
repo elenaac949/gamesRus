@@ -13,6 +13,11 @@ class Vista
     include "./frm/frm_login.php";
   }
 
+  public static function MuestraRegistro($data)
+  {
+    include "./frm/frm_signup.php";
+  }
+
   public static function MuestraBiblioteca($data) //Necesario para que la vista tenga los datos a mostrar 
   {
     include "./frm/frm_biblioteca.php";

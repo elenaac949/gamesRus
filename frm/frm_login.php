@@ -14,14 +14,14 @@
         <form action="#" method="post">
             <h1>Login</h1>
             <div class="input-box">
-                <input type="text" name="usuario" id="usuario" placeholder="Introduce nick o correo" required value="<?php if (isset($_POST['usuario'])) {
+                <input type="text" name="usuario" id="usuario" placeholder="Introduce nick o correo"  value="<?php if (isset($_POST['usuario'])) {
                                                                                                                             echo $_POST['usuario'];
                                                                                                                         } ?>">
                 <i class='bx bxs-user'></i>
 
             </div>
             <div class="input-box">
-                <input type="password" name="contrasenia" id="password" placeholder="Contraseña" required>
+                <input type="password" name="contrasenia" id="password" placeholder="Contraseña" >
                 <i class='bx bxs-lock-alt'></i>
             </div>
             <div class="remember-forgot">
@@ -35,7 +35,7 @@
 
             <div class="link-registro">
                 <p>¿No tienes cuenta? </p>
-                <input type="submit" value="Registrate" name="registroUsuario" class="registrarse">
+                <input type="submit" value="Registrate" name="registroUsuario" class="boton_registro">
             </div>
 
         </form>

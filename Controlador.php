@@ -36,6 +36,9 @@ class Controlador
             case 'login':
                 Vista::MuestraLogin($this->data);
                 break;
+            case 'registro':
+                Vista::MuestraRegistro($this->data);
+                break;
             case 'landing':
                 Vista::MuestraLanding();
                 break;
@@ -48,23 +51,28 @@ class Controlador
 
 
     //quiero gurdar la sesion en el ordenador del  usuario con cookies
-    private function recordarUsuario(){
-        if(isset($_POST['recordar_usuario'])){//si hemos marcado la casilla de recordarme creamos la cookie
+    /* private function recordarUsuario()
+    {
+        if (isset($_POST['recordar_usuario'])) { //si hemos marcado la casilla de recordarme creamos la cookie
             setcookie('usuario', $_SESSION['idUsuario'], time() + (30 * 24 * 60 * 60), "/");
-
-        }else{
-            if (isset($_COOKIE['usuario'])) {//si no esta marcada se borra
-                setcookie('usuario', '', time() - 3600, "/"); 
+        } else {
+            if (isset($_COOKIE['usuario'])) { //si no esta marcada se borra
+                setcookie('usuario', '', time() - 3600, "/");
             }
         }
+    } */
+
+    public function irAlRegistro()
+    {
+        $this->action = 'registro';
     }
 
+    
     private function datosBiblioteca()
     {
         global $baseDatos;
         $idUsuario = $_SESSION['idUsuario'];
         $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
-        
     }
     public function verificarUsuario()
     {
@@ -95,6 +103,8 @@ $programa = new Controlador();
 
 if (isset($_POST['loginUsuario'])) {
     $programa->verificarUsuario();
+} elseif (isset($_POST['registroUsuario'])) {
+    $programa->irAlRegistro();
 }
 
 $programa->Inicio();
