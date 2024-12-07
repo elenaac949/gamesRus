@@ -1,3 +1,7 @@
+<?php
+include __DIR__ . '/../controlSesion.php'; 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 

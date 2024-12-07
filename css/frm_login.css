@@ -95,7 +95,7 @@ form {
 }
 
 /* QUEE ESTA PASANDOOOOOOOO */
-from .enviar, .boton-registro {
+form .enviar, .boton-registro {
     width: 100%;
     height: 45px;
     background-color: #fff;

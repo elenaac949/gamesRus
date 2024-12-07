@@ -51,9 +51,10 @@ header .titulo h1 {
 }
 
 header .titulo p {
-    margin: 5px 0 0;
+    /* margin: 5px 0 0; */
     font-size: 0.9em;
-    color: #4cc9f0; 
+    color: #4cc9f0;
+    margin-top: -10px;
 }
 
 nav {

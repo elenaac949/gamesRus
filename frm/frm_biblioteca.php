@@ -1,3 +1,6 @@
+<?php
+include __DIR__ . '/../controlSesion.php'; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,7 +16,7 @@
     <header>
         <div class="titulo">
             <h1>GamesRus</h1>
-            <p>Bienvenido <?php echo $_SESSION['idUsuario'];  ?></p>
+            <p>Bienvenido <?php echo $_SESSION['nickUsuario'];  ?></p>
         </div>
         <!-- <nav>
             <ul>
@@ -27,7 +30,7 @@
         </nav> -->
         <nav>
             <form action="" method="post">
-                <input type="text" class="buscardor" placeholder="Bucar...">
+                <input type="text" class="buscardor" placeholder="Buscar...">
                 <input type="submit" name="irAlPerfil" class="perfil" value="Perfil">
                 <input type="submit" name="irAlCatalogo" class="catalogo" value="Catálogo">
                 <input type="submit" name="irBiblioteca" class="biblioteca" value="Biblioteca">
