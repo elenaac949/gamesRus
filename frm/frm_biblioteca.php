@@ -18,16 +18,6 @@ include __DIR__ . '/../controlSesion.php';
             <h1>GamesRus</h1>
             <p>Bienvenido <?php echo $_SESSION['nickUsuario'];  ?></p>
         </div>
-        <!-- <nav>
-            <ul>
-                <li>Perfil</li>
-                <li>Catálogo</li>
-                <li>Biblioteca</li>
-                <li>Carrito</li>
-                <li>Buscador</li>
-                <li>Salir</li>
-            </ul>
-        </nav> -->
         <nav>
             <form action="" method="post">
                 <input type="text" class="buscardor" placeholder="Buscar...">
@@ -44,7 +34,6 @@ include __DIR__ . '/../controlSesion.php';
     <main class="contenido_principal">
         <h2>Tus Juegos</h2>
         <div class="vista_juegos">
-
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
                     <div class="imagen_juego">
