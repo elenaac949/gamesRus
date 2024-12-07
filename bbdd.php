@@ -43,7 +43,7 @@ class Database
                 ':apellidos' => $apellidos,
                 ':contrasenia' => $contrasenia,
             ]);
-            echo "Usuario registrado correctamente.";
+           
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -63,6 +63,30 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
+
+    public function verificarSiExisteUsuario($nick, $correo) {
+        try {
+            $sql = "SELECT idUsuario FROM usuario WHERE `nick` = :nick OR `email` = :correo";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute([
+                ':nick' => $nick,
+                ':correo' => $correo                
+            ]);
+    
+            // Busco el primer resultado
+            $coincidencias = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // Si no hay coincidencias, devuelvo true indicando que no existe el usuario
+            if ($coincidencias) {
+                return false; // Ya existe un usuario con el mismo correo o nick
+            } else {
+                return true;  // No existe usuario con ese correo o nick
+            }
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+    
 
 
     // Este metodo se ejecuta al finalizar la ejecución de la web,
