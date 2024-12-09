@@ -32,7 +32,7 @@
     inset: 0 0 0 0;
     transform: 
         rotateY(calc( (var(--position) - 1) * (360 / var(--quantity)) * 1deg))
-        translateZ(550px);
+        translateZ(400px);
 }
 .banner .slider .item img{
     width: 100%;
