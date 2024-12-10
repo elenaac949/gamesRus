@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../controlSesion.php'; 
+include __DIR__ . '/../controlSesion.php';
 
 ?>
 <!DOCTYPE html>
@@ -13,33 +13,30 @@ include __DIR__ . '/../controlSesion.php';
 </head>
 
 <body>
+    <h1>Registro</h1>
     <form action="" method="post">
-        <label for="nombre">Nombre:
-            <input type="text" name="nombre" id="nombre" placeholder="Nombre" value="<?php if (isset($_POST['nombre'])) {
-                                                                                            echo $_POST['nombre'];
-                                                                                        } ?>">
-        </label>
-        <label for="apellidos">Apellidos:
-            <input type="text" name="apellidos" id="apellidos" placeholder="Apellidos" value="<?php if (isset($_POST['apellidos'])) {
-                                                                                                    echo $_POST['apellidos'];
-                                                                                                } ?>">
-        </label>
-        <label for="correo">Correo electrónico:
-            <input type="email" name="correo" id="correo" placeholder="Correo electrónico" value="<?php if (isset($_POST['correo'])) {
-                                                                                                        echo $_POST['correo'];
-                                                                                                    } ?>">
-        </label>
-        <label for="nick">Nick:
-            <input type="text" name="nick" id="nick" placeholder="Nombre de usuario" value="<?php if (isset($_POST['nick'])) {
-                                                                                                echo $_POST['nick'];
-                                                                                            } ?>">
-        </label>
-        <label for="contrasenia"> Contraseña:
-            <input type="password" name="contrasenia" id="contrasenia" placeholder="Contraseña">
-        </label>
-        <label for="contrasenia2"> Confirma la contraseña:
-            <input type="password" name="contrasenia2" id="contrasenia2" placeholder="Contraseña">
-        </label>
+        <fieldset>
+            <legend>Credenciales</legend>
+            <input type="text" name="alias" id="alias" placeholder="Nick o Alias">
+            <input type="email" name="correo" id="correo" placeholder="Correo Electrónico">
+            <input type="password" name="contrasenia1" placeholder="Contraseña">
+            <input type="password" name="contrasenia2" placeholder="Repite la contraseña">
+        </fieldset>
+        <fieldset>
+            <legend>Datos personales</legend>
+            <input type="text" name="nombre" placeholder="Nombre" value="<?php if (isset($_POST['nick'])) {
+                                                                                echo $_POST['nick'];
+                                                                            } ?>">
+            <input type="text" name="apellidos" placeholder="Apellidos">
+
+        </fieldset>
+        <fieldset>
+            <legend>Datos de contacto</legend>
+            <input type="text" name="tipo_via" placeholder="Tipo de vía">
+            <input type="text" name="nombre_via" placeholder="Nombre de la vía">
+            <input type="text" name="numero_via" placeholder="Número">
+            <input type="tel" name="telefono" placeholder="Teléfono">
+        </fieldset>
 
         <input type="submit" name="registroUsuario" value="Registrarse" class="registrar">
 
