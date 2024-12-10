@@ -27,7 +27,7 @@ h1 {
 }
 
 form {
-    width: 50%;
+    width: 45%;
     color: #fff;
     background-color: transparent;
     /* border: 2px solid rgba(255, 255, 255, 0.2); */
@@ -109,7 +109,7 @@ form fieldset input:focus {
     margin-top: 5px;
 }
 
-.registrar:hover {
+.registrar, .boton-login:hover {
     transform: scale(0.98);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
