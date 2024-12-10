@@ -29,26 +29,41 @@ class Database
         }
     }
 
-    //Registro de usuario
-    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia)
+    //Registrar usuario - Cambiado
+    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero, $numeroTelefono)
     {
         try {
-            $sql = "INSERT INTO `usuario` (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`) 
-                    VALUES (:nick, :correo, :nombre, :apellidos, :contrasenia)"; //etiquetas para que luego se cambien son valores predeterminado consultas preparadas 
+            // Consulta SQL con etiquetas para consultas preparadas
+            $sql = "INSERT INTO `usuario` 
+                    (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `TipoDeVia`, `NombreDeVia`, `Numero`, `NumeroTelefono`) 
+                    VALUES 
+                    (:nick, :correo, :nombre, :apellidos, :contrasenia, :tipoDeVia, :nombreDeVia, :numero, :numeroTelefono)";
+            
+            // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
-            $stmt->execute([
-                ':nick' => $nick,
-                ':correo' => $correo,
-                ':nombre' => $nombre,
-                ':apellidos' => $apellidos,
-                ':contrasenia' => $contrasenia,
-            ]);
-           
+    
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':nick', $nick);
+            $stmt->bindParam(':correo', $correo);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':apellidos', $apellidos);
+            $stmt->bindParam(':contrasenia', $contrasenia);
+            $stmt->bindParam(':tipoDeVia', $tipoDeVia);
+            $stmt->bindParam(':nombreDeVia', $nombreDeVia);
+            $stmt->bindParam(':numero', $numero, PDO::PARAM_INT);
+            $stmt->bindParam(':numeroTelefono', $numeroTelefono);
+    
+            // Ejecutar la consulta
+            $stmt->execute();
+    
+            echo "Usuario registrado con éxito";
+    
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
-    //Función para mostrar los juegos comprados por un usuario en concreto
+    
+    //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
 
     public function mostrarBiblioteca($idUsuario)
     {
@@ -66,26 +81,28 @@ class Database
 
     public function verificarSiExisteUsuario($nick, $correo) {
         try {
+            // Preparar la consulta
             $sql = "SELECT idUsuario FROM usuario WHERE `nick` = :nick OR `email` = :correo";
             $stmt = $this->conexion->prepare($sql);
-            $stmt->execute([
-                ':nick' => $nick,
-                ':correo' => $correo                
-            ]);
     
-            // Busco el primer resultado
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':nick', $nick, PDO::PARAM_STR);
+            $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+    
+            // Ejecutar la consulta
+            $stmt->execute();
+    
+            // Buscar el primer resultado
             $coincidencias = $stmt->fetch(PDO::FETCH_ASSOC);
     
-            // Si no hay coincidencias, devuelvo true indicando que no existe el usuario
-            if ($coincidencias) {
-                return false; // Ya existe un usuario con el mismo correo o nick
-            } else {
-                return true;  // No existe usuario con ese correo o nick
-            }
+            // Si hay coincidencias, devuelve false (usuario ya existe)
+            return !$coincidencias;
+    
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+    
     
 
 
