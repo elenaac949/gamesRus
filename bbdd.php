@@ -29,26 +29,25 @@ class Database
         }
     }
 
-    //Registro de usuario
+    //Registrar usuario - Cambiado
     public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia)
     {
         try {
             $sql = "INSERT INTO `usuario` (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`) 
                     VALUES (:nick, :correo, :nombre, :apellidos, :contrasenia)"; //etiquetas para que luego se cambien son valores predeterminado consultas preparadas 
             $stmt = $this->conexion->prepare($sql);
-            $stmt->execute([
-                ':nick' => $nick,
-                ':correo' => $correo,
-                ':nombre' => $nombre,
-                ':apellidos' => $apellidos,
-                ':contrasenia' => $contrasenia,
-            ]);
+            $stmt->bindParam(':nick', $nick);
+            $stmt->bindParam(':correo', $correo);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':apellidos', $apellidos);
+            $stmt->bindParam(':contrasenia', $contrasenia);
+            $stmt->execute();            
            
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
-    //Función para mostrar los juegos comprados por un usuario en concreto
+    //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
 
     public function mostrarBiblioteca($idUsuario)
     {
@@ -68,6 +67,7 @@ class Database
         try {
             $sql = "SELECT idUsuario FROM usuario WHERE `nick` = :nick OR `email` = :correo";
             $stmt = $this->conexion->prepare($sql);
+            
             $stmt->execute([
                 ':nick' => $nick,
                 ':correo' => $correo                
