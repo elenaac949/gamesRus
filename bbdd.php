@@ -65,27 +65,28 @@ class Database
 
     public function verificarSiExisteUsuario($nick, $correo) {
         try {
+            // Preparar la consulta
             $sql = "SELECT idUsuario FROM usuario WHERE `nick` = :nick OR `email` = :correo";
             $stmt = $this->conexion->prepare($sql);
-            
-            $stmt->execute([
-                ':nick' => $nick,
-                ':correo' => $correo                
-            ]);
     
-            // Busco el primer resultado
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':nick', $nick, PDO::PARAM_STR);
+            $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+    
+            // Ejecutar la consulta
+            $stmt->execute();
+    
+            // Buscar el primer resultado
             $coincidencias = $stmt->fetch(PDO::FETCH_ASSOC);
     
-            // Si no hay coincidencias, devuelvo true indicando que no existe el usuario
-            if ($coincidencias) {
-                return false; // Ya existe un usuario con el mismo correo o nick
-            } else {
-                return true;  // No existe usuario con ese correo o nick
-            }
+            // Si hay coincidencias, devuelve false (usuario ya existe)
+            return !$coincidencias;
+    
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+    
     
 
 
