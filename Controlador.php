@@ -104,6 +104,7 @@ class Controlador
     {
         global $baseDatos;
 
+        if($_POST['nombre'] && $_POST['apellidos'])
         $nombre = $_POST['nombre'];
         $apellidos = $_POST['apellidos'];
         $correo = $_POST['correo'];
@@ -114,7 +115,7 @@ class Controlador
         //Hacer una consulta a la bbdd que verifiqeu si ese email o nick existen
         if (!$baseDatos->verificarSiExisteUsuario($nick, $correo)) {
             $this->data = 'Correo o nick ya existentes';
-            $this->action = 'login';
+            $this->action = 'registro';
         } else {
             // Validar si las contraseñas coinciden
             if ($contrasenia === $contrasenia2) {
