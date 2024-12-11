@@ -18,21 +18,21 @@ include __DIR__ . '/../controlSesion.php';
     <p class="errores"><?= $data ?></p>
         <fieldset>
             <legend>Credenciales</legend>
-            <input type="text" name="alias" id="alias" placeholder="Nick o Alias" value="<?php if (isset($_POST['alias'])) {
+            <input type="text" name="alias" id="alias" placeholder="Nick o Alias*" value="<?php if (isset($_POST['alias'])) {
                                                                                 echo $_POST['alias'];
                                                                             } ?>">
-            <input type="email" name="correo" id="correo" placeholder="Correo Electrónico" value="<?php if (isset($_POST['correo'])) {
+            <input type="email" name="correo" id="correo" placeholder="Correo Electrónico*" value="<?php if (isset($_POST['correo'])) {
                                                                                 echo $_POST['correo'];
                                                                             } ?>">
-            <input type="password" name="contrasenia1" placeholder="Contraseña">
-            <input type="password" name="contrasenia2" placeholder="Repite la contraseña">
+            <input type="password" name="contrasenia1" placeholder="Contraseña*">
+            <input type="password" name="contrasenia2" placeholder="Repite la contraseña*">
         </fieldset>
         <fieldset>
             <legend>Datos personales</legend>
-            <input type="text" name="nombre" placeholder="Nombre" value="<?php if (isset($_POST['nombre'])) {
+            <input type="text" name="nombre" placeholder="Nombre*" value="<?php if (isset($_POST['nombre'])) {
                                                                                 echo $_POST['nombre'];
                                                                             } ?>">
-            <input type="text" name="apellidos" placeholder="Apellidos" value="<?php if (isset($_POST['apellidos'])) {
+            <input type="text" name="apellidos" placeholder="Apellidos*" value="<?php if (isset($_POST['apellidos'])) {
                                                                                 echo $_POST['apellidos'];
                                                                             } ?>">
 
@@ -48,7 +48,7 @@ include __DIR__ . '/../controlSesion.php';
             <input type="text" name="numero_via" placeholder="Número" value="<?php if (isset($_POST['numero_via'])) {
                                                                                 echo $_POST['numero_via'];
                                                                             } ?>">
-            <input type="tel" name="telefono" placeholder="Teléfono" value="<?php if (isset($_POST['telefono'])) {
+            <input type="tel" name="telefono" placeholder="Teléfono*" value="<?php if (isset($_POST['telefono'])) {
                                                                                 echo $_POST['telefono'];
                                                                             } ?>">
                                                     

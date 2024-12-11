@@ -100,43 +100,58 @@ class Controlador
         $this->action = 'login';
         return;
     }
+
+
     public function anadirUsuario()
     {
         global $baseDatos;
 
-        if($_POST['nombre'] && $_POST['apellidos'])
-        $nombre = $_POST['nombre'];
-        $apellidos = $_POST['apellidos'];
-        $correo = $_POST['correo'];
-        $nick = $_POST['alias'];
-        $contrasenia = $_POST['contrasenia1'];
-        $contrasenia2 = $_POST['contrasenia2'];
-        $tipoDeVia=$_POST["tipo_via"];
-        $nombreDeVia=$_POST['nombre_via'];
-        $numero=$_POST['numero_via'];
-        $numeroTelefono=$_POST['telefono'];
+        if (!empty($_POST['nombre']) && !empty($_POST['apellidos']) && !empty($_POST['alias']) && !empty($_POST['correo']) && !empty($_POST['contrasenia1']) && !empty($_POST['contrasenia2']) && !empty($_POST['telefono'])) {
+            $nombre = $_POST['nombre'];
+            $apellidos = $_POST['apellidos'];
+            $correo = $_POST['correo'];
+            $nick = $_POST['alias'];
+            $contrasenia1 = $_POST['contrasenia1'];
+            $contrasenia2 = $_POST['contrasenia2'];
+            $tipoDeVia = $_POST["tipo_via"];
+            $nombreDeVia = $_POST['nombre_via'];
+            $numero = $_POST['numero_via'];
+            $numeroTelefono = $_POST['telefono'];
 
-        //Hacer una consulta a la bbdd que verifiqeu si ese email o nick existen
-        if (!$baseDatos->verificarSiExisteUsuario($nick, $correo)) {
-            $this->data = 'Correo o nick ya existentes';
-            $this->action = 'registro';
-        } else {
-            // Validar si las contraseñas coinciden
-            if ($contrasenia === $contrasenia2) {
-                // Hashear la contraseña
-                $hashedPassword = password_hash($contrasenia, PASSWORD_DEFAULT);
-
-                // Registrar al usuario
-                $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero, $numeroTelefono);
-                //Guardamos en cookie el nombre nick para pasarlo a l login (contraseña no por seguridad) - la cookie dura 5 mins
-                // setcookie('nick', $_POST['nick'], time() + (5 * 60), "/");
-                $this->data = 'Usuario registrado correctamente.';
-                $this->action = 'login';
+            $patron = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+            //Hacer una consulta a la bbdd que verifiqeu si ese email o nick existen
+            if (!$baseDatos->verificarSiExisteUsuario($nick, $correo)) {
+                $this->data = 'Correo o nick ya existentes';
+                $this->action = 'registro';
             } else {
-                $this->data = 'Las contraseñas no coinciden.';
+                if (preg_match($patron, $correo)) {
+                    // Validar si las contraseñas coinciden
+                    if ($contrasenia1 === $contrasenia2) {
+                        // Hashear la contraseña
+                        $hashedPassword = password_hash($contrasenia1, PASSWORD_DEFAULT);
+
+                        // Registrar al usuario
+                        $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword, $tipoDeVia, $nombreDeVia, $numero, $numeroTelefono);
+                        //Guardamos en cookie el nombre nick para pasarlo a l login (contraseña no por seguridad) - la cookie dura 5 mins
+                        // setcookie('nick', $_POST['nick'], time() + (5 * 60), "/");
+                        $this->data = 'Usuario registrado correctamente.';
+                        $this->action = 'login';
+                    } else {
+                        $this->data = 'Las contraseñas no coinciden.';
+                        $this->action = 'registro';
+                    }
+                } else {
+                    $this->data = 'El correo electónico no es válido.';
+                    $this->action = 'registro';
+                }
             }
+        } else {
+            $this->data = 'Datos incompletos.';
+            $this->action = 'registro';
         }
     }
+
+
 
     public function cerrarSesion()
     {
