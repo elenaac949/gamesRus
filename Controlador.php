@@ -111,6 +111,10 @@ class Controlador
         $nick = $_POST['nick'];
         $contrasenia = $_POST['contrasenia'];
         $contrasenia2 = $_POST['contrasenia2'];
+        $tipoDeVia=$_POST["tipo_via"];
+        $nombreDeVia=$_POST['nombre_via'];
+        $numero=$_POST['numero_via'];
+        $numeroTelefono=$_POST['telefono'];
 
         //Hacer una consulta a la bbdd que verifiqeu si ese email o nick existen
         if (!$baseDatos->verificarSiExisteUsuario($nick, $correo)) {
@@ -123,7 +127,7 @@ class Controlador
                 $hashedPassword = password_hash($contrasenia, PASSWORD_DEFAULT);
 
                 // Registrar al usuario
-                $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword);
+                $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero, $numeroTelefono);
                 //Guardamos en cookie el nombre nick para pasarlo a l login (contraseña no por seguridad) - la cookie dura 5 mins
                 // setcookie('nick', $_POST['nick'], time() + (5 * 60), "/");
                 $this->data = 'Usuario registrado correctamente.';
