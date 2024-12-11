@@ -105,6 +105,8 @@ class Controlador
         global $baseDatos;
 
         if($_POST['nombre'] && $_POST['apellidos'])
+
+        
         $nombre = $_POST['nombre'];
         $apellidos = $_POST['apellidos'];
         $correo = $_POST['correo'];

@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Poppins",sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 :root {
@@ -24,7 +24,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9; 
+    background-color: #f4f4f9;
 }
 
 header {
@@ -33,7 +33,7 @@ header {
     justify-content: space-between;
     align-items: center;
     background-image: linear-gradient(to bottom, #3a0ca3, #4361ee);
-    color: #f4f4f9; 
+    color: #f4f4f9;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -47,7 +47,7 @@ header .titulo {
 header .titulo h1 {
     font-size: 4rem;
     margin: 0;
-    color: #f72585; 
+    color: #f72585;
 }
 
 header .titulo p {
@@ -59,15 +59,21 @@ header .titulo p {
 
 nav {
     display: flex;
+    gap: 10px;
     align-items: center;
 }
 
 nav form {
     display: flex;
-    gap: 20px;
-    margin: 0;
-    padding: 0;
+    align-items: center;
+    flex-direction: column;
+
+    img{
+        size: 6px;
+    }
 }
+
+
 
 
 nav form input[type="submit"] {
@@ -128,13 +134,13 @@ main {
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    
+
 }
 
 
 
 
-.juego{
+.juego {
     border: 2px solid #4361ee;
     border-radius: 10px;
     width: 280px;
@@ -150,6 +156,7 @@ main {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
+
 .imagen_juego img {
     border-radius: 10px;
     width: 100%;
@@ -159,7 +166,7 @@ main {
 .nombre_juego p {
     font-size: 1.2em;
     font-weight: bold;
-    color: #7209b7; 
+    color: #7209b7;
     margin: 10px 0;
 }
 
@@ -171,8 +178,8 @@ main {
 }
 
 .botones_juego input {
-    background-color: #4361ee; 
-    color: #f4f4f9; 
+    background-color: #4361ee;
+    color: #f4f4f9;
     border: none;
     border-radius: 5px;
     padding: 10px 15px;
@@ -182,7 +189,7 @@ main {
 }
 
 .botones_juego input:hover {
-    background-color: #4cc9f0; 
+    background-color: #4cc9f0;
 }
 
 .boton_administrador {
@@ -191,7 +198,7 @@ main {
 }
 
 .boton_administrador input {
-    background-color: #f72585; 
+    background-color: #f72585;
     color: #ffffff;
     border: none;
     border-radius: 5px;
@@ -202,7 +209,7 @@ main {
 }
 
 .boton_administrador input:hover {
-    background-color: #7209b7; 
+    background-color: #7209b7;
 }
 
 footer {
