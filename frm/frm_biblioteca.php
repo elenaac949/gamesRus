@@ -21,11 +21,23 @@ include __DIR__ . '/../controlSesion.php';
         <nav>
             <form action="" method="post">
                 <input type="text" class="buscardor" placeholder="Buscar...">
-                <input type="submit" name="irAlPerfil" class="perfil" value="Perfil">
+            </form>
+            <form action="perfil" method="post">
+            <a href="#"><img src="./img/image-removebg-preview (1).png" alt="" srcset=""></a>
+            <input type="submit" name="irAlPerfil" class="perfil" value="Perfil">
+            </form>               
+            <form action="catalogo" method="post">
                 <input type="submit" name="irAlCatalogo" class="catalogo" value="Catálogo">
+            </form>
+            <form action="biblioteca" method="post">
                 <input type="submit" name="irBiblioteca" class="biblioteca" value="Biblioteca">
+            </form>   
+            <form action="carrito" method="post">
                 <input type="submit" name="irAlCarrito" class="carrito" value="Carrito">
+            </form> 
+            <form action="#" method="post">
                 <input type="submit" name="cerrar_sesion" class="salir" value="Cerrar Sesión">
+
             </form>
         </nav>
     </header>
@@ -58,6 +70,7 @@ include __DIR__ . '/../controlSesion.php';
             <form action="" method="post">
                 <input type="submit" name="administrar" value="Administrar">
             </form>
+            
         </div>
 
     </main>
