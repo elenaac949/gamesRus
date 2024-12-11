@@ -108,8 +108,8 @@ class Controlador
         $nombre = $_POST['nombre'];
         $apellidos = $_POST['apellidos'];
         $correo = $_POST['correo'];
-        $nick = $_POST['nick'];
-        $contrasenia = $_POST['contrasenia'];
+        $nick = $_POST['alias'];
+        $contrasenia = $_POST['contrasenia1'];
         $contrasenia2 = $_POST['contrasenia2'];
         $tipoDeVia=$_POST["tipo_via"];
         $nombreDeVia=$_POST['nombre_via'];
