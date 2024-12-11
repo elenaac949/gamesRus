@@ -56,8 +56,6 @@ class Database
             // Ejecutar la consulta
             $stmt->execute();
     
-            echo "Usuario registrado con éxito";
-    
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -102,6 +100,7 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
+    
     
     
 
