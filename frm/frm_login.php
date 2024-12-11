@@ -16,6 +16,7 @@ include __DIR__ . '/../controlSesion.php';
     <div class="layout">
         <h1>Login</h1>
         <form action="#" method="post">
+        <p class="errores"><?= $data ?></p>
             <div class="input-box">
                 <input type="text" name="usuario" id="usuario" placeholder="Introduce nick o correo" value="<?php echo  $_POST['nick'] ?? '' ?>">
                 <i class='bx bxs-user'></i>
@@ -40,7 +41,7 @@ include __DIR__ . '/../controlSesion.php';
             </div>
 
         </form>
-        <p><?= $data ?></p>
+        
 
     </div>
 
