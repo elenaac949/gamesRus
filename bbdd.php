@@ -38,10 +38,10 @@ class Database
                     (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `TipoDeVia`, `NombreDeVia`, `Numero`, `NumeroTelefono`) 
                     VALUES 
                     (:nick, :correo, :nombre, :apellidos, :contrasenia, :tipoDeVia, :nombreDeVia, :numero, :numeroTelefono)";
-            
+
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
-    
+
             // Asignar valores a las etiquetas
             $stmt->bindParam(':nick', $nick);
             $stmt->bindParam(':correo', $correo);
@@ -52,15 +52,14 @@ class Database
             $stmt->bindParam(':nombreDeVia', $nombreDeVia);
             $stmt->bindParam(':numero', $numero, PDO::PARAM_INT);
             $stmt->bindParam(':numeroTelefono', $numeroTelefono);
-    
+
             // Ejecutar la consulta
             $stmt->execute();
-    
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
-    
+
     //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
 
     public function mostrarBiblioteca($idUsuario)
@@ -77,32 +76,85 @@ class Database
         }
     }
 
-    public function verificarSiExisteUsuario($nick, $correo) {
+    public function verificarSiExisteUsuario($nick, $correo)
+    {
         try {
             // Preparar la consulta
             $sql = "SELECT idUsuario FROM usuario WHERE `nick` = :nick OR `email` = :correo";
             $stmt = $this->conexion->prepare($sql);
-    
+
             // Asociar parámetros con bindParam
             $stmt->bindParam(':nick', $nick, PDO::PARAM_STR);
             $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
-    
+
             // Ejecutar la consulta
             $stmt->execute();
-    
+
             // Buscar el primer resultado
             $coincidencias = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
             // Si hay coincidencias, devuelve false (usuario ya existe)
             return !$coincidencias;
-    
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+
+    // Función que muestra todos los juegos
+    public function mostrarJuegos(){
+        try {
+            // Establecer la consulta SQL
+            $sql = "SELECT * FROM `juego`";
+            
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
+            
+            // Ejecutar la consulta
+            $stmt->execute();
+            
+            // Obtener los resultados (como un array asociativo)
+            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Retornar los resultados
+            return $resultados;
+            
+        } catch (Exception $e) {
+            // Si hay un error, mostrar el mensaje
+            echo "Error: " . $e->getMessage();
+        }
+    }
     
-    
-    
+
+    //Agregar un juego nuevo
+    public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero)
+    {
+        try {
+            // Consulta SQL corregida
+            $sql = "INSERT INTO `juego` 
+                    (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `genero`) 
+                    VALUES 
+                    (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :genero)";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':titulo', $titulo);
+            $stmt->bindParam(':desarrollador', $desarrollador);
+            $stmt->bindParam(':distribuidor', $distribuidor);
+            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->bindParam(':ruta', $ruta);
+            $stmt->bindParam(':genero', $genero, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+
+
 
 
     // Este metodo se ejecuta al finalizar la ejecución de la web,
