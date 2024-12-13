@@ -101,29 +101,29 @@ class Database
     }
 
     // Función que muestra todos los juegos
-    public function mostrarJuegos(){
+    public function mostrarJuegos()
+    {
         try {
             // Establecer la consulta SQL
             $sql = "SELECT * FROM `juego`";
-            
+
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
-            
+
             // Ejecutar la consulta
             $stmt->execute();
-            
+
             // Obtener los resultados (como un array asociativo)
             $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
+
             // Retornar los resultados
             return $resultados;
-            
         } catch (Exception $e) {
             // Si hay un error, mostrar el mensaje
             echo "Error: " . $e->getMessage();
         }
     }
-    
+
 
     //Agregar un juego nuevo
     public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero)
@@ -153,20 +153,49 @@ class Database
         }
     }
 
-public function eliminarJuego($idJuego){
-    try{
-        $sql = "DELETE FROM `juego`WHERE `idJuego` = :idJuego )";
-         // Preparar la consulta
-         $stmt = $this->conexion->prepare($sql);
-         $stmt->bindParam(':idJuego', $idJuego);
+    // Editar juego
+    public function editarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero)
+    {
+        try {
+            // Consulta SQL corregida
+            $sql = "UPDATE INTO `juego` 
+                    (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `genero`) 
+                    VALUES 
+                    (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :genero)";
 
-         $stmt->execute();
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
 
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':titulo', $titulo);
+            $stmt->bindParam(':desarrollador', $desarrollador);
+            $stmt->bindParam(':distribuidor', $distribuidor);
+            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->bindParam(':ruta', $ruta);
+            $stmt->bindParam(':genero', $genero, PDO::PARAM_INT);
 
-    }catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
-}
+
+
+    // Eliminar juego 
+    public function eliminarJuego($idJuego)
+    {
+        try {
+            $sql = "DELETE FROM `juego`WHERE `idJuego` = :idJuego )";
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idJuego', $idJuego);
+
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
 
 
