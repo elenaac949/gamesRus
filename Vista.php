@@ -22,4 +22,10 @@ class Vista
   {
     include "./frm/frm_biblioteca.php";
   }
+
+
+  public static function MuestraAdministración($data) //Necesario para que la vista tenga los datos a mostrar 
+  {
+    include "./frm/frm_administracion.php";
+  }
 }

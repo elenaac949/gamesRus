@@ -1,0 +1,45 @@
+
+main{
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 1fr;
+
+}
+
+aside{
+    padding: 5%;
+    display: flex;
+
+}
+
+aside form input[type="submit"] {
+    width: 200px;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #f4f4f9;
+    background: linear-gradient(to right, #7209b7, #3a0ca3);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+aside form input[type="submit"]:hover {
+    background: linear-gradient(to right, #3a0ca3, #4cc9f0);
+    color: #f72585;
+    transform: translateY(-2px);
+}
+
+aside form input[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+

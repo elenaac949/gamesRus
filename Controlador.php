@@ -46,6 +46,9 @@ class Controlador
                 $this->datosBiblioteca();
                 Vista::MuestraBiblioteca($this->data);
                 break;
+            case 'administracion':
+                Vista::MuestraAdministración($this->data);
+                break;
         }
     }
 
@@ -159,6 +162,12 @@ class Controlador
         $this->action = 'login';
         $this->data = 'Sesión cerrada';
     }
+
+
+
+    public function irAlAdministrador(){
+        $this->action='administracion';
+    }
 }
 
 
@@ -171,6 +180,8 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAlRegistro();
 } else if (isset($_POST['registroUsuario'])) {
     $programa->anadirUsuario();
+}else if(isset($_POST['administrar'])){
+    $programa->irAlAdministrador();
 }
 
 if (isset($_POST['cerrar_sesion'])) {

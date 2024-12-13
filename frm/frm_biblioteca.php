@@ -8,6 +8,7 @@ include __DIR__ . '/../controlSesion.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca</title>
+    <link rel="stylesheet" href="/gamesRus/css/general.css">
     <link rel="stylesheet" href="/gamesRus/css/frm_biblioteca.css">
 </head>
 
@@ -49,6 +50,14 @@ include __DIR__ . '/../controlSesion.php';
     <?php /* var_dump($data)  */ ?>
     <main class="contenido_principal">
         <h2>Tus Juegos</h2>
+        <div class="boton_administrador" style="display: <?php if ($_SESSION['idUsuario'] != 4) {
+                                                                echo 'none';
+                                                            }  ?>;">
+            <form action="" method="post">
+                <input type="submit" name="administrar" value="Administrar">
+            </form>
+
+        </div>
         <div class="vista_juegos">
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
@@ -68,14 +77,7 @@ include __DIR__ . '/../controlSesion.php';
                 </div>
             <?php endforeach; ?>
         </div>
-        <div class="boton_administrador" style="display: <?php if ($_SESSION['idUsuario'] != 4) {
-                                                                echo 'none';
-                                                            }  ?>;">
-            <form action="" method="post">
-                <input type="submit" name="administrar" value="Administrar">
-            </form>
-
-        </div>
+        
 
     </main>
 
