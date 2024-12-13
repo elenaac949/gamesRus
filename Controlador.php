@@ -69,12 +69,21 @@ class Controlador
     }
 
 
+    //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra 
     private function datosBiblioteca()
     {
         global $baseDatos;
-        $idUsuario = $_SESSION['idUsuario'];
-        $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
+        if ($_SESSION['nickUsuario'] === 'admin') {
+            $this->data = $baseDatos->mostrarJuegos();
+        } else {
+            $idUsuario = $_SESSION['idUsuario'];
+            $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
+        }
     }
+
+
+
+
     public function verificarUsuario()
     {
         global $baseDatos;
@@ -178,45 +187,3 @@ if (isset($_POST['cerrar_sesion'])) {
 }
 
 $programa->Inicio();
-
-
-
-
-
-
-
-
-
-
-
-
-/* if(isset($_POST['entrar'])){
-    $programa->inicia();
-} *///no se como hacer que se deje de llamar a la pagina de landing
-/* $programa->inicia();
-
-$programa->registra(); */
-
-// Si enviamos las credenciales de usuario y contraseña
-
-
-//Si registramos usuario nuevo
-/* if (isset($_POST['registrar'])) {
-    $nombre = $_POST['nombre'];
-    $apellidos = $_POST['apellidos'];
-    $correo = $_POST['correo'];
-    $nick = $_POST['nick'];
-    $contrasenia = $_POST['contrasenia'];
-    $contrasenia2 = $_POST['contrasenia2'];
-} */
-    // Validar si las contraseñas coinciden
-   /*  if ($contrasenia === $contrasenia2) {
-        // Hashear la contraseña
-        $hashedPassword = password_hash($contrasenia, PASSWORD_DEFAULT); */
-
-        // Registrar al usuario
-/*         $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword);
-    } else {
-        echo 'Las contraseñas no coinciden.';
-    }
-} */

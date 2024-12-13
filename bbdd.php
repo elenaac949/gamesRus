@@ -100,13 +100,30 @@ class Database
         }
     }
 
+    // Función que muestra todos los juegos
     public function mostrarJuegos(){
-        try{
-            $sql = "SELECT * FROM `juego`"
-        }catch (Exception $e) {
+        try {
+            // Establecer la consulta SQL
+            $sql = "SELECT * FROM `juego`";
+            
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
+            
+            // Ejecutar la consulta
+            $stmt->execute();
+            
+            // Obtener los resultados (como un array asociativo)
+            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Retornar los resultados
+            return $resultados;
+            
+        } catch (Exception $e) {
+            // Si hay un error, mostrar el mensaje
             echo "Error: " . $e->getMessage();
         }
     }
+    
 
     //Agregar un juego nuevo
     public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero)
