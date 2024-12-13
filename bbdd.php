@@ -153,6 +153,21 @@ class Database
         }
     }
 
+public function eliminarJuego($idJuego){
+    try{
+        $sql = "DELETE FROM `juego`WHERE `idJuego` = :idJuego )";
+         // Preparar la consulta
+         $stmt = $this->conexion->prepare($sql);
+         $stmt->bindParam(':idJuego', $idJuego);
+
+         $stmt->execute();
+
+
+    }catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 
 
 
