@@ -58,7 +58,8 @@
             </form>
         </aside>
         <section>
-            <!-- aqui va el contenido -->
+            <!-- si damos al boton de añadir juego se muestra el formulario correspondiente-->
+            <?php if(isset($_POST['mostrar_anadir_juego'])) : ?>
             <h2>Datos Juego Nuevo</h2>
             <form action="" method="post" name="formulario_anadir_juego">
                 <input type="text" name="titulo_juego" placeholder="Título">
@@ -76,6 +77,7 @@
                 <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
                 <input type="submit" name="anadir-juego" value="Añadir Juego">
             </form>
+            <?php endif ?>
         </section>
 
     </main>
