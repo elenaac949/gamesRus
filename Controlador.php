@@ -9,7 +9,6 @@ include "./env/conf.env";
 
 class Controlador
 {
-    private $modelo;
 
     private $action;
 
@@ -47,7 +46,9 @@ class Controlador
                 Vista::MuestraBiblioteca($this->data);
                 break;
             case 'administracion':
+                $this->mostrarGeneros();
                 Vista::MuestraAdministración($this->data);
+
                 break;
         }
     }
@@ -176,6 +177,12 @@ class Controlador
 
     public function irAlAdministrador(){
         $this->action='administracion';
+
+    }
+
+    public function mostrarGeneros(){
+        global $baseDatos;
+        $this->data=$baseDatos->accederGeneros();
     }
 }
 

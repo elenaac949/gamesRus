@@ -154,6 +154,30 @@ class Database
     }
 
 
+    public function accederGeneros(){
+        try {
+            // Establecer la consulta SQL
+            $sql = "SELECT * FROM `genero`";
+            
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
+            
+            // Ejecutar la consulta
+            $stmt->execute();
+            
+            // Obtener los resultados (como un array asociativo)
+            $generos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Retornar los resultados
+            return $generos;
+            
+        } catch (Exception $e) {
+            // Si hay un error, mostrar el mensaje
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    
 
 
 
