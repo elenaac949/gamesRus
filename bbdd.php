@@ -61,7 +61,6 @@ class Database
     }
 
     //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
-
     public function mostrarBiblioteca($idUsuario)
     {
         try {
@@ -222,11 +221,8 @@ class Database
     }
 
     
-
-
-
     // Este metodo se ejecuta al finalizar la ejecución de la web,
-    // eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido
+    // Eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido
     function __destruct()
     {
         $this->conexion = null;
