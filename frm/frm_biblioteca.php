@@ -23,10 +23,6 @@ include __DIR__ . '/../controlSesion.php';
             <form action="" method="post">
                 <input type="text" class="buscardor" placeholder="Buscar...">
             </form>
-            <form action="perfil" method="post">
-                <a href="#"><img src="./img/usuario.png" alt="" srcset=""></a>
-                <input type="submit" name="irAlPerfil" class="perfil" value="Perfil">
-            </form>
             <form action="catalogo" method="post">
                 <a href="#"><img src="./img/catalogo.png" alt="" srcset=""></a>
                 <input type="submit" name="irAlCatalogo" class="catalogo" value="Catálogo">
@@ -39,11 +35,22 @@ include __DIR__ . '/../controlSesion.php';
                 <a href="#"><img src="./img/carro-de-la-compra.png" alt="" srcset=""></a>
                 <input type="submit" name="irAlCarrito" class="carrito" value="Carrito">
             </form>
-            <form action="#" method="post">
-                <a href="#"><img src="./img/salir.png" alt="" srcset=""></a>
-                <input type="submit" name="cerrar_sesion" class="salir" value="Cerrar Sesión">
-
-            </form>
+            <div class="perfil-container">
+                <form action="perfil" method="post" class="perfil-form">
+                    <a href="#"><img src="./img/usuario.png" alt=""></a>
+                    <input type="submit" name="irAlPerfil" class="perfil" value="Perfil">
+                </form>
+                <div class="desplegable">
+                    <form action="#" method="post">
+                        <img src="/img/salir.png" alt="">
+                        <input type="submit" name="verPerfil" class="verPerfil" value="Ver Perfil">
+                        <form action="#" method="post">
+                            <img src="/img/usuario.png" alt="" srcset="">
+                            <input type="submit" name="cerrar_sesion" class="salir" value="Cerrar Sesión">
+                        </form>
+                    </form>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -77,7 +84,7 @@ include __DIR__ . '/../controlSesion.php';
                 </div>
             <?php endforeach; ?>
         </div>
-        
+
 
     </main>
 
