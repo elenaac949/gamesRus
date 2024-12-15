@@ -20,6 +20,7 @@ include __DIR__ . '/../common/controlSesion.php';
     <main>
         <aside class="">
             <form action="" method="post" name="elegir_accion_administrador">
+                <input type="hidden" name="administrar">
                 <div>
                     <input type="submit" name="mostrar_anadir_juego" value="Nuevo Juego">
                 </div>

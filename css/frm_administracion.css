@@ -1,5 +1,4 @@
-
-main{
+main {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 5fr;
@@ -7,7 +6,7 @@ main{
 
 }
 
-aside{
+aside {
     padding: 5%;
     display: flex;
 
@@ -48,7 +47,7 @@ section {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     color: #3a0ca3;
-    max-height: 80vh;
+    /* max-height: 80vh; */
 }
 
 section h2 {
@@ -70,7 +69,7 @@ section form {
 
 section form input[type="text"],
 section form input[type="date"],
-section form textarea ,
+section form textarea,
 section form select {
     font-size: 1em;
     padding: 10px;
@@ -86,7 +85,7 @@ section form select {
 section form input[type="text"]:focus,
 section form input[type="date"]:focus,
 section form textarea:focus,
-section form select option{
+section form select option {
     border-color: #4cc9f0;
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
 }
@@ -120,7 +119,3 @@ section form input[type="submit"]:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
-
-
-

@@ -1,17 +1,14 @@
 <?php
-/* require_once "modelo.php"
- */
 require_once "vista.php";
-require_once "bbdd.php";
+// El modelo es bbdd
+require_once "bbdd.php"; 
 include "./env/conf.env";
-
-
 
 class Controlador
 {
-
+    // Con action controlamos la navegación de páginas
     private $action;
-
+    // Con data controlamos los mensajes y errores (Crear una para errores?)
     private $data;
 
     public function __construct()
@@ -73,7 +70,7 @@ class Controlador
     }
 
 
-    //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra 
+    //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra los juegos del usuario
     private function datosBiblioteca()
     {
         global $baseDatos;
@@ -87,7 +84,7 @@ class Controlador
 
 
 
-
+    // Función que verifica si el usuario se ha logeado bien
     public function verificarUsuario()
     {
         global $baseDatos;
@@ -115,6 +112,7 @@ class Controlador
     }
 
 
+    // Función que registra a un usuario en el sistema (bbddd)
     public function anadirUsuario()
     {
         global $baseDatos;
@@ -164,8 +162,7 @@ class Controlador
         }
     }
 
-
-
+    // Función que cierra la sesión y redirge al login
     public function cerrarSesion()
     {
         session_destroy();
@@ -173,19 +170,27 @@ class Controlador
         $this->data = 'Sesión cerrada';
     }
 
-
-
+    // Función que te lleva al panel de administración
     public function irAlAdministrador(){
         $this->action='administracion';
 
     }
 
+    // Función que muestra los géneros de los juegos
     public function mostrarGeneros(){
         global $baseDatos;
         $this->data=$baseDatos->accederGeneros();
     }
+
+    public function mostrarFormulario(){
+        if (isset($_POST['mostrar_anadir_juego'])){
+            
+        }
+
+    }
 }
 
+// El programa en sí comienza aquí
 
 $programa = new Controlador();
 
