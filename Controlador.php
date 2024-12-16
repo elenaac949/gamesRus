@@ -11,6 +11,9 @@ class Controlador
     // Con data controlamos los mensajes y errores (Crear una para errores?)
     private $data;
 
+    private $data1;
+    private $error;
+
     public function __construct()
     {
         // $this->modelo= new Modelo();
@@ -43,7 +46,7 @@ class Controlador
                 Vista::MuestraBiblioteca($this->data);
                 break;
             case 'administracion':
-                $this->mostrarGeneros();
+                $this->mostrarFormulario();
                 Vista::MuestraAdministración($this->data);
 
                 break;
@@ -182,16 +185,27 @@ class Controlador
         $this->data=$baseDatos->accederGeneros();
     }
 
+    public function mostrarLosJuegos(){
+        global $baseDatos;
+        $this->data=$baseDatos->mostrarJuegos();
+    }
+
+    //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
+
     public function mostrarFormulario(){
         if (isset($_POST['mostrar_anadir_juego'])){
-            
+            $this->mostrarGeneros();
+        }else if(isset($_POST['mostrar_eliminar_juego'])){
+            $this->mostrarLosJuegos();
+        }else if(isset($_POST['mostrar_editar_juego'])){
+            $this->mostrarLosJuegos();
         }
 
     }
 }
 
-// El programa en sí comienza aquí
 
+// El programa en sí comienza aquí
 $programa = new Controlador();
 
 

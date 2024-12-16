@@ -181,6 +181,9 @@ class Database
     }
 
 
+
+    
+
     // Eliminar juego 
     public function eliminarJuego($idJuego)
     {

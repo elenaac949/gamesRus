@@ -28,7 +28,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="submit" name="mostrar_eliminar_juego" value="Eliminar Juego">
                 </div>
                 <div>
-                    <input type="submit" name="mostrar_modificar_juego" value="Editar Juego">
+                    <input type="submit" name="mostrar_editar_juego" value="Editar Juego">
                 </div>
             </form>
         </aside>
@@ -51,6 +51,40 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="text" name="ruta_juego" placeholder="Ruta">
                     <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
                     <input type="submit" name="anadir-juego" value="Añadir Juego">
+                </form>
+            <?php endif ?>
+            
+            <!-- ELIMINAR LOS JUEGOS -->
+            <?php if (isset($_POST['mostrar_eliminar_juego'])) : ?>
+            <h2>Eliminar Juego</h2>
+            <form action="" method="post" name="formulario_eliminar_juego">
+                <select name="nombre_juego">
+                <option value="">Selecciona un titulo</option>
+                        <?php foreach ($data as $titulo) : ?>
+                            <option value="<?= $titulo['titulo']; ?>"><?= $titulo['titulo']; ?></option>
+                        <?php endforeach ?>
+                </select>
+                <input type="submit" name="eliminar-juego" value="Eliminar juego">
+            </form>
+            <?php endif ?>
+            
+            <!-- Editar los juegos -->
+            <?php if (isset($_POST['mostrar_editar_juego'])) : ?>
+                <h2>Editar juego</h2>
+                <form action="" method="post" name="formulario_editar_juego">
+                <select name="nombre_juego">
+                <option value="">Selecciona un titulo</option>
+                        <?php foreach ($data as $titulo) : ?>
+                            <option value="<?= $titulo['titulo']; ?>"><?= $titulo['titulo']; ?></option>
+                        <?php endforeach ?>
+                </select>
+                
+                <input type="text" name="desarrollador_juego" placeholder="Desarrollador" value="">
+                <input type="text" name="distribuidor_juego" placeholder="Distribuidor">
+                <input type="date" name="anio_lanzamiento" placeholder="Año">
+                <input type="text" name="ruta_juego" placeholder="Ruta">
+                <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
+
                 </form>
             <?php endif ?>
         </section>
