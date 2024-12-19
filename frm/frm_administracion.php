@@ -21,6 +21,7 @@ include __DIR__ . '/../common/controlSesion.php';
         <aside class="">
             <form action="" method="post" name="elegir_accion_administrador">
             
+            <!-- Le estamos pasando el parametro administrar para que en controlador nos cargue esta vista  NO TIENE QUE VER CON EL submit DE ADMINISTRAR se llaman igual porque con ese valor vamos a hacer la misma función, es decir, mostrar la vista de administrador-->
                 <input type="hidden" name="administrar">
                 <div>
 
@@ -35,9 +36,10 @@ include __DIR__ . '/../common/controlSesion.php';
             </form>
         </aside>
         <section>
+        
         <p class="errores"><?= $error ?></p>
             <!-- si damos al boton de añadir juego se muestra el formulario correspondiente-->
-            <?php if (isset($_POST['boton']) && $_POST['boton']=="Nuevo") : ?>
+            <?php if (isset($_POST['mostrar_anadir_juego'])) : ?>
                 
                 <h2>Datos Juego Nuevo</h2>
                 
@@ -56,6 +58,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="date" name="anio_lanzamiento" placeholder="Año">
                     <input type="text" name="ruta_juego" placeholder="Ruta">
                     <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
+                    <input type="text" name="portada_juego" placeholder="Portada">
                     <input type="submit" name="anadir-juego" value="Añadir Juego">
                     
                 </form>

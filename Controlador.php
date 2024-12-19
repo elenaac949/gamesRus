@@ -1,7 +1,7 @@
 <?php
 require_once "vista.php";
 // El modelo es bbdd
-require_once "bbdd.php"; 
+require_once "bbdd.php";
 include "./env/conf.env";
 
 class Controlador
@@ -171,18 +171,25 @@ class Controlador
     }
 
     // Función que te lleva al panel de administración
-    public function irAlAdministrador(){
-        $this->action='administracion';
-
+    public function irAlAdministrador()
+    {
+        $this->action = 'administracion';
     }
 
-    public function mostrarFormulario(){
-
-        if(isset($_POST['boton'])){
-            if($_POST['boton']=="Nuevo"){
-                $this->mostrarGeneros();
-            }
-        } 
+    // Función para mostrar Formularios de añadir, eliminar y editar
+    public function mostrarFormulario()
+    {
+        if (isset($_POST['mostrar_anadir_juego'])) {
+            $this->mostrarGeneros();
+        }
+        // falta post de editar
+        //falta post de eliminar
+        // No hace falta ya esto
+        // if(isset($_POST['boton'])){
+        //     if($_POST['boton']=="Nuevo"){
+        //         $this->mostrarGeneros();
+        //     }
+        // }
         /* if (isset($_POST['mostrar_anadir_juego'])){
             
          
@@ -192,56 +199,57 @@ class Controlador
         }else if(isset($_POST['mostrar_editar_juego'])){
             $this->mostrarLosJuegos();
         } */
-
     }
 
 
 
     // Función que muestra los géneros de los juegos
-    public function mostrarGeneros(){
-        echo "entro 3";
+    public function mostrarGeneros()
+    {
+       
         global $baseDatos;
-        $this->data=$baseDatos->accederGeneros();
-        echo "entro 4";
+        $this->data = $baseDatos->accederGeneros();
+        
     }
 
-    public function mostrarLosJuegos(){
+    public function mostrarLosJuegos()
+    {
         global $baseDatos;
-        $this->data=$baseDatos->mostrarJuegos();
+        $this->data = $baseDatos->mostrarJuegos();
     }
 
-    public function anadirNuevoJuego(){
+    public function anadirNuevoJuego()
+    {
         global $baseDatos;
-        if($_SERVER["REQUEST_METHOD"]== "POST"){
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validar campos obligatorios
-        if (!empty($_POST['titulo_juego']) && !empty($_POST['genero_juego']) && 
-        !empty($_POST['desarrollador_juego']) && !empty($_POST['distribuidor_juego']) &&
-        !empty($_POST['anio_lanzamiento']) && !empty($_POST['ruta_juego']) && 
-        !empty($_POST['descripcion_juego'])) {
-            $titulo=$_POST['titulo_juego'];
-            $genero=$_POST['genero_juego'];
-            $desarrollador=$_POST['desarrollador_juego'];
-            $distribuidor=$_POST['distribuidor_juego'];
-            $lanzamiento=$_POST['anio_lanzamiento'];
-            $ruta=$_POST['ruta_juego'];
-            $descripcion=$_POST['descripcion_juego'];
-            $portada=$_POST['portada'];
-//falta una funcion para verificar si el juego existe ya
-//falta que se añada la descripcion y la portada
-            $baseDatos->agregarJuego($titulo,$desarrollador,$distribuidor, $lanzamiento, $ruta,$genero,$descripcion,$portada);
-            $this->error = 'Juego añadido correctamente';
-            $this->action = 'administracion';
-        }else{
-            $this->error = 'Datos incompletos.';
-            $this->action = 'administracion';
+            if (
+                !empty($_POST['titulo_juego']) && !empty($_POST['genero_juego']) &&
+                !empty($_POST['desarrollador_juego']) && !empty($_POST['distribuidor_juego']) &&
+                !empty($_POST['anio_lanzamiento']) && !empty($_POST['ruta_juego']) &&
+                !empty($_POST['descripcion_juego'] && !empty($_POST['portada_juego']))
+            ) {
+                $titulo = $_POST['titulo_juego'];
+                $genero = $_POST['genero_juego'];
+                $desarrollador = $_POST['desarrollador_juego'];
+                $distribuidor = $_POST['distribuidor_juego'];
+                $lanzamiento = $_POST['anio_lanzamiento'];
+                $ruta = $_POST['ruta_juego'];
+                $descripcion = $_POST['descripcion_juego'];
+                $portada = $_POST['portada_juego'];
+                //falta una funcion para verificar si el juego existe ya
+                //falta que se añada la descripcion y la portada
+                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $ruta, $genero, $descripcion, $portada);
+                $this->error = 'Juego añadido correctamente';
+                $this->action = 'administracion';
+            } else {
+                $this->error = 'Datos incompletos.';
+                $this->action = 'administracion';
+            }
         }
     }
     //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
-
-
 }
-
-
 // El programa en sí comienza aquí
 $programa = new Controlador();
 
@@ -252,9 +260,10 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAlRegistro();
 } else if (isset($_POST['registroUsuario'])) {
     $programa->anadirUsuario();
-}else if(isset($_POST['administrar'])){
+} else if (isset($_POST['administrar'])) {
+    //Gracias al parametro administrar (pasado por submit desde biblioteca o por hidden en el mismo panel del administrador) nos muestra la vista de Administrador
     $programa->irAlAdministrador();
-}else if(isset($_POST['anadir-juego'])){
+} else if (isset($_POST['anadir-juego'])) {
     $programa->anadirNuevoJuego();
 }
 

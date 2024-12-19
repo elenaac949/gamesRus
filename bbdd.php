@@ -130,9 +130,9 @@ class Database
         try {
             // Consulta SQL actualizada
             $sql = "INSERT INTO `juego` 
-                (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `genero`, `descripcion`, `portada`) 
+                (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `idGenero`, `descripcion`, `portada`) 
                 VALUES 
-                (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :genero, :descripcion, :portada)";
+                (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :idGenero, :descripcion, :portada)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -143,7 +143,7 @@ class Database
             $stmt->bindParam(':distribuidor', $distribuidor);
             $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
             $stmt->bindParam(':ruta', $ruta);
-            $stmt->bindParam(':genero', $genero, PDO::PARAM_INT);
+            $stmt->bindParam(':idGenero', $genero, PDO::PARAM_INT);
             $stmt->bindParam(':descripcion', $descripcion);
             $stmt->bindParam(':portada', $portada);
 
@@ -161,9 +161,9 @@ class Database
         try {
             // Consulta SQL corregida
             $sql = "UPDATE INTO `juego` 
-                    (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `genero`) 
+                    (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `idGenero`) 
                     VALUES 
-                    (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :genero)";
+                    (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :idGenero)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -174,7 +174,7 @@ class Database
             $stmt->bindParam(':distribuidor', $distribuidor);
             $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
             $stmt->bindParam(':ruta', $ruta);
-            $stmt->bindParam(':genero', $genero, PDO::PARAM_INT);
+            $stmt->bindParam(':idGenero', $genero, PDO::PARAM_INT);
 
             // Ejecutar la consulta
             $stmt->execute();
@@ -185,7 +185,7 @@ class Database
 
 
 
-    
+
 
     // Eliminar juego 
     public function eliminarJuego($idJuego)

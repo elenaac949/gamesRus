@@ -25,6 +25,7 @@ include __DIR__ . '/../common/controlSesion.php';
                                                                 echo 'none';
                                                             }  ?>;">
             <form action="" method="post">
+                <!--  -->
                 <input type="submit" name="administrar" value="Administrar">
             </form>
 
