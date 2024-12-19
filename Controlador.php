@@ -33,7 +33,9 @@ class Controlador
                 $this->anadirUsuario();
             } elseif (isset($_POST['cerrar_sesion'])) {
                 $this->cerrarSesion();
-            } elseif(isset($_POST['administrar'])){
+            } 
+            
+            if(isset($_POST['administrar'])){
                 $this->action='administracion';
             }elseif (isset($_POST['mostrar_anadir_juego'])) {
                 $this->action = 'administrar_nuevo_juego';
@@ -42,6 +44,9 @@ class Controlador
             } elseif (isset($_POST['mostrar_editar_juego'])) {
                 $this->action = 'administrar_editar_juego';
             }
+
+
+            
         } else {
             $this->action = 'landing'; // Acción predeterminada en solicitudes GET
         }
