@@ -37,6 +37,44 @@ aside form input[type="submit"]:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ul li {
+    display: inline-block;
+    position: relative;
+}ul li > input,
+ul li > a {
+    width: 200px;
+    display: block;
+    padding: 20px 25px;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    font-size: 20px;
+    background-color: #22438c;
+    border: none;
+    cursor: pointer;
+}
+ul li ul.dropdown {
+    display: none; /* Oculta los submenús por defecto */
+    position: absolute;
+    background-color: #22438c;
+    width: 100%;
+    z-index: 999;
+}
+ul li ul.dropdown li {
+    display: block;
+}
+ul li:hover > ul.dropdown {
+    display: block; /* Muestra los submenús al pasar el mouse */
+}
+ul li > input:hover,
+ul li > a:hover {
+    background-color: #112c66;
+}
 
 section {
     display: flex;
