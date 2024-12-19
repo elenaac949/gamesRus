@@ -265,9 +265,7 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAlAdministrador();
 } else if (isset($_POST['anadir-juego'])) {
     $programa->anadirNuevoJuego();
-}
-
-if (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 }
 
