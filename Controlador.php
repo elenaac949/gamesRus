@@ -69,17 +69,14 @@ class Controlador
                 break;
             case 'nuevo_juego':
                 $this->mostrarGeneros();  // Llamar al método para obtener los géneros
-                Vista::MuestraFormularioNuevoJuego($this->data);  // Mostrar el formulario para nuevo juego
                 break;
             case 'eliminar_juego':
                 // Acción para mostrar el formulario de eliminar juego
                 $this->mostrarLosJuegos();  // Cargar los juegos disponibles para eliminar
-                //Vista::MuestraFormularioEliminarJuego($this->data);  // Mostrar el formulario de eliminar juego
                 break;
             case 'editar_juego':
                 // Acción para mostrar el formulario de editar juego
                 $this->mostrarLosJuegos();  // Cargar los juegos disponibles para editar
-                //Vista::MuestraFormularioEditarJuego($this->data);  // Mostrar el formulario para editar juego
                 break;
             default:
                 Vista::MuestraLanding();  // Acción por defecto si no hay coincidencia
