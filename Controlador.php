@@ -23,8 +23,9 @@ class Controlador
     private function resolverAccion()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            if (isset($_POST['loginUsuario'])) {
+            if(isset($_POST['irInicioSesion'])){
+                $this->action='login';
+            }elseif (isset($_POST['loginUsuario'])) {
                 $this->verificarUsuario();
             } elseif (isset($_POST['irRegistro'])) {
                 $this->irAlRegistro();
@@ -32,14 +33,13 @@ class Controlador
                 $this->anadirUsuario();
             } elseif (isset($_POST['cerrar_sesion'])) {
                 $this->cerrarSesion();
-            } elseif (isset($_POST['mostrar_anadir_juego'])) {
-                // Acción para mostrar el formulario de nuevo juego
+            } elseif(isset($_POST['administrar'])){
+                $this->action='administracion';
+            }elseif (isset($_POST['mostrar_anadir_juego'])) {
                 $this->action = 'nuevo_juego';
             } elseif (isset($_POST['mostrar_eliminar_juego'])) {
-                // Acción para mostrar el formulario de eliminar juego
                 $this->action = 'eliminar_juego';
             } elseif (isset($_POST['mostrar_editar_juego'])) {
-                // Acción para mostrar el formulario de editar juego
                 $this->action = 'editar_juego';
             }
         } else {
