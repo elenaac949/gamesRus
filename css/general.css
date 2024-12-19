@@ -26,7 +26,7 @@ body {
 }
 
 header {
-    height: 20vh;
+    max-height: 20vh;
     display: flex;
     justify-content: space-between;
     align-items: center;

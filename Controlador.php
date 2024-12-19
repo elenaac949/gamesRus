@@ -36,11 +36,11 @@ class Controlador
             } elseif(isset($_POST['administrar'])){
                 $this->action='administracion';
             }elseif (isset($_POST['mostrar_anadir_juego'])) {
-                $this->action = 'nuevo_juego';
+                $this->action = 'administrar_nuevo_juego';
             } elseif (isset($_POST['mostrar_eliminar_juego'])) {
-                $this->action = 'eliminar_juego';
+                $this->action = 'administrar_eliminar_juego';
             } elseif (isset($_POST['mostrar_editar_juego'])) {
-                $this->action = 'editar_juego';
+                $this->action = 'administrar_editar_juego';
             }
         } else {
             $this->action = 'landing'; // Acción predeterminada en solicitudes GET
@@ -67,16 +67,19 @@ class Controlador
             case 'administracion':
                 Vista::MuestraAdministración($this->data);
                 break;
-            case 'nuevo_juego':
+            case 'administrar_nuevo_juego':
                 $this->mostrarGeneros();  // Llamar al método para obtener los géneros
+                Vista::MuestraAdministración($this->data);
                 break;
-            case 'eliminar_juego':
+            case 'administrar_eliminar_juego':
                 // Acción para mostrar el formulario de eliminar juego
                 $this->mostrarLosJuegos();  // Cargar los juegos disponibles para eliminar
+                Vista::MuestraAdministración($this->data);
                 break;
-            case 'editar_juego':
+            case 'administrar_editar_juego':
                 // Acción para mostrar el formulario de editar juego
                 $this->mostrarLosJuegos();  // Cargar los juegos disponibles para editar
+                Vista::MuestraAdministración($this->data);
                 break;
             default:
                 Vista::MuestraLanding();  // Acción por defecto si no hay coincidencia
