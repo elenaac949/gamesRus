@@ -1,7 +1,7 @@
 <?php
 require_once "vista.php";
 // El modelo es bbdd
-require_once "bbdd.php"; 
+require_once "bbdd.php";
 include "./env/conf.env";
 
 class Controlador
@@ -10,27 +10,46 @@ class Controlador
     private $action;
     // Con data controlamos los mensajes y errores (Crear una para errores?)
     private $data;
-
-    private $data1;
     private $error;
 
     public function __construct()
     {
         // $this->modelo= new Modelo();
         session_start();
+        $this->resolverAccion();
+    }
+
+
+    private function resolverAccion()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            if (isset($_POST['irInicioSesion'])) {
-                $this->action = 'login';
+            if (isset($_POST['loginUsuario'])) {
+                $this->verificarUsuario();
+            } elseif (isset($_POST['irRegistro'])) {
+                $this->irAlRegistro();
+            } elseif (isset($_POST['registroUsuario'])) {
+                $this->anadirUsuario();
+            } elseif (isset($_POST['cerrar_sesion'])) {
+                $this->cerrarSesion();
+            } elseif (isset($_POST['mostrar_anadir_juego'])) {
+                // Acción para mostrar el formulario de nuevo juego
+                $this->action = 'nuevo_juego';
+            } elseif (isset($_POST['mostrar_eliminar_juego'])) {
+                // Acción para mostrar el formulario de eliminar juego
+                $this->action = 'eliminar_juego';
+            } elseif (isset($_POST['mostrar_editar_juego'])) {
+                // Acción para mostrar el formulario de editar juego
+                $this->action = 'editar_juego';
             }
         } else {
-            $this->action = 'landing';
+            $this->action = 'landing'; // Acción predeterminada en solicitudes GET
         }
     }
 
     public function Inicio()
     {
-        // var_dump($this->action);
+        // var_dump($this->action); // Para depuración si es necesario
         switch ($this->action) {
             case 'login':
                 Vista::MuestraLogin($this->data);
@@ -46,12 +65,28 @@ class Controlador
                 Vista::MuestraBiblioteca($this->data);
                 break;
             case 'administracion':
-                $this->mostrarFormulario();
                 Vista::MuestraAdministración($this->data);
-
+                break;
+            case 'nuevo_juego':
+                $this->mostrarGeneros();  // Llamar al método para obtener los géneros
+                Vista::MuestraFormularioNuevoJuego($this->data);  // Mostrar el formulario para nuevo juego
+                break;
+            case 'eliminar_juego':
+                // Acción para mostrar el formulario de eliminar juego
+                $this->mostrarLosJuegos();  // Cargar los juegos disponibles para eliminar
+                //Vista::MuestraFormularioEliminarJuego($this->data);  // Mostrar el formulario de eliminar juego
+                break;
+            case 'editar_juego':
+                // Acción para mostrar el formulario de editar juego
+                $this->mostrarLosJuegos();  // Cargar los juegos disponibles para editar
+                //Vista::MuestraFormularioEditarJuego($this->data);  // Mostrar el formulario para editar juego
+                break;
+            default:
+                Vista::MuestraLanding();  // Acción por defecto si no hay coincidencia
                 break;
         }
     }
+
 
 
     //Estamos trabajando en ello (No es requisito de Luis para esta entrega)
@@ -174,53 +209,39 @@ class Controlador
     }
 
     // Función que te lleva al panel de administración
-    public function irAlAdministrador(){
-        $this->action='administracion';
-
+    public function irAlAdministrador()
+    {
+        $this->action = 'administracion';
     }
 
     // Función que muestra los géneros de los juegos
-    public function mostrarGeneros(){
+    public function mostrarGeneros()
+    {
         global $baseDatos;
-        $this->data=$baseDatos->accederGeneros();
+        $this->data = $baseDatos->accederGeneros();
     }
 
-    public function mostrarLosJuegos(){
+    public function mostrarLosJuegos()
+    {
         global $baseDatos;
-        $this->data=$baseDatos->mostrarJuegos();
+        $this->data = $baseDatos->mostrarJuegos();
     }
 
     //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
 
-    public function mostrarFormulario(){
-        if (isset($_POST['mostrar_anadir_juego'])){
+    public function mostrarFormulario()
+    {
+        if (isset($_POST['mostrar_anadir_juego'])) {
             $this->mostrarGeneros();
-        }else if(isset($_POST['mostrar_eliminar_juego'])){
+        } else if (isset($_POST['mostrar_eliminar_juego'])) {
             $this->mostrarLosJuegos();
-        }else if(isset($_POST['mostrar_editar_juego'])){
+        } else if (isset($_POST['mostrar_editar_juego'])) {
             $this->mostrarLosJuegos();
         }
-
     }
 }
 
 
 // El programa en sí comienza aquí
 $programa = new Controlador();
-
-
-if (isset($_POST['loginUsuario'])) {
-    $programa->verificarUsuario();
-} elseif (isset($_POST['irRegistro'])) {
-    $programa->irAlRegistro();
-} else if (isset($_POST['registroUsuario'])) {
-    $programa->anadirUsuario();
-}else if(isset($_POST['administrar'])){
-    $programa->irAlAdministrador();
-}
-
-if (isset($_POST['cerrar_sesion'])) {
-    $programa->cerrarSesion();
-}
-
 $programa->Inicio();

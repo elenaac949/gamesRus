@@ -28,4 +28,9 @@ class Vista
   {
     include "./frm/frm_administracion.php";
   }
+
+  public static function MuestraFormularioNuevoJuego($data)
+    {
+      include "./frm/frm_anadir_juego.php";
+    }
 }
