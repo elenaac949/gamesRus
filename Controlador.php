@@ -47,6 +47,8 @@ class Controlador
 
             if(isset($_POST['btn_anadir_juego'])){
                 $this->action='anadir_nuevo_juego';
+            }elseif(isset($_POST['btn_eliminar_juego'])){
+                $this->action='eliminar_juego';
             }
 
 
@@ -91,6 +93,10 @@ class Controlador
                 break;
             case 'anadir_nuevo_juego':
                 $this->anadirNuevoJuego();
+                Vista::MuestraAdministración($this->data, $this->error);
+                break;
+            case 'eliminar_juego':
+                $this->eliminarUnJuego();
                 Vista::MuestraAdministración($this->data, $this->error);
                 break;
             default:
@@ -284,6 +290,28 @@ class Controlador
             }
         }
     }
+
+    public function eliminarUnJuego()
+    {
+        if (!empty($_POST['nombre_juego'])) {
+            $titulo = $_POST['nombre_juego'];
+            global $baseDatos;
+    
+            // Obtén el idJuego a partir del título
+            $id = $baseDatos->devolverIdJuego($titulo);
+    
+            // Verifica si el idJuego es válido
+            if ($id) {
+                $baseDatos->eliminarJuego($id);
+                $this->error = "Juego eliminado: " . $titulo;
+            } else {
+                $this->error = "No se encontró un juego con el título: " . $titulo;
+            }
+        } else {
+            $this->error = "Algo ha fallado, no se proporcionó un título.";
+        }
+    }
+    
 }
 
 

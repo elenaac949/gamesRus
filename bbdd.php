@@ -183,23 +183,36 @@ class Database
     }
 
 
-
+    //obtener el id del juego a aprtir del titulo que eliges en el select
+    public function devolverIdJuego($titulo){
+        try {
+            $sql = "SELECT `idJuego` FROM `juego` WHERE `titulo` = :titulo";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':titulo', $titulo);
+            $stmt->execute();
     
-
-    // Eliminar juego 
+            // Obtiene el primer valor de la primera fila (idJuego)
+            return $stmt->fetchColumn();
+    
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+            return null; // Retorna null si hay error
+        }
+    }
+    
     public function eliminarJuego($idJuego)
     {
         try {
-            $sql = "DELETE FROM `juego`WHERE `idJuego` = :idJuego )";
-            // Preparar la consulta
+            $sql = "DELETE FROM juego WHERE idJuego = :idJuego";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':idJuego', $idJuego);
-
             $stmt->execute();
+    
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+    
 
 
     public function accederGeneros(){

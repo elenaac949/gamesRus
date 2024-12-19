@@ -6,5 +6,5 @@
             <option value="<?= $titulo['titulo']; ?>"><?= $titulo['titulo']; ?></option>
         <?php endforeach ?>
     </select>
-    <input type="submit" name="eliminar-juego" value="Eliminar juego">
+    <input type="submit" name="btn_eliminar_juego" value="Eliminar juego">
 </form>
