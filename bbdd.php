@@ -125,14 +125,14 @@ class Database
 
 
     //Agregar un juego nuevo
-    public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero)
+    public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero, $descripcion, $portada)
     {
         try {
-            // Consulta SQL corregida
+            // Consulta SQL actualizada
             $sql = "INSERT INTO `juego` 
-                    (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `genero`) 
-                    VALUES 
-                    (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :genero)";
+                (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `genero`, `descripcion`, `portada`) 
+                VALUES 
+                (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :genero, :descripcion, :portada)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -144,6 +144,8 @@ class Database
             $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
             $stmt->bindParam(':ruta', $ruta);
             $stmt->bindParam(':genero', $genero, PDO::PARAM_INT);
+            $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':portada', $portada);
 
             // Ejecutar la consulta
             $stmt->execute();
@@ -151,6 +153,7 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
+
 
     // Editar juego
     public function editarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero)
@@ -197,30 +200,30 @@ class Database
     }
 
 
-    public function accederGeneros(){
+    public function accederGeneros()
+    {
         try {
             // Establecer la consulta SQL
             $sql = "SELECT * FROM `genero`";
-            
+
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
-            
+
             // Ejecutar la consulta
             $stmt->execute();
-            
+
             // Obtener los resultados (como un array asociativo)
             $generos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
+
             // Retornar los resultados
             return $generos;
-            
         } catch (Exception $e) {
             // Si hay un error, mostrar el mensaje
             echo "Error: " . $e->getMessage();
         }
     }
 
-    
+
     // Este metodo se ejecuta al finalizar la ejecución de la web,
     // Eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido
     function __destruct()
