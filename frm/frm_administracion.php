@@ -34,6 +34,7 @@ include __DIR__ . '/../common/controlSesion.php';
             </form>
         </aside>
         <section>
+        <p class="errores"><?= $error ?></p>
             <?php if (isset($_POST['mostrar_anadir_juego'])) {
                 include "./frm/frm_anadir_juego.php";
             }elseif (isset($_POST['mostrar_eliminar_juego'])) {

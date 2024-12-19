@@ -11,7 +11,7 @@
         }
         ?>
     </select>
-
+    <input type="text" name="portada_juego" placeholder="Portada">
     <input type="text" name="desarrollador_juego" placeholder="Desarrollador">
     <input type="text" name="distribuidor_juego" placeholder="Distribuidor">
     <input type="date" name="anio_lanzamiento" placeholder="Año">

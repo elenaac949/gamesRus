@@ -24,7 +24,7 @@ class Vista
   }
 
 
-  public static function MuestraAdministración($data) //Necesario para que la vista tenga los datos a mostrar 
+  public static function MuestraAdministración($data,$error) //Necesario para que la vista tenga los datos a mostrar 
   {
     include "./frm/frm_administracion.php";
   }

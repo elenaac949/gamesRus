@@ -73,24 +73,25 @@ class Controlador
                 Vista::MuestraBiblioteca($this->data);
                 break;
             case 'administracion':
-                Vista::MuestraAdministración($this->data);
+                Vista::MuestraAdministración($this->data, $this->error);
                 break;
             case 'administrar_nuevo_juego':
                 $this->mostrarGeneros();  // Llamar al método para obtener los géneros
-                Vista::MuestraAdministración($this->data);
+                Vista::MuestraAdministración($this->data, $this->error);
                 break;
             case 'administrar_eliminar_juego':
                 // Acción para mostrar el formulario de eliminar juego
                 $this->mostrarLosJuegos();  // Cargar los juegos disponibles para eliminar
-                Vista::MuestraAdministración($this->data);
+                Vista::MuestraAdministración($this->data, $this->error);
                 break;
             case 'administrar_editar_juego':
                 // Acción para mostrar el formulario de editar juego
                 $this->mostrarLosJuegos();  // Cargar los juegos disponibles para editar
-                Vista::MuestraAdministración($this->data);
+                Vista::MuestraAdministración($this->data, $this->error);
                 break;
             case 'anadir_nuevo_juego':
-
+                $this->anadirNuevoJuego();
+                Vista::MuestraAdministración($this->data, $this->error);
                 break;
             default:
                 Vista::MuestraLanding();  // Acción por defecto si no hay coincidencia
@@ -251,9 +252,37 @@ class Controlador
         }
     }
 
-    public function anadirNuevoJuego(){
+    public function anadirNuevoJuego()
+    {
         global $baseDatos;
-        //$this->data = $baseDatos->agregarJuego();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Validar campos obligatorios
+            if (
+                !empty($_POST['titulo_juego']) && !empty($_POST['genero_juego']) &&
+                !empty($_POST['desarrollador_juego']) && !empty($_POST['distribuidor_juego']) &&
+                !empty($_POST['anio_lanzamiento']) && !empty($_POST['ruta_juego']) &&
+                !empty($_POST['descripcion_juego'] && !empty($_POST['portada_juego']))
+            ) {
+                $titulo = $_POST['titulo_juego'];
+                $genero = $_POST['genero_juego'];
+                $desarrollador = $_POST['desarrollador_juego'];
+                $distribuidor = $_POST['distribuidor_juego'];
+                $lanzamiento = $_POST['anio_lanzamiento'];
+                $ruta = $_POST['ruta_juego'];
+                $descripcion = $_POST['descripcion_juego'];
+                $portada = $_POST['portada_juego'];
+
+                //$this->error="Titulo: ".$titulo."\ndesarrollador: ".$desarrollador."\ngenero: ".$genero;
+                //falta una funcion para verificar si el juego existe ya
+                //falta que se añada la descripcion y la portada
+                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $ruta, $genero, $descripcion, $portada);
+                $this->error = 'Juego añadido correctamente';
+                //$this->action = 'administracion';
+            } else {
+                $this->error = 'Datos incompletos.';
+                $this->action = 'administracion';
+            }
+        }
     }
 }
 
