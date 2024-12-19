@@ -17,5 +17,5 @@
     <input type="date" name="anio_lanzamiento" placeholder="Año">
     <input type="text" name="ruta_juego" placeholder="Ruta">
     <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
-    <input type="submit" name="anadir-juego" value="Añadir Juego">
+    <input type="submit" name="btn_anadir_juego" value="Añadir Juego">
 </form>

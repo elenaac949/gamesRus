@@ -45,8 +45,11 @@ class Controlador
                 $this->action = 'administrar_editar_juego';
             }
 
+            if(isset($_POST['btn_anadir_juego'])){
+                $this->action='anadir_nuevo_juego';
+            }
 
-            
+
         } else {
             $this->action = 'landing'; // Acción predeterminada en solicitudes GET
         }
@@ -85,6 +88,9 @@ class Controlador
                 // Acción para mostrar el formulario de editar juego
                 $this->mostrarLosJuegos();  // Cargar los juegos disponibles para editar
                 Vista::MuestraAdministración($this->data);
+                break;
+            case 'anadir_nuevo_juego':
+
                 break;
             default:
                 Vista::MuestraLanding();  // Acción por defecto si no hay coincidencia
@@ -243,6 +249,11 @@ class Controlador
         } else if (isset($_POST['mostrar_editar_juego'])) {
             $this->mostrarLosJuegos();
         }
+    }
+
+    public function anadirNuevoJuego(){
+        global $baseDatos;
+        //$this->data = $baseDatos->agregarJuego();
     }
 }
 
