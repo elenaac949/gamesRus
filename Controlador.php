@@ -10,6 +10,7 @@ class Controlador
     private $action;
     // Con data controlamos los mensajes y errores (Crear una para errores?)
     private $data;
+    private $error;
 
     public function __construct()
     {
@@ -43,9 +44,8 @@ class Controlador
                 Vista::MuestraBiblioteca($this->data);
                 break;
             case 'administracion':
-                $this->mostrarGeneros();
-                Vista::MuestraAdministración($this->data);
-
+                $this->mostrarFormulario();
+                Vista::MuestraAdministración($this->data, $this->error);
                 break;
         }
     }
@@ -176,22 +176,67 @@ class Controlador
 
     }
 
+    public function mostrarFormulario(){
+
+        if(isset($_POST['boton'])){
+            if($_POST['boton']=="Nuevo"){
+                $this->mostrarGeneros();
+            }
+        } 
+        /* if (isset($_POST['mostrar_anadir_juego'])){
+            
+         
+           
+        }else if(isset($_POST['mostrar_eliminar_juego'])){
+            $this->mostrarLosJuegos();
+        }else if(isset($_POST['mostrar_editar_juego'])){
+            $this->mostrarLosJuegos();
+        } */
+
+    }
+
+
+
     // Función que muestra los géneros de los juegos
     public function mostrarGeneros(){
+        echo "entro 3";
         global $baseDatos;
         $this->data=$baseDatos->accederGeneros();
+        echo "entro 4";
     }
 
-    public function mostrarFormulario(){
-        if (isset($_POST['mostrar_anadir_juego'])){
-            
+    public function mostrarLosJuegos(){
+        global $baseDatos;
+        $this->data=$baseDatos->mostrarJuegos();
+    }
+
+    public function anadirNuevoJuego(){
+        global $baseDatos;
+        if(!empty($_POST['titulo_juego']) && !empty($_POST['genero_juego']) && !empty($_POST['desarrollador_juego']) && !empty($_POST['distribuidor_juego']) && !empty($_POST['anio_lanzamiento']) && !empty($_POST['ruta_juego']) && !empty($_POST['descripcion_juego'])){
+            $titulo=$_POST['titulo_juego'];
+            $genero=$_POST['genero_juego'];
+            $desarrollador=$_POST['desarrollador_juego'];
+            $distribuidor=$_POST['distribuidor_juego'];
+            $lanzamiento=$_POST['anio_lanzamiento'];
+            $ruta=$_POST['ruta_juego'];
+            $descripcion=$_POST['descripcion_juego'];
+//falta una funcion para verificar si el juego existe ya
+//falta que se añada la descripcion y la portada
+            $baseDatos->agregarJuego($titulo,$desarrollador,$distribuidor, $lanzamiento, $ruta,$genero);
+            $this->error = 'Juego añadido correctamente';
+            $this->action = 'administracion';
+        }else{
+            $this->error = 'Datos incompletos.';
+            $this->action = 'administracion';
         }
-
     }
+    //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
+
+
 }
 
-// El programa en sí comienza aquí
 
+// El programa en sí comienza aquí
 $programa = new Controlador();
 
 
@@ -203,6 +248,8 @@ if (isset($_POST['loginUsuario'])) {
     $programa->anadirUsuario();
 }else if(isset($_POST['administrar'])){
     $programa->irAlAdministrador();
+}else if(isset($_POST['anadir-juego'])){
+    $programa->anadirNuevoJuego();
 }
 
 if (isset($_POST['cerrar_sesion'])) {
