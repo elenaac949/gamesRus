@@ -288,6 +288,12 @@ class Controlador
         if ($_SERVER["REQUEST_METHOD"]  == "POST") {
         }
     }
+
+    public function mobyGames($urlMobyGames)
+    {
+        echo file_get_contents($urlMobyGames);
+        die();
+    }
 }
 // El programa en sí comienza aquí
 $programa = new Controlador();
@@ -312,6 +318,8 @@ if (isset($_POST['loginUsuario'])) {
     $programa->actualizarDatosUsuario();
 } elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
+} elseif (isset($_GET['mobyGames'])) {
+    $programa->mobyGames($_GET['mobyGames']);
 }
 
 $programa->Inicio();

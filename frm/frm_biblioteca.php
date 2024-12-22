@@ -54,8 +54,30 @@ include __DIR__ . '/../common/controlSesion.php';
     </main>
 
     <?php
-        include './common/footer.php';
+    include './common/footer.php';
     ?>
+    <script>
+        // Llama al proxy local para hacer la petición a la API de MobyGames
+        (async () => {
+            const url = new URL(window.location.href);
+
+            const mobyGamesUrl = new URL("https://api.mobygames.com/v1/games");
+            mobyGamesUrl.searchParams.append("api_key", "moby_Ivjf8fphPEz3gLn9DVIcRsvNYgE");
+            mobyGamesUrl.searchParams.append("title", "doom");
+
+
+            url.searchParams.append("mobyGames", mobyGamesUrl.toString());
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data = await response.json();
+            console.log(data);
+        })();
+    </script>
 
 </body>
 
