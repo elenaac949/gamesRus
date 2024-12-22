@@ -230,6 +230,14 @@ class Controlador
         $this->action = 'perfil';
     }
 
+    public function actualizarDatosUsuario(){
+
+        
+        global $baseDatos;
+       // $this->data = $baseDatos->actualizarUsuario();
+    }
+
+
     public function anadirNuevoJuego()
     {
         global $baseDatos;
@@ -287,7 +295,10 @@ if (isset($_POST['loginUsuario'])) {
     /* $programa-> */
 }elseif(isset($_POST['verPerfil'])){
     $programa->irAlPerfil();
-}elseif (isset($_POST['cerrar_sesion'])) {
+}elseif(isset($_POST['btn_actualizar_datos'])){
+    $programa->actualizarDatosUsuario();
+}
+elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 }
 
