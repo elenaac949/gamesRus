@@ -138,6 +138,107 @@ class Database
     }
 
     // Añadir tarjeta
+    public function agnadirTarjeta($numeroTarjeta, $ccv, $caducidad)
+    {
+        try {
+            // Consulta SQL con etiquetas para consultas preparadas
+            $sql = "INSERT INTO `tarjeta` 
+                    (`numeroTarjeta`,`ccv`, `caducidad`) 
+                    VALUES 
+                    (:numeroTarjeta,:ccv, :caducidad)";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':numeroTarjeta', $numeroTarjeta);
+            $stmt->bindParam(':cvc', $ccv);
+            $stmt->bindParam(':caducidad', $caducidad);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    public function editarTarjeta($ccv, $caducidad)
+    {
+        try {
+            // Consulta SQL con etiquetas para consultas preparadas
+            $sql = "UPDATE INTO `tarjeta` 
+                    (`ccv`, `caducidad`) 
+                    VALUES 
+                    (:ccv, :caducidad)";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':cvc', $cvc);
+            $stmt->bindParam(':caducidad', $caducidad);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    //Eliminar tarjeta
+    function eliminarTarjeta($idTarjeta)
+    {
+        try {
+            $sql = "DELETE FROM `tarjeta` WHERE `idTarjeta` = :idTarjeta";
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idTarjeta', $idTarjeta);
+
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Añadir juego a la biblioteca
+    public function agregarJuegoBiblioteca($idUsuario, $idJuego)
+    {
+        try {
+            // Consulta SQL con etiquetas para consultas preparadas
+            $sql = "INSERT INTO `comprado` 
+                    (`idUsuario`, `idJuego`) 
+                    VALUES 
+                    (:idUsuario, :idJuego)";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    //Eliminar juego de la biblioteca
+    public function eliminarJuegoBiblioteca($idUsuario, $idJuego)
+    {
+        try {
+            $sql = "DELETE FROM `comprado` WHERE `idUsuario` = :idUsuario AND `idJuego` = :idJuego";
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
     public function mostrarTarjeta($idUsuario)
@@ -153,6 +254,7 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
+
     //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
     public function mostrarBiblioteca($idUsuario)
     {
@@ -164,6 +266,82 @@ class Database
             $biblioteca = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
             return $biblioteca;
         } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Añadir juego al carrito - Update
+    public function agregarJuegoCarrito($idUsuario, $idJuego)
+    {
+        try {
+            // Consulta SQL con etiquetas para consultas preparadas
+            $sql = "INSERT INTO `carritojuego` ( `idCarrito`, `idJuego`) VALUES (
+                     (SELECT idCarrito FROM carrito WHERE idUsuario=:idUsuario),
+                    :idJuego)";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Crear carrito, cuando se crea un usuario
+    public function crearCarrito($idUsuario)
+    {
+        try {
+            // Consulta SQL con etiquetas para consultas preparadas
+            $sql = "INSERT INTO `carrito` ( `idUsuario`) VALUES (:idUsuario)";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Obtenemos el carrito entero de un usuario - Mostrar Read
+    public function obtenerCarrito($idUsuario)
+    {
+        try {
+            $sql = "SELECT * FROM carrito INNER JOIN carritojuego on carrito.idCompra = carritojuego.idCarrito WHERE idUsuario = :idUsuario";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $carrito = $stmt->fetch(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+            return $carrito;
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Eliminar juego del carrito - Delete
+    public function eliminarCarritoJuego($idUsuario)
+    {
+        try {
+            $sql = "DELETE FROM carritojuego 
+                    WHERE idCarrito = (
+                        SELECT idCarrito FROM carrito WHERE idUsuario = :idUsuario
+                    );";
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+
+            $stmt->execute();
+        } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
