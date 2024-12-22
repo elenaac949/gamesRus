@@ -283,7 +283,7 @@ if (isset($_POST['loginUsuario'])) {
 }elseif(isset($_POST['mostrar_editar_juego'])){
     /* $programa-> */
 }elseif(isset($_POST['verPerfil'])){
-    // $programa->irAlPerfil();
+    $programa->irAlPerfil();
 }elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 }

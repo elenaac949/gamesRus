@@ -107,6 +107,13 @@ class Database
 
     }
 
+
+    //consultar datos usuario para completar los campos del formulario de update
+
+    public function obtenerDatosUsuario($idUsuario){
+        $usuario=$_SESSION['idUsuario'];
+    }
+
     // Añadir tarjeta
     // public function agnadirTarjeta($)
     //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
