@@ -35,9 +35,9 @@ class Database
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "INSERT INTO `usuario` 
-                    (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `TipoDeVia`, `NombreDeVia`, `Numero`, `NumeroTelefono`) 
+                    (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `TipoDeVia`, `NombreDeVia`, `Numero`, `NumeroTelefono`, `id_rol` ) 
                     VALUES 
-                    (:nick, :correo, :nombre, :apellidos, :contrasenia, :tipoDeVia, :nombreDeVia, :numero, :numeroTelefono)";
+                    (:nick, :correo, :nombre, :apellidos, :contrasenia, :tipoDeVia, :nombreDeVia, :numero, :numeroTelefono,1)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);

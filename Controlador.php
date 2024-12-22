@@ -152,7 +152,7 @@ class Controlador
                         // setcookie('nick', $_POST['nick'], time() + (5 * 60), "/");
                         $usuario = $baseDatos->controlLogin($correo);
                         //Creamos el carrito del usuario
-                        $baseDatos->crearCarrito($usuario['idUsuario']);
+                        //$baseDatos->crearCarrito($usuario['idUsuario']);
 
                         $this->data = 'Usuario registrado correctamente.';
                         $this->action = 'login';
