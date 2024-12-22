@@ -138,7 +138,21 @@ class Database
     }
 
     // Añadir tarjeta
-    // public function agnadirTarjeta($)
+
+    //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
+    public function mostrarTarjeta($idUsuario)
+    {
+        try {
+            $sql = "SELECT * FROM tieneTarjeta INNER JOIN tarjeta ON tieneTarjeta.idTarjeta = tarjeta.idTarjeta WHERE tieneTarjeta.idUsuario = :idUsuario";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $tarjeta = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+            return $tarjeta;
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
     //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
     public function mostrarBiblioteca($idUsuario)
     {
