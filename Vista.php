@@ -28,4 +28,10 @@ class Vista
   {
     include "./frm/frm_administracion.php";
   }
+
+  public static function MuestraPerfil($data,$error) //Necesario para que la vista tenga los datos a mostrar 
+  {
+    include "./frm/frm_perfil_usuario.php";
+  }
+
 }

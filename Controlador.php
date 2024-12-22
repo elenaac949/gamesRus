@@ -47,6 +47,9 @@ class Controlador
                 $this->mostrarFormulario();
                 Vista::MuestraAdministración($this->data, $this->error);
                 break;
+            case 'perfil':
+                Vista::MuestraPerfil($this->data,$this->error);
+                break;
         }
     }
 
@@ -220,6 +223,10 @@ class Controlador
         $this->data = $baseDatos->mostrarJuegos();
     }
 
+    public function irAlPerfil(){
+        $this->action = 'perfil';
+    }
+
     public function anadirNuevoJuego()
     {
         global $baseDatos;
@@ -274,7 +281,9 @@ if (isset($_POST['loginUsuario'])) {
 } else if (isset($_POST['anadir-juego'])) {
     $programa->anadirNuevoJuego();
 }elseif(isset($_POST['mostrar_editar_juego'])){
-    $programa->
+    /* $programa-> */
+}elseif(isset($_POST['verPerfil'])){
+    $programa->irAlPerfil();
 }
 elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
