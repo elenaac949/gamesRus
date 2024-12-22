@@ -83,7 +83,7 @@ class Database
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
-            $idUsuario=$_SESSION['idUsuario'];
+            $idUsuario = $_SESSION['idUsuario'];
             $sql =  "UPDATE `usuario`
                      SET `nick` = :nick, 
                         `email` = :correo, 
@@ -112,7 +112,7 @@ class Database
             $stmt->bindParam(':numeros', $numeros);
             $stmt->bindParam(':otros', $otros);
             $stmt->bindParam(':numeroTelefono', $numeroTelefono);
-            $stmt->bindParam(':id',$idUsuario);
+            $stmt->bindParam(':id', $idUsuario);
             var_dump($stmt->queryString);
 
             // Ejecutar la consulta
@@ -252,11 +252,17 @@ class Database
     public function editarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero)
     {
         try {
+            $idUsuario = $_SESSION['idUsuario'];
             // Consulta SQL corregida
-            $sql = "UPDATE INTO `juego` 
-                    (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `idGenero`) 
-                    VALUES 
-                    (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :idGenero)";
+            $sql = "UPDATE `juego`
+                    SET `titulo` = :titulo,
+                        `desarrollador` = :desarrollador,
+                        `distribuidor` = :distribuidor,
+                        `anio` = :anio,
+                        `ruta` = :ruta,
+                        `idGenero` = :idGenero
+                    WHERE `idUsuario` = :id"; // Reemplaza `id` con la clave primaria de la tabla.
+
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
