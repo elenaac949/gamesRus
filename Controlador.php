@@ -181,6 +181,8 @@ class Controlador
     {
         if (isset($_POST['mostrar_anadir_juego'])) {
             $this->mostrarGeneros();
+        }elseif(isset($_POST['mostrar_editar_juego'])){
+            $this->mostrarLosJuegos();
         }
         // falta post de editar
         //falta post de eliminar
@@ -249,6 +251,12 @@ class Controlador
         }
     }
     //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
+
+    public function editarJuego(){
+        if($_SERVER["REQUEST_METHOD"]  == "POST"){
+            
+        }
+    }
 }
 // El programa en sí comienza aquí
 $programa = new Controlador();
@@ -265,7 +273,10 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAlAdministrador();
 } else if (isset($_POST['anadir-juego'])) {
     $programa->anadirNuevoJuego();
-} elseif (isset($_POST['cerrar_sesion'])) {
+}elseif(isset($_POST['mostrar_editar_juego'])){
+    $programa->
+}
+elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 }
 

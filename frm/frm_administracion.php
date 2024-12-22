@@ -31,7 +31,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="submit" name="boton" value="Eliminar">
                 </div>
                 <div>
-                    <input type="submit" name="boton" value="Editar">
+                    <input type="submit" name="mostrar_editar_juego" value="Editar">
                 </div>
             </form>
         </aside>
@@ -94,6 +94,8 @@ include __DIR__ . '/../common/controlSesion.php';
                 <input type="date" name="anio_lanzamiento" placeholder="Año">
                 <input type="text" name="ruta_juego" placeholder="Ruta">
                 <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
+                <input type="submit" name="editar-juego" value="Editar Juego">
+
 
                 </form>
             <?php endif ?>
