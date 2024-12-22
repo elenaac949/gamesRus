@@ -114,8 +114,51 @@ class Database
         $usuario=$_SESSION['idUsuario'];
     }
 
-    // Añadir tarjeta
-    // public function agnadirTarjeta($)
+    // Añadir tarjeta - Create
+    public function agnadirTarjeta($cvv, $caducidad){
+        try {
+            // Consulta SQL con etiquetas para consultas preparadas
+            $sql = "INSERT INTO `tarjeta` 
+                    (`cvv`, `caducidad`) 
+                    VALUES 
+                    (:cvv, :caducidad)";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':cvv', $cvv);
+            $stmt->bindParam(':caducidad', $caducidad);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Función para editar tarjeta - Update
+    public function editarTarjeta(){
+        try {
+            // Consulta SQL con etiquetas para consultas preparadas
+            $sql = "UPDATE INTO `tarjeta` 
+                    (`cvv`, `caducidad`) 
+                    VALUES 
+                    (:cvv, :caducidad)";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':cvv', $cvv);
+            $stmt->bindParam(':caducidad', $caducidad);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
     //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
     public function mostrarBiblioteca($idUsuario)
     {

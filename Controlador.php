@@ -1,4 +1,5 @@
 <?php
+header("Access-Control-Allow-Origin: *"); // Permitir cualquier origen, permite utilizar CORS
 require_once "vista.php";
 // El modelo es bbdd
 require_once "bbdd.php";
@@ -48,7 +49,7 @@ class Controlador
                 Vista::MuestraAdministración($this->data, $this->error);
                 break;
             case 'perfil':
-                Vista::MuestraPerfil($this->data,$this->error);
+                Vista::MuestraPerfil($this->data, $this->error);
                 break;
         }
     }
@@ -184,7 +185,7 @@ class Controlador
     {
         if (isset($_POST['mostrar_anadir_juego'])) {
             $this->mostrarGeneros();
-        }elseif(isset($_POST['mostrar_editar_juego'])){
+        } elseif (isset($_POST['mostrar_editar_juego'])) {
             $this->mostrarLosJuegos();
         }
         // falta post de editar
@@ -211,10 +212,9 @@ class Controlador
     // Función que muestra los géneros de los juegos
     public function mostrarGeneros()
     {
-       
+
         global $baseDatos;
         $this->data = $baseDatos->accederGeneros();
-        
     }
 
     public function mostrarLosJuegos()
@@ -223,7 +223,8 @@ class Controlador
         $this->data = $baseDatos->mostrarJuegos();
     }
 
-    public function irAlPerfil(){
+    public function irAlPerfil()
+    {
         $this->action = 'perfil';
     }
 
@@ -259,9 +260,9 @@ class Controlador
     }
     //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
 
-    public function editarJuego(){
-        if($_SERVER["REQUEST_METHOD"]  == "POST"){
-            
+    public function editarJuego()
+    {
+        if ($_SERVER["REQUEST_METHOD"]  == "POST") {
         }
     }
 }
@@ -280,7 +281,7 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAlAdministrador();
 } else if (isset($_POST['anadir-juego'])) {
     $programa->anadirNuevoJuego();
-}elseif(isset($_POST['mostrar_editar_juego'])){
+} elseif (isset($_POST['mostrar_editar_juego'])) {
     /* $programa-> */
 }elseif(isset($_POST['verPerfil'])){
     $programa->irAlPerfil();
