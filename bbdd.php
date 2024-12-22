@@ -60,7 +60,21 @@ class Database
         }
     }
 
+    //obtener los datos del usuario para autorellenar 
+    public function obtenerDatosUsuario(){
+        $userId=$_SESSION['idUsuario'];
+        try {
 
+            $sql="SELECT nick, email, nombre, apellidos,contrasenia, TipoDeVia, NombreDeVia, Numero, Numeros, NumeroTelefono, Otros FROM usuario WHERE idUsuario = :id";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':id', $userId);
+            $stmt->execute();
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $userData;
+        } catch (PDOException $e) {
+            echo "Error en la conexión: " . $e->getMessage();
+        }
+    }
 
     //Update usuario
 

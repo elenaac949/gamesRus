@@ -225,6 +225,8 @@ class Controlador
 
     public function irAlPerfil()
     {
+        global $baseDatos;
+        $this->data = $baseDatos->obtenerDatosUsuario();
         $this->action = 'perfil';
     }
 
