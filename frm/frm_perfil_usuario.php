@@ -66,15 +66,19 @@ include __DIR__ . '/../common/controlSesion.php';
 
     </section>
 
-
-
-
-
-
-
     <?php
     include './common/footer.php';
     ?>
+
+    <script>
+        document.getElementById('formEliminarCuenta').addEventListener('submit', function(event) {
+            const isConfirmed = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
+            if (!isConfirmed) {
+                // Si el usuario cancela, se previene el envío del formulario
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 
 </html>
