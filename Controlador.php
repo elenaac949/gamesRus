@@ -274,9 +274,8 @@ if (isset($_POST['loginUsuario'])) {
 } else if (isset($_POST['anadir-juego'])) {
     $programa->anadirNuevoJuego();
 }elseif(isset($_POST['mostrar_editar_juego'])){
-    $programa->
-}
-elseif (isset($_POST['cerrar_sesion'])) {
+    // $programa->
+}elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 }
 
