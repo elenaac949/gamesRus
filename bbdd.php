@@ -60,6 +60,8 @@ class Database
         }
     }
 
+
+
     //Update usuario
 
     public function actualizarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero, $numeroTelefono){
@@ -274,9 +276,6 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
-
-
-
 
 
     // Eliminar juego 
