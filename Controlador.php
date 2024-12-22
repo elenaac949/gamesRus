@@ -101,6 +101,7 @@ class Controlador
                 // Verificar la contraseña
                 if (password_verify($contrasenia, $usuarioCorrecto['contrasenia'])) {
                     $_SESSION['idUsuario'] = $usuarioCorrecto['idUsuario'];
+
                     $_SESSION['nickUsuario'] = $usuarioCorrecto['nick'];
                     $this->action = 'biblioteca';
                     return;
@@ -149,6 +150,10 @@ class Controlador
                         $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword, $tipoDeVia, $nombreDeVia, $numero, $numeroTelefono);
                         //Guardamos en cookie el nombre nick para pasarlo a l login (contraseña no por seguridad) - la cookie dura 5 mins
                         // setcookie('nick', $_POST['nick'], time() + (5 * 60), "/");
+                        $usuario = $baseDatos->controlLogin($correo);
+                        //Creamos el carrito del usuario
+                        $baseDatos->crearCarrito($usuario['idUsuario']);
+
                         $this->data = 'Usuario registrado correctamente.';
                         $this->action = 'login';
                     } else {
@@ -207,7 +212,7 @@ class Controlador
         } */
     }
 
-
+    
 
     // Función que muestra los géneros de los juegos
     public function mostrarGeneros()
