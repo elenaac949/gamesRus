@@ -230,11 +230,24 @@ class Controlador
         $this->action = 'perfil';
     }
 
-    public function actualizarDatosUsuario(){
+    public function actualizarDatosUsuario()
+    {
+        $nombre = $_POST['nombre'];
+        $apellidos = $_POST['apellidos'];
+        $correo = $_POST['correo'];
+        $nick = $_POST['alias'];
+        $tipoDeVia = $_POST["tipo_via"];
+        $nombreDeVia = $_POST['nombre_via'];
+        $numero = $_POST['numero_via'];
+        $numeros = $_POST['numeros'];
+        $otros = $_POST['otros'];
+        $numeroTelefono = $_POST['telefono'];
 
-        
+
+        /* valdria comparar los datos introducidos con los dde la bbdd y si han cambiado cambiarlos */
         global $baseDatos;
-       // $this->data = $baseDatos->actualizarUsuario();
+        $this->data = $baseDatos->actualizarUsuario($nombre, $apellidos, $correo, $nick, $tipoDeVia, $nombreDeVia, $numero, $numeros, $otros, $numeroTelefono);
+        $this->irAlPerfil();
     }
 
 
@@ -293,12 +306,11 @@ if (isset($_POST['loginUsuario'])) {
     $programa->anadirNuevoJuego();
 } elseif (isset($_POST['mostrar_editar_juego'])) {
     /* $programa-> */
-}elseif(isset($_POST['verPerfil'])){
+} elseif (isset($_POST['verPerfil'])) {
     $programa->irAlPerfil();
-}elseif(isset($_POST['btn_actualizar_datos'])){
+} elseif (isset($_POST['btn_actualizar_datos'])) {
     $programa->actualizarDatosUsuario();
-}
-elseif (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 }
 

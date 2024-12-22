@@ -35,13 +35,13 @@ include __DIR__ . '/../common/controlSesion.php';
             <input required type="text" name="tipo_via" placeholder="Tipo de vía" value="<?php echo $data['TipoDeVia'] ; ?>" >
             <input required type="text" name="nombre_via" placeholder="Nombre de la vía" value="<?php echo $data['NombreDeVia'] ; ?>">
             <input required type="text" name="numero_via" placeholder="Número Vía" value="<?php echo $data['Numero'] ; ?>">
-            <input required type="text" name="numero" placeholder="Número Piso" value="<?php echo $data['Numeros'] ; ?>">
+            <input required type="text" name="numeros" placeholder="Número Piso" value="<?php echo $data['Numeros'] ; ?>">
             <input required type="text" name="otros" placeholder="Otros datos" value="<?php echo $data['Otros'] ; ?>">
             <input required type="tel" name="telefono" placeholder="Teléfono*" value="<?php echo $data['NumeroTelefono'] ; ?>">
 
         </fieldset>
 
-        <input type="button" name="btn_actualizar_datos" value="Actualizar Datos" class="actualizar">
+        <input type="submit" name="btn_actualizar_datos" value="Actualizar Datos" class="actualizar">
 
 
 

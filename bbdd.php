@@ -61,11 +61,12 @@ class Database
     }
 
     //obtener los datos del usuario para autorellenar 
-    public function obtenerDatosUsuario(){
-        $userId=$_SESSION['idUsuario'];
+    public function obtenerDatosUsuario()
+    {
+        $userId = $_SESSION['idUsuario'];
         try {
 
-            $sql="SELECT nick, email, nombre, apellidos,contrasenia, TipoDeVia, NombreDeVia, Numero, Numeros, NumeroTelefono, Otros FROM usuario WHERE idUsuario = :id";
+            $sql = "SELECT nick, email, nombre, apellidos,contrasenia, TipoDeVia, NombreDeVia, Numero, Numeros, NumeroTelefono, Otros FROM usuario WHERE idUsuario = :id";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':id', $userId);
             $stmt->execute();
@@ -78,13 +79,24 @@ class Database
 
     //Update usuario
 
-    public function actualizarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numeroVia, $numeros, $otros, $numeroTelefono){
+    public function actualizarUsuario($nombre, $apellidos, $correo, $nick, $tipoDeVia, $nombreDeVia, $numeroVia, $numeros, $otros, $numeroTelefono)
+    {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
-            $sql = "UPDATE INTO `usuario` 
-                    (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `TipoDeVia`, `NombreDeVia`, `Numero`, `Numeros`,`Otros`, `NumeroTelefono`) 
-                    VALUES 
-                    (:nick, :correo, :nombre, :apellidos, :contrasenia, :tipoDeVia, :nombreDeVia, :numeroVia,:numeros, :otros, :numeroTelefono)";
+            $idUsuario=$_SESSION['idUsuario'];
+            $sql =  "UPDATE `usuario`
+                     SET `nick` = :nick, 
+                        `email` = :correo, 
+                        `nombre` = :nombre, 
+                        `apellidos` = :apellidos, 
+                        
+                        `TipoDeVia` = :tipoDeVia, 
+                        `NombreDeVia` = :nombreDeVia, 
+                        `Numero` = :numeroVia, 
+                        `Numeros` = :numeros, 
+                        `Otros` = :otros, 
+                        `NumeroTelefono` = :numeroTelefono
+                    WHERE `idUsuario` = :id";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -94,13 +106,14 @@ class Database
             $stmt->bindParam(':correo', $correo);
             $stmt->bindParam(':nombre', $nombre);
             $stmt->bindParam(':apellidos', $apellidos);
-            $stmt->bindParam(':contrasenia', $contrasenia);
             $stmt->bindParam(':tipoDeVia', $tipoDeVia);
             $stmt->bindParam(':nombreDeVia', $nombreDeVia);
             $stmt->bindParam(':numeroVia', $numeroVia, PDO::PARAM_INT);
             $stmt->bindParam(':numeros', $numeros);
             $stmt->bindParam(':otros', $otros);
             $stmt->bindParam(':numeroTelefono', $numeroTelefono);
+            $stmt->bindParam(':id',$idUsuario);
+            var_dump($stmt->queryString);
 
             // Ejecutar la consulta
             $stmt->execute();
@@ -122,7 +135,6 @@ class Database
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
-
     }
 
     // Añadir tarjeta
