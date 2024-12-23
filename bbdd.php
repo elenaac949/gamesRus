@@ -137,8 +137,9 @@ class Database
         }
     }
 
+    
     // Añadir tarjeta
-    public function agnadirTarjeta($numeroTarjeta, $ccv, $caducidad)
+    public function anadirTarjeta($numeroTarjeta, $ccv, $caducidad)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
@@ -166,10 +167,9 @@ class Database
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
-            $sql = "UPDATE INTO `tarjeta` 
-                    (`ccv`, `caducidad`) 
-                    VALUES 
-                    (:ccv, :caducidad)";
+            $sql = "UPDATE `tarjeta` 
+                    SET `ccv` = :ccv, `caducidad` = :caducidad 
+                    WHERE `idUsuario` = :id";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);

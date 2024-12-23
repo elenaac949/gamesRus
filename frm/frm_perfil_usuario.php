@@ -50,7 +50,12 @@ include __DIR__ . '/../common/controlSesion.php';
 
     <section class="tarjetas">
         <!-- mostrar tarjetas de credito -->
+         <h2>Tus tarjetas</h2>
+         
     </section>
+
+
+    
 
     <section class="borrar_cuenta">
         <!-- si la sesion no es del acministrador podra eliminar su cuenta -->
@@ -65,6 +70,8 @@ include __DIR__ . '/../common/controlSesion.php';
 
 
     </section>
+
+
 
     <?php
     include './common/footer.php';
