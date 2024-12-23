@@ -20,8 +20,8 @@ include __DIR__ . '/../common/controlSesion.php';
     <main>
         <aside class="">
             <form action="" method="post" name="elegir_accion_administrador">
-            
-            <!-- Le estamos pasando el parametro administrar para que en controlador nos cargue esta vista  NO TIENE QUE VER CON EL submit DE ADMINISTRAR se llaman igual porque con ese valor vamos a hacer la misma función, es decir, mostrar la vista de administrador-->
+
+                <!-- Le estamos pasando el parametro administrar para que en controlador nos cargue esta vista  NO TIENE QUE VER CON EL submit DE ADMINISTRAR se llaman igual porque con ese valor vamos a hacer la misma función, es decir, mostrar la vista de administrador-->
                 <input type="hidden" name="administrar">
                 <div>
 
@@ -36,17 +36,17 @@ include __DIR__ . '/../common/controlSesion.php';
             </form>
         </aside>
         <section>
-        
-        <p class="errores"><?= $error ?></p>
-            <!-- si damos al boton de añadir juego se muestra el formulario correspondiente-->
-            <?php if (isset($_POST['mostrar_anadir_juego'])) : ?>
-                
-                <h2>Datos Juego Nuevo</h2>
-                
-                <form action="#" method="post" name="formulario_anadir_juego">
-                
-                    <input type="text" name="titulo_juego" placeholder="Título">
 
+            <p class="errores"><?= $error ?></p>
+            <!-- si damos al boton de añadir juego se muestra el formulario correspondiente-->
+            <?php if (isset($_POST['mostrar_anadir_juego']) || isset($_POST['buscar_juego'])) : ?>
+
+                <h2>Datos Juego Nuevo</h2>
+
+                <form action="#" method="post" name="formulario_anadir_juego">
+
+                    <input type="text" name="titulo_juego" placeholder="Título">
+                    <input type="submit" name="buscar_juego" value="Buscar">
                     <select name="genero_juego">
                         <option value="">Selecciona un género</option>
                         <?php foreach ($data as $genero) : ?>
@@ -59,42 +59,43 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="text" name="ruta_juego" placeholder="Ruta">
                     <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
                     <input type="text" name="portada_juego" placeholder="Portada">
-                    <input type="submit" name="anadir-juego" value="Añadir Juego">
-                    
+                    <input type="submit" name="anadir_juego" value="Añadir Juego">
+
                 </form>
+                
             <?php endif ?>
-            
+
             <!-- ELIMINAR LOS JUEGOS -->
             <?php if (isset($_POST['mostrar_eliminar_juego'])) : ?>
-            <h2>Eliminar Juego</h2>
-            <form action="" method="post" name="formulario_eliminar_juego">
-                <select name="nombre_juego">
-                <option value="">Selecciona un titulo</option>
+                <h2>Eliminar Juego</h2>
+                <form action="" method="post" name="formulario_eliminar_juego">
+                    <select name="nombre_juego">
+                        <option value="">Selecciona un titulo</option>
                         <?php foreach ($data as $titulo) : ?>
                             <option value="<?= $titulo['titulo']; ?>"><?= $titulo['titulo']; ?></option>
                         <?php endforeach ?>
-                </select>
-                <input type="submit" name="eliminar-juego" value="Eliminar juego">
-            </form>
+                    </select>
+                    <input type="submit" name="eliminar-juego" value="Eliminar juego">
+                </form>
             <?php endif ?>
-            
+
             <!-- Editar los juegos -->
             <?php if (isset($_POST['mostrar_editar_juego'])) : ?>
                 <h2>Editar juego</h2>
                 <form action="" method="post" name="formulario_editar_juego">
-                <select name="nombre_juego">
-                <option value="">Selecciona un titulo</option>
+                    <select name="nombre_juego">
+                        <option value="">Selecciona un titulo</option>
                         <?php foreach ($data as $titulo) : ?>
                             <option value="<?= $titulo['titulo']; ?>"><?= $titulo['titulo']; ?></option>
                         <?php endforeach ?>
-                </select>
-                
-                <input type="text" name="desarrollador_juego" placeholder="Desarrollador" value="">
-                <input type="text" name="distribuidor_juego" placeholder="Distribuidor">
-                <input type="date" name="anio_lanzamiento" placeholder="Año">
-                <input type="text" name="ruta_juego" placeholder="Ruta">
-                <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
-                <input type="submit" name="editar-juego" value="Editar Juego">
+                    </select>
+
+                    <input type="text" name="desarrollador_juego" placeholder="Desarrollador" value="">
+                    <input type="text" name="distribuidor_juego" placeholder="Distribuidor">
+                    <input type="date" name="anio_lanzamiento" placeholder="Año">
+                    <input type="text" name="ruta_juego" placeholder="Ruta">
+                    <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
+                    <input type="submit" name="editar-juego" value="Editar Juego">
 
 
                 </form>
@@ -107,6 +108,7 @@ include __DIR__ . '/../common/controlSesion.php';
     <?php
     include './common/footer.php';
     ?>
+
 </body>
 
 </html>

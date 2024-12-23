@@ -5,6 +5,8 @@ require_once "vista.php";
 require_once "bbdd.php";
 include "./env/conf.env";
 
+require_once "api.php";
+
 class Controlador
 {
     // Con action controlamos la navegación de páginas
@@ -294,7 +296,7 @@ class Controlador
     }
     //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
 
-    public function editarJuego()
+    /* public function editarJuego()
     {
         if ($_SERVER["REQUEST_METHOD"]  == "POST") {
         }
@@ -304,7 +306,7 @@ class Controlador
     {
         echo file_get_contents($urlMobyGames);
         die();
-    }
+    } */
 }
 // El programa en sí comienza aquí
 $programa = new Controlador();
@@ -331,8 +333,53 @@ if (isset($_POST['loginUsuario'])) {
     $programa->eliminarCuentaUsuario();
 }elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
-} elseif (isset($_GET['mobyGames'])) {
+} /* elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);
+} */
+
+if (isset($_POST['buscar_juego'])) {
+
+	$api = new API();
+	$_SESSION['juegos'] = $api->getInfoJuego($_POST['titulo_juego']);
+    
+	
+
+    if (isset($resultados['games']) && count($resultados['games']) > 0) {
+        
+        
+        // Iterar sobre los juegos encontrados
+        foreach ($resultados['games'] as $juego) {
+            $titulo = $juego['title'];
+            $descripcion = $juego['description'];
+            $generos = implode(', ', array_column($juego['genres'], 'genre_name'));
+            $desarrollador = isset($juego['developer']) ? $juego['developer'] : 'Desarrollador no disponible';
+            $distribuidor = isset($juego['publisher']) ? $juego['publisher'] : 'Distribuidor no disponible';
+            $fechaLanzamiento = isset($juego['platforms'][0]['first_release_date']) ? $juego['platforms'][0]['first_release_date'] : 'Fecha no disponible';
+            $portada = isset($juego['sample_cover']['image']) ? $juego['sample_cover']['image'] : 'https://via.placeholder.com/150'; // Imagen por defecto si no hay portada
+
+            // Mostrar los detalles del juego
+            echo "<div class='juego'>";
+            echo "<h2>" . htmlspecialchars($titulo) . "</h2>";
+            echo "<p><strong>Descripción:</strong> " . nl2br(htmlspecialchars($descripcion)) . "</p>";
+            echo "<p><strong>Géneros:</strong> " . htmlspecialchars($generos) . "</p>";
+            echo "<p><strong>Desarrollador:</strong> " . htmlspecialchars($desarrollador) . "</p>";
+            echo "<p><strong>Distribuidor:</strong> " . htmlspecialchars($distribuidor) . "</p>";
+            echo "<p><strong>Fecha de Lanzamiento:</strong> " . htmlspecialchars($fechaLanzamiento) . "</p>";
+            echo "<img src='" . htmlspecialchars($portada) . "' alt='Portada de " . htmlspecialchars($titulo) . "' style='width: 200px; height: auto;'>";
+            echo "</div><br>";
+        }
+    } else {
+        echo "<p>No se encontraron juegos para el título: " . $_SESSION['juegos']. "</p>";
+    }
+
+    $programa->irAlAdministrador();
+
+
+} else if (isset($_POST['guardar'])) {
+	// Llamamos a $controlador -> $modelo->guardarJuego(...)
+} else {
+	$programa->irAlAdministrador();
 }
+
 
 $programa->Inicio();
