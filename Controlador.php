@@ -255,6 +255,12 @@ class Controlador
         $this->irAlPerfil();
     }
 
+    public function eliminarCuentaUsuario(){
+        global $baseDatos;
+        $baseDatos->eliminarUsuario($_SESSION['nickUsuario']);
+        $this->action='landing';
+    }
+
 
     public function anadirNuevoJuego()
     {
@@ -321,7 +327,9 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAlPerfil();
 } elseif (isset($_POST['btn_actualizar_datos'])) {
     $programa->actualizarDatosUsuario();
-} elseif (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['btn_eliminar_cuenta'])) {
+    $programa->eliminarCuentaUsuario();
+}elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);
