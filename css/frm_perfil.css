@@ -1,0 +1,121 @@
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: #f4f4f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #3a0ca3;
+}
+
+section h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #7209b7;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+section.actualizar_datos form,
+section.borrar_cuenta form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+}
+
+section.actualizar_datos form fieldset {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f4f4f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+section.actualizar_datos form fieldset legend {
+    font-weight: bold;
+    color: #7209b7;
+    padding: 0 10px;
+}
+
+section.actualizar_datos form input[type="text"],
+section.actualizar_datos form input[type="email"],
+section.actualizar_datos form input[type="tel"] {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f4f4f9;
+    color: #3a0ca3;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+section.actualizar_datos form input[type="text"]:focus,
+section.actualizar_datos form input[type="email"]:focus,
+section.actualizar_datos form input[type="tel"]:focus {
+    border-color: #4cc9f0;
+    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}
+
+section.actualizar_datos form input[type="submit"] {
+    width: 40%;
+    align-self: center;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #f4f4f9;
+    background: linear-gradient(to right, #3a0ca3, #7209b7);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section.actualizar_datos form input[type="submit"]:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
+    transform: translateY(-2px);
+}
+
+section.borrar_cuenta form input[type="submit"] {
+    width: 30%;
+    align-self: center;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #f4f4f9;
+    background: linear-gradient(to right, #d00000, #7209b7);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section.borrar_cuenta form input[type="submit"]:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
+    transform: translateY(-2px);
+}
+
+section.tarjetas {
+    padding: 20px;
+    background: #f8f8ff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #3a0ca3;
+}
+
+section.tarjetas h2 {
+    text-align: center;
+    color: #7209b7;
+}
