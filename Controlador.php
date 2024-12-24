@@ -192,6 +192,8 @@ class Controlador
             $this->mostrarGeneros();
         } elseif (isset($_POST['mostrar_editar_juego'])) {
             $this->mostrarLosJuegos();
+        }elseif (isset($_POST['mostrar_eliminar_juego'])) {
+            $this->mostrarLosJuegos();
         }
         // falta post de editar
         //falta post de eliminar
@@ -326,6 +328,25 @@ class Controlador
         }
     }
 
+    //Función eliminar juego
+    public function eliminarJuego()
+    {
+        global $baseDatos;
+        var_dump($_POST);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Validar campos obligatorios
+            if (!empty($_POST['idJuego'])) {
+                $idJuego = $_POST['idJuego'];
+                $baseDatos->eliminarJuego($idJuego);
+                $this->error = 'Juego eliminado correctamente';
+                $this->action = 'administracion';
+            } else {
+                $this->error = 'Datos incompletos.';
+                $this->action = 'administracion';
+            }
+        }
+    }
+
     public function mobyGames($urlMobyGames)
     {
         echo file_get_contents($urlMobyGames);
@@ -350,6 +371,8 @@ if (isset($_POST['loginUsuario'])) {
 } elseif (isset($_POST['editar-juego'])) {
     // var_dump('hola');
     $programa->editarJuego();
+}elseif (isset($_POST['eliminar-juego'])) {
+    $programa->eliminarJuego();
 } elseif (isset($_POST['verPerfil'])) {
     $programa->irAlPerfil();
 } elseif (isset($_POST['btn_actualizar_datos'])) {
