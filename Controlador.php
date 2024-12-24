@@ -212,7 +212,7 @@ class Controlador
         } */
     }
 
-    
+
 
     // Función que muestra los géneros de los juegos
     public function mostrarGeneros()
@@ -255,10 +255,11 @@ class Controlador
         $this->irAlPerfil();
     }
 
-    public function eliminarCuentaUsuario(){
+    public function eliminarCuentaUsuario()
+    {
         global $baseDatos;
         $baseDatos->eliminarUsuario($_SESSION['nickUsuario']);
-        $this->action='landing';
+        $this->action = 'landing';
     }
 
 
@@ -270,7 +271,7 @@ class Controlador
             if (
                 !empty($_POST['titulo_juego']) && !empty($_POST['genero_juego']) &&
                 !empty($_POST['desarrollador_juego']) && !empty($_POST['distribuidor_juego']) &&
-                !empty($_POST['anio_lanzamiento']) && !empty($_POST['ruta_juego']) &&
+                !empty($_POST['anio_lanzamiento']) &&
                 !empty($_POST['descripcion_juego'] && !empty($_POST['portada_juego']))
             ) {
                 $titulo = $_POST['titulo_juego'];
@@ -278,12 +279,12 @@ class Controlador
                 $desarrollador = $_POST['desarrollador_juego'];
                 $distribuidor = $_POST['distribuidor_juego'];
                 $lanzamiento = $_POST['anio_lanzamiento'];
-                $ruta = $_POST['ruta_juego'];
+
                 $descripcion = $_POST['descripcion_juego'];
                 $portada = $_POST['portada_juego'];
                 //falta una funcion para verificar si el juego existe ya
                 //falta que se añada la descripcion y la portada
-                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $ruta, $genero, $descripcion, $portada);
+                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $genero, $descripcion, $portada);
                 $this->error = 'Juego añadido correctamente';
                 $this->action = 'administracion';
             } else {
@@ -296,7 +297,32 @@ class Controlador
 
     public function editarJuego()
     {
+        global $baseDatos;
         if ($_SERVER["REQUEST_METHOD"]  == "POST") {
+            // Validar campos obligatorios
+            if (
+
+                !empty($_POST['desarrollador_juego']) && !empty($_POST['distribuidor_juego']) &&
+                !empty($_POST['anio_lanzamiento']) &&
+                !empty($_POST['descripcion_juego'] && !empty($_POST['portada_juego'])) && !empty($_POST['idJuego'])
+            ) {
+
+                $desarrollador = $_POST['desarrollador_juego'];
+                $distribuidor = $_POST['distribuidor_juego'];
+                $lanzamiento = $_POST['anio_lanzamiento'];
+                $descripcion = $_POST['descripcion_juego'];
+                $portada = $_POST['portada_juego'];
+                $idJuego = $_POST['idJuego'];
+                //falta una funcion para verificar si el juego existe ya
+                //falta que se añada la descripcion y la portada
+                $baseDatos->editarJuego($idJuego, $desarrollador, $distribuidor, $lanzamiento, $portada, $descripcion);
+
+                $this->error = 'Juego añadido correctamente';
+                $this->action = 'administracion';
+            } else {
+                $this->error = 'Datos incompletos.';
+                $this->action = 'administracion';
+            }
         }
     }
 
@@ -309,7 +335,7 @@ class Controlador
 // El programa en sí comienza aquí
 $programa = new Controlador();
 
-
+// var_dump($_POST);
 if (isset($_POST['loginUsuario'])) {
     $programa->verificarUsuario();
 } elseif (isset($_POST['irRegistro'])) {
@@ -321,15 +347,16 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAlAdministrador();
 } else if (isset($_POST['anadir-juego'])) {
     $programa->anadirNuevoJuego();
-} elseif (isset($_POST['mostrar_editar_juego'])) {
-    /* $programa-> */
+} elseif (isset($_POST['editar-juego'])) {
+    // var_dump('hola');
+    $programa->editarJuego();
 } elseif (isset($_POST['verPerfil'])) {
     $programa->irAlPerfil();
 } elseif (isset($_POST['btn_actualizar_datos'])) {
     $programa->actualizarDatosUsuario();
 } elseif (isset($_POST['btn_eliminar_cuenta'])) {
     $programa->eliminarCuentaUsuario();
-}elseif (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);

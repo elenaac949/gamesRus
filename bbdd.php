@@ -137,7 +137,7 @@ class Database
         }
     }
 
-    
+
     // Añadir tarjeta
     public function anadirTarjeta($numeroTarjeta, $ccv, $caducidad)
     {
@@ -395,15 +395,15 @@ class Database
     }
 
 
-    //Agregar un juego nuevo
-    public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero, $descripcion, $portada)
+    //Agregar un juego nuevo - HEMOS QUITADO LA RUTA PARA QUE FUNCIONE 
+    public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio,  $genero, $descripcion, $portada)
     {
         try {
             // Consulta SQL actualizada
             $sql = "INSERT INTO `juego` 
-                (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `idGenero`, `descripcion`, `portada`) 
+                (`titulo`, `desarrollador`, `distribuidor`, `anio`, `idGenero`, `descripcion`, `portada`) 
                 VALUES 
-                (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :idGenero, :descripcion, :portada)";
+                (:titulo, :desarrollador, :distribuidor, :anio,:idGenero, :descripcion, :portada)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -413,7 +413,7 @@ class Database
             $stmt->bindParam(':desarrollador', $desarrollador);
             $stmt->bindParam(':distribuidor', $distribuidor);
             $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
-            $stmt->bindParam(':ruta', $ruta);
+
             $stmt->bindParam(':idGenero', $genero, PDO::PARAM_INT);
             $stmt->bindParam(':descripcion', $descripcion);
             $stmt->bindParam(':portada', $portada);
@@ -427,31 +427,32 @@ class Database
 
 
     // Editar juego
-    public function editarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $genero)
+    public function editarJuego($idJuego, $desarrollador, $distribuidor, $anio, $portada, $descripcion)
     {
         try {
-            $idUsuario = $_SESSION['idUsuario'];
+
             // Consulta SQL corregida
             $sql = "UPDATE `juego`
-                    SET `titulo` = :titulo,
+                    SET 
                         `desarrollador` = :desarrollador,
                         `distribuidor` = :distribuidor,
                         `anio` = :anio,
-                        `ruta` = :ruta,
-                        `idGenero` = :idGenero
-                    WHERE `idUsuario` = :id"; // Reemplaza `id` con la clave primaria de la tabla.
+                        `portada` = :portada,
+                        `descripcion` = :descripcion                        
+                    WHERE `idJuego` = :idJuego"; // Reemplaza `id` con la clave primaria de la tabla.
 
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
 
             // Asignar valores a las etiquetas
-            $stmt->bindParam(':titulo', $titulo);
+
             $stmt->bindParam(':desarrollador', $desarrollador);
             $stmt->bindParam(':distribuidor', $distribuidor);
             $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
-            $stmt->bindParam(':ruta', $ruta);
-            $stmt->bindParam(':idGenero', $genero, PDO::PARAM_INT);
+            $stmt->bindParam(':portada', $portada);
+            $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
 
             // Ejecutar la consulta
             $stmt->execute();

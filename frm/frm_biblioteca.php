@@ -34,7 +34,7 @@ include __DIR__ . '/../common/controlSesion.php';
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
                     <div class="imagen_juego">
-                        <img src="https://placehold.co/200x100" alt="<?php echo $juego['titulo']; ?>">
+                        <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo $juego['titulo']; ?>">
                     </div>
                     <div class="nombre_juego">
                         <p><?php echo $juego['titulo']; ?></p>
@@ -56,28 +56,7 @@ include __DIR__ . '/../common/controlSesion.php';
     <?php
     include './common/footer.php';
     ?>
-    <script>
-        // Llama al proxy local para hacer la petición a la API de MobyGames
-        (async () => {
-            const url = new URL(window.location.href);
 
-            const mobyGamesUrl = new URL("https://api.mobygames.com/v1/games");
-            mobyGamesUrl.searchParams.append("api_key", "moby_Ivjf8fphPEz3gLn9DVIcRsvNYgE");
-            mobyGamesUrl.searchParams.append("title", "doom");
-
-
-            url.searchParams.append("mobyGames", mobyGamesUrl.toString());
-            const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const data = await response.json();
-            console.log(data);
-        })();
-    </script>
 
 </body>
 
