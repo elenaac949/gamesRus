@@ -50,7 +50,7 @@ class Controlador
                 Vista::MuestraAdministración($this->data, $this->error);
                 break;
             case 'perfil':
-                Vista::MuestraPerfil($this->data,$this->data1, $this->error);
+                Vista::MuestraPerfil($this->data, $this->data1, $this->error);
                 break;
         }
     }
@@ -193,7 +193,7 @@ class Controlador
             $this->mostrarGeneros();
         } elseif (isset($_POST['mostrar_editar_juego'])) {
             $this->mostrarLosJuegos();
-        }elseif (isset($_POST['mostrar_eliminar_juego'])) {
+        } elseif (isset($_POST['mostrar_eliminar_juego'])) {
             $this->mostrarLosJuegos();
         }
         // falta post de editar
@@ -235,7 +235,7 @@ class Controlador
     {
         global $baseDatos;
         $this->data = $baseDatos->obtenerDatosUsuario();
-        $this->data1= $baseDatos -> mostrarTarjetas($_SESSION['nickUsuario']);
+        $this->data1 = $baseDatos->mostrarTarjetas($_SESSION['idUsuario']);
         $this->action = 'perfil';
     }
 
@@ -267,6 +267,109 @@ class Controlador
     }
 
 
+
+    /* Tarjetas de usuario */
+
+
+    public function anadirNuevaTarjeta()
+    {
+        if (!empty($_POST['numero_tarjeta']) && !empty($_POST['ccv_tarjeta']) && !empty($_POST['fecha_caducidad_tarjeta'])) {
+            $numeroTarjeta = $_POST['numero_tarjeta'];
+            $ccv = $_POST['ccv_tarjeta'];
+            $caducidad = $_POST['fecha_caducidad_tarjeta'];
+            global $baseDatos;
+
+            // Validar el número de tarjeta con el algoritmo de Luhn
+            if (!$this->esTarjetaValida($numeroTarjeta)) {
+                $this->error = "El número de tarjeta es inválido.";
+                $this->irAlPerfil();
+                return;
+            }
+
+            // Validar CCV (debe ser un número de 3 o 4 dígitos)
+            if (!preg_match('/^\d{3,4}$/', $ccv)) {
+                $this->error = "El CCV debe contener 3 o 4 dígitos.";
+                $this->irAlPerfil();
+                return;
+            }
+
+
+            // Comprobar si ya existe una tarjeta con el mismo número y el mismo CCV para este usuario
+            if ($baseDatos->tarjetaExiste($numeroTarjeta, $ccv, $_SESSION['idUsuario'])) {
+                $this->error = "Ya tienes una tarjeta registrada con ese número y CCV.";
+                $this->irAlPerfil();
+                return;
+            }
+            // Validar la fecha de caducidad (formato MM/AA o MM/AAAA)
+            /* if (!preg_match('/^(0[1-9]|1[0-2])\/(\d{2}|\d{4})$/', $caducidad)) {
+                $this->error = "La fecha de caducidad debe estar en formato MM/AA o MM/AAAA.";
+                return;
+            } */
+
+            // Validar que la tarjeta no esté vencida
+            if (!$this->esFechaCaducidadValida($caducidad)) {
+                $this->error = "La tarjeta está vencida.";
+                $this->irAlPerfil();
+                return;
+            }
+
+            
+            $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']);
+            $this->error = "Tarjeta añadida con exito\n numero: " . $numeroTarjeta . "\n cvv: " . $ccv . "\n caducidad: " . $caducidad;
+            $this->irAlPerfil();
+        } else {
+            $this->error = "Revisa la informacion";
+        }
+
+        $this->action = 'perfil';
+    }
+
+    private function esTarjetaValida($numero_tarjeta)
+    {
+        $numero_tarjeta = str_replace(' ', '', $numero_tarjeta); // Eliminar espacios
+        if (!preg_match('/^\d{13,19}$/', $numero_tarjeta)) {
+            return false; // La tarjeta debe contener entre 13 y 19 dígitos
+        }
+
+        $suma = 0;
+        $alternar = false;
+        for ($i = strlen($numero_tarjeta) - 1; $i >= 0; $i--) {
+            $digito = intval($numero_tarjeta[$i]);
+            if ($alternar) {
+                $digito *= 2;
+                if ($digito > 9) {
+                    $digito -= 9;
+                }
+            }
+            $suma += $digito;
+            $alternar = !$alternar;
+        }
+        return ($suma % 10 === 0);
+    }
+
+    private function esFechaCaducidadValida($fecha_cad)
+    {
+        $partes = explode('-', $fecha_cad);
+        $anio = intval($partes[0]);
+        $mes = intval($partes[1]);
+
+        // Convertir AA a AAAA si es necesario
+        if ($anio < 100) {
+            $anio += 2000; // Asumir siglo actual
+        }
+
+        // Fecha actual
+        $mes_actual = intval(date('m'));
+        $anio_actual = intval(date('Y'));
+
+        // Validar que no esté vencida
+        return ($anio > $anio_actual || ($anio === $anio_actual && $mes >= $mes_actual));
+    }
+
+
+
+
+    /* JUEGOS */
     public function anadirNuevoJuego()
     {
         global $baseDatos;
@@ -372,7 +475,7 @@ if (isset($_POST['loginUsuario'])) {
 } elseif (isset($_POST['editar-juego'])) {
     // var_dump('hola');
     $programa->editarJuego();
-}elseif (isset($_POST['eliminar-juego'])) {
+} elseif (isset($_POST['eliminar-juego'])) {
     $programa->eliminarJuego();
 } elseif (isset($_POST['verPerfil'])) {
     $programa->irAlPerfil();
@@ -380,6 +483,8 @@ if (isset($_POST['loginUsuario'])) {
     $programa->actualizarDatosUsuario();
 } elseif (isset($_POST['btn_eliminar_cuenta'])) {
     $programa->eliminarCuentaUsuario();
+} elseif (isset($_POST['btn_anadir_tarjeta'])) {
+    $programa->anadirNuevaTarjeta();
 } elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {

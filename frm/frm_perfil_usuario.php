@@ -17,10 +17,11 @@ include __DIR__ . '/../common/controlSesion.php';
     include './common/cabecera.php';
     ?>
     <main>
+        <p class="errores"><?= $error ?></p>
         <section class="actualizar_datos">
             <h3>Actualizar Datos de Usuario</h3>
             <form action="" method="post">
-                <p class="errores"><?= $error ?></p>
+
                 <?php /* var_dump($data) */ ?>
                 <fieldset>
                     <legend>Credenciales</legend>
@@ -51,31 +52,64 @@ include __DIR__ . '/../common/controlSesion.php';
         </section>
 
         <section class="tarjetas">
-            
+
             <div>
                 <h3>Tus tarjetas</h3>
                 <form method="post">
-                    <?php  
-                        $tarjetas=$data1; 
-                        if(!empty($tarjetas)){
-                            foreach ($tarjetas as $tarjeta) {
-                                echo "ID Tarjeta: " . $tarjeta['idTarjeta'] . "<br>";
-                                echo "CCV: " . $tarjeta['ccv'] . "<br>";
-                                echo "Fecha de Caducidad: " . $tarjeta['fechaCaducidad'] . "<br><br>";
-                            }
-                        }else {
-                            echo "No se encontraron tarjetas";
-                        }
-                    ?>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Últimos 4 dígitos</th>
+                                <th>CCV</th>
+                                <th>Caducidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $contador = 1; ?>
+                            <?php foreach ($data1 as $tarjeta): ?>
+                                <tr>
+                                    <!-- Número de fila -->
+                                    <td><?php echo $contador++; ?></td>
+
+                                    <!-- Últimos 4 dígitos de la tarjeta -->
+                                    <td><?php echo substr($tarjeta['numeroTarjeta'], -4); ?></td>
+
+                                    <!-- CCV oculto -->
+                                    <td><?php echo $tarjeta['ccv']; ?></td>
+
+                                    <!-- Fecha de caducidad -->
+                                    <td>
+                                        <?php
+                                        $fechaActual = date('Y-m');
+                                        if ($tarjeta['fechaCaducidad'] < $fechaActual) {
+                                            echo 'Caducada'; // Si la fecha de caducidad es anterior a la fecha actual
+                                        } else {
+                                            echo $tarjeta['fechaCaducidad']; // Mostrar la fecha si no está caducada
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
                 </form>
             </div>
             <div>
                 <h3>Añadir tarjeta nueva</h3>
-                    <form  method="post">
-                        <input type="text" name="numero_tarjeta" >
-                    </form>
+
+                <form action="" method="post">
+                    <label for="numero_tarjeta">Numero de Tarjeta: </label>
+                    <input type="text" name="numero_tarjeta" placeholder="xxxx xxxx xxxx xxxx">
+                    <label for="ccv_tarjeta">CCV: </label>
+                    <input type="text" name="ccv_tarjeta" placeholder="xxx">
+                    <label for="fecha_caducidad_tarjeta">Fecha de caducidad: </label>
+                    <input type="month" name="fecha_caducidad_tarjeta">
+                    <input type="submit" name="btn_anadir_tarjeta" value="Añadir">
+                </form>
             </div>
-            
+
         </section>
 
         <section class="borrar_cuenta">

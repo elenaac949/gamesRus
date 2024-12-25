@@ -171,30 +171,7 @@ INSERT INTO `rol` (`id_rol`, `rol`) VALUES
 (1, 'usuario'),
 (2, 'admin');
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `tarjeta`
---
-
-CREATE TABLE `tarjeta` (
-  `idTarjeta` int(11) NOT NULL,
-  `numeroTarjeta` char(16) NOT NULL
-  `ccv` char(3) NOT NULL,
-  `fechaCaducidad` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tienetarjeta`
---
-
-CREATE TABLE `tienetarjeta` (
-  `idTieneTarjeta` int(255) NOT NULL,
-  `idUsuario` int(11) NOT NULL,
-  `idTarjeta` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -203,7 +180,7 @@ CREATE TABLE `tienetarjeta` (
 --
 
 CREATE TABLE `usuario` (
-  `idUsuario` int(11) NOT NULL,
+  `idUsuario` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `nick` varchar(11) NOT NULL,
   `email` varchar(50) NOT NULL,
   `nombre` varchar(50) NOT NULL,
@@ -217,6 +194,22 @@ CREATE TABLE `usuario` (
   `NumeroTelefono` varchar(15) DEFAULT NULL,
   `id_rol` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tarjeta`
+--
+
+CREATE TABLE `tarjeta` (
+  `idTarjeta` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `numeroTarjeta` varchar(19) NOT NULL,
+  `ccv` char(3) NOT NULL,
+  `fechaCaducidad` date NOT NULL,
+  `idUsuario` int(11)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 --
 -- Volcado de datos para la tabla `usuario`
@@ -291,23 +284,21 @@ ALTER TABLE `rol`
 --
 -- Indices de la tabla `tarjeta`
 --
-ALTER TABLE `tarjeta`
-  ADD PRIMARY KEY (`idTarjeta`),
-  ADD UNIQUE KEY `ccv` (`ccv`);
 
---
--- Indices de la tabla `tienetarjeta`
---
-ALTER TABLE `tienetarjeta`
-  ADD PRIMARY KEY (`idTieneTarjeta`),
-  ADD KEY `idTarjeta` (`idTarjeta`),
-  ADD KEY `idUsuario` (`idUsuario`,`idTarjeta`) USING BTREE;
+
+ALTER TABLE `tarjeta`
+ADD CONSTRAINT fk_tar_idu_usu_idu FOREIGN KEY (idUsuario) REFERENCES `usuario`(idUsuario)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+;
+
+
+
 
 --
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`idUsuario`),
   ADD UNIQUE KEY `nick` (`nick`),
   ADD UNIQUE KEY `email` (`email`),
   ADD KEY `fk_usuario_rol` (`id_rol`);
@@ -358,11 +349,7 @@ ALTER TABLE `rol`
 ALTER TABLE `tarjeta`
   MODIFY `idTarjeta` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `tienetarjeta`
---
-ALTER TABLE `tienetarjeta`
-  MODIFY `idTieneTarjeta` int(255) NOT NULL AUTO_INCREMENT;
+
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
@@ -403,12 +390,7 @@ ALTER TABLE `regalado`
   ADD CONSTRAINT `fk_usuario_recibe` FOREIGN KEY (`idUsuarioRecibe`) REFERENCES `usuario` (`idUsuario`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_usuario_regala` FOREIGN KEY (`idUsuarioRegala`) REFERENCES `usuario` (`idUsuario`) ON DELETE CASCADE;
 
---
--- Filtros para la tabla `tienetarjeta`
---
-ALTER TABLE `tienetarjeta`
-  ADD CONSTRAINT `tienetarjeta_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tienetarjeta_ibfk_2` FOREIGN KEY (`idTarjeta`) REFERENCES `tarjeta` (`idTarjeta`) ON DELETE CASCADE;
+
 
 --
 -- Filtros para la tabla `usuario`

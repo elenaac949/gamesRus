@@ -139,29 +139,33 @@ class Database
 
 
     // Añadir tarjeta
-    public function anadirTarjeta($numeroTarjeta, $ccv, $caducidad)
+    public function anadirTarjeta($numeroTarjeta, $ccv, $fechaCaducidad, $idUsuario)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "INSERT INTO `tarjeta` 
-                    (`numeroTarjeta`,`ccv`, `caducidad`) 
-                    VALUES 
-                    (:numeroTarjeta,:ccv, :caducidad)";
+                (`numeroTarjeta`, `ccv`, `fechaCaducidad`, `idUsuario`) 
+                VALUES 
+                (:numeroTarjeta, :ccv, :fechaCaducidad, :idUsuario)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
 
             // Asignar valores a las etiquetas
             $stmt->bindParam(':numeroTarjeta', $numeroTarjeta);
-            $stmt->bindParam(':cvc', $ccv);
-            $stmt->bindParam(':caducidad', $caducidad);
+            $stmt->bindParam(':ccv', $ccv);
+            $stmt->bindParam(':fechaCaducidad', $fechaCaducidad);
+            $stmt->bindParam(':idUsuario', $idUsuario);
 
             // Ejecutar la consulta
             $stmt->execute();
+            echo "Tarjeta añadida correctamente.";
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+            // Manejar errores
+            echo "Error al añadir la tarjeta: " . $e->getMessage();
         }
     }
+
 
     public function editarTarjeta($ccv, $caducidad)
     {
@@ -205,18 +209,45 @@ class Database
     public function mostrarTarjetas($idUsuario)
     {
         try {
-            $sql = "SELECT * FROM tieneTarjeta INNER JOIN tarjeta 
-                    ON tieneTarjeta.idTarjeta = tarjeta.idTarjeta 
-                    WHERE tieneTarjeta.idUsuario = :idUsuario";
+            $sql = "SELECT * FROM `tarjeta` WHERE `idUsuario` = :idUsuario";
+
+            // Preparar la consulta SQL
             $stmt = $this->conexion->prepare($sql);
+
+            // Vincular el parámetro :idUsuario con el valor proporcionado
             $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
             $stmt->execute();
-            $tarjeta = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+
+            // Obtener todas las filas de resultados
+            $tarjeta = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             return $tarjeta;
-        } catch (\Throwable $e) {
+        } catch (Exception $e) {
+            // Capturar y mostrar el error si ocurre
             echo "Error: " . $e->getMessage();
         }
     }
+
+
+    public function tarjetaExiste($numeroTarjeta, $ccv, $idUsuario)
+    {
+        global $baseDatos;
+
+        // Comprobar si existe una tarjeta con el mismo número y CCV para el usuario actual
+        $sql = "SELECT * FROM `tarjeta` WHERE `numeroTarjeta` = :numeroTarjeta AND `ccv` = :ccv AND `idUsuario` = :idUsuario";
+        $stmt = $baseDatos->conexion->prepare($sql);
+        $stmt->bindParam(':numeroTarjeta', $numeroTarjeta, PDO::PARAM_STR);
+        $stmt->bindParam(':ccv', $ccv, PDO::PARAM_STR);
+        $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        // Si se encuentra alguna tarjeta, devolvemos true (existe)
+        return $stmt->rowCount() > 0;
+    }
+
 
     // Añadir juego a la biblioteca
     public function agregarJuegoBiblioteca($idUsuario, $idJuego)
