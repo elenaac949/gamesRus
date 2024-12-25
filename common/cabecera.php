@@ -22,7 +22,7 @@
             <div class="perfil-container">
                 <form action="perfil" method="post" class="perfil-form">
                     <a href="#"><img src="./img/usuario.png" alt=""></a>
-                    <input type="submit" name="irAlPerfil" class="perfil" value="Perfil">
+                    <input type="button" name="irAlPerfil" class="perfil" value="Perfil">
                 </form>
                 <div class="desplegable">
                     <form action="#" method="post">

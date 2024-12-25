@@ -73,7 +73,7 @@ nav form {
 
 
 
-nav form input[type="submit"] {
+nav form input[type="submit"], nav form input[type="button"]{
     font-size: 1.1em;
     cursor: pointer;
     color: #f4f4f9;
@@ -89,6 +89,10 @@ nav form input[type="submit"]:hover {
     transition: color 0.3s ease;
 }
 
+nav form input[type="button"]:hover{
+    color: #4cc9f0;
+    transition: color 0.3s ease;
+}
 nav form input[type="submit"]::after {
     content: "";
     position: absolute;
