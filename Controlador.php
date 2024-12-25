@@ -11,6 +11,7 @@ class Controlador
     private $action;
     // Con data controlamos los mensajes y errores (Crear una para errores?)
     private $data;
+    private $data1;
     private $error;
 
     public function __construct()
@@ -49,7 +50,7 @@ class Controlador
                 Vista::MuestraAdministración($this->data, $this->error);
                 break;
             case 'perfil':
-                Vista::MuestraPerfil($this->data, $this->error);
+                Vista::MuestraPerfil($this->data,$this->data1, $this->error);
                 break;
         }
     }
@@ -234,6 +235,7 @@ class Controlador
     {
         global $baseDatos;
         $this->data = $baseDatos->obtenerDatosUsuario();
+        $this->data1= $baseDatos -> mostrarTarjetas($_SESSION['nickUsuario']);
         $this->action = 'perfil';
     }
 

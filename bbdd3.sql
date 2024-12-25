@@ -179,7 +179,8 @@ INSERT INTO `rol` (`id_rol`, `rol`) VALUES
 
 CREATE TABLE `tarjeta` (
   `idTarjeta` int(11) NOT NULL,
-  `ccv` int(11) NOT NULL,
+  `numeroTarjeta` char(16) NOT NULL
+  `ccv` char(3) NOT NULL,
   `fechaCaducidad` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

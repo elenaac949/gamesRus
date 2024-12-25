@@ -18,7 +18,7 @@ include __DIR__ . '/../common/controlSesion.php';
     ?>
     <main>
         <section class="actualizar_datos">
-            <h2>Actualizar Datos de Usuario</h2>
+            <h3>Actualizar Datos de Usuario</h3>
             <form action="" method="post">
                 <p class="errores"><?= $error ?></p>
                 <?php /* var_dump($data) */ ?>
@@ -51,14 +51,36 @@ include __DIR__ . '/../common/controlSesion.php';
         </section>
 
         <section class="tarjetas">
-            <!-- mostrar tarjetas de credito -->
-            <h2>Tus tarjetas</h2>
-
+            
+            <div>
+                <h3>Tus tarjetas</h3>
+                <form method="post">
+                    <?php  
+                        $tarjetas=$data1; 
+                        if(!empty($tarjetas)){
+                            foreach ($tarjetas as $tarjeta) {
+                                echo "ID Tarjeta: " . $tarjeta['idTarjeta'] . "<br>";
+                                echo "CCV: " . $tarjeta['ccv'] . "<br>";
+                                echo "Fecha de Caducidad: " . $tarjeta['fechaCaducidad'] . "<br><br>";
+                            }
+                        }else {
+                            echo "No se encontraron tarjetas";
+                        }
+                    ?>
+                </form>
+            </div>
+            <div>
+                <h3>Añadir tarjeta nueva</h3>
+                    <form  method="post">
+                        <input type="text" name="numero_tarjeta" >
+                    </form>
+            </div>
+            
         </section>
 
         <section class="borrar_cuenta">
             <!-- si la sesion no es del acministrador podra eliminar su cuenta -->
-            <h2>Eliminar Cuenta de usuario</h2>
+            <h3>Eliminar Cuenta de usuario</h3>
             <form action="" method="post">
                 <?php if ($_SESSION['nickUsuario'] == 'admin') : ?>
                     <p>No puedes eliminar esta cuenta</p>
