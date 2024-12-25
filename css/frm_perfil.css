@@ -119,3 +119,116 @@ section.tarjetas h2 {
     text-align: center;
     color: #7209b7;
 }
+
+/* Estilos para la sección general */
+section.tarjetas {
+    padding: 20px;
+    background: #f8f8ff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #3a0ca3;
+}
+
+/* Títulos dentro de la sección */
+section.tarjetas h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #7209b7;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+section.tarjetas h2 {
+    text-align: center;
+    color: #7209b7;
+}
+
+/* Estilos para la tabla */
+section.tarjetas table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+section.tarjetas th,
+section.tarjetas td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+section.tarjetas th {
+    background-color: #f4f4f9;
+    font-weight: bold;
+}
+
+section.tarjetas td {
+    background-color: #ffffff;
+}
+
+/* Estilo para formularios */
+section.tarjetas form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+section.tarjetas form label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #3a0ca3;
+}
+
+section.tarjetas form input[type="text"],
+section.tarjetas form input[type="month"] {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f4f4f9;
+    color: #3a0ca3;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+section.tarjetas form input[type="text"]:focus,
+section.tarjetas form input[type="month"]:focus {
+    border-color: #4cc9f0;
+    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}
+
+section.tarjetas form input[type="submit"] {
+    width: 40%;
+    align-self: center;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #f4f4f9;
+    background: linear-gradient(to right, #3a0ca3, #7209b7);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section.tarjetas form input[type="submit"]:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
+    transform: translateY(-2px);
+}
+
+/* Estilos para el fieldset en el formulario */
+section.tarjetas form fieldset {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f4f4f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+section.tarjetas form fieldset legend {
+    font-weight: bold;
+    color: #7209b7;
+    padding: 0 10px;
+}

@@ -116,11 +116,9 @@ include __DIR__ . '/../common/controlSesion.php';
             <!-- si la sesion no es del acministrador podra eliminar su cuenta -->
             <h3>Eliminar Cuenta de usuario</h3>
             <form action="" method="post">
-                <?php if ($_SESSION['nickUsuario'] == 'admin') : ?>
-                    <p>No puedes eliminar esta cuenta</p>
-                <?php else : ?>
-                    <input type="submit" name="btn_eliminar_cuenta" value="Eliminar Cuenta">
-                <?php endif; ?>
+                
+                <input type="submit" name="btn_eliminar_cuenta" value="Eliminar Cuenta">
+                
             </form>
 
 

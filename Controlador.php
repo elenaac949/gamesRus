@@ -262,6 +262,11 @@ class Controlador
     public function eliminarCuentaUsuario()
     {
         global $baseDatos;
+        if($_SESSION['nickUsuario']=="admin" || $_SESSION['nickUsuario']=="usuario"){
+            $this->error="No puedes eliminar esta cuenta";
+            $this->irAlPerfil();
+            return;
+        }
         $baseDatos->eliminarUsuario($_SESSION['nickUsuario']);
         $this->action = 'landing';
     }
