@@ -74,6 +74,9 @@ class Controlador
         $this->action = 'registro';
     }
 
+    public function irABiblioteca(){
+        $this->action = 'biblioteca';
+    }
 
     //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra los juegos del usuario
     private function datosBiblioteca()
@@ -481,7 +484,9 @@ if (isset($_POST['loginUsuario'])) {
     $programa->verificarUsuario();
 } elseif (isset($_POST['irRegistro'])) {
     $programa->irAlRegistro();
-} else if (isset($_POST['registroUsuario'])) {
+} elseif(isset($_POST['irBiblioteca'])){
+    $programa->irABiblioteca();
+}else if (isset($_POST['registroUsuario'])) {
     $programa->anadirUsuario();
 } else if (isset($_POST['administrar'])) {
     //Gracias al parametro administrar (pasado por submit desde biblioteca o por hidden en el mismo panel del administrador) nos muestra la vista de Administrador

@@ -8,20 +8,20 @@
                 <input type="text" class="buscardor" placeholder="Buscar...">
             </form>
             <form action="catalogo" method="post">
-                <a href="#"><img src="./img/catalogo.png" alt="" srcset=""></a>
+                <img src="./img/catalogo.png" alt="" srcset="">
                 <input type="submit" name="irAlCatalogo" class="catalogo" value="Catálogo">
             </form>
-            <form action="biblioteca" method="post">
-                <a href="#"><img src="./img/biblioteca.png" alt="" srcset=""></a>
+            <form action="" method="post">
+                <img src="./img/biblioteca.png" alt="" srcset="">
                 <input type="submit" name="irBiblioteca" class="biblioteca" value="Biblioteca">
             </form>
             <form action="carrito" method="post">
-                <a href="#"><img src="./img/carro-de-la-compra.png" alt="" srcset=""></a>
+                <img src="./img/carro-de-la-compra.png" alt="" srcset="">
                 <input type="submit" name="irAlCarrito" class="carrito" value="Carrito">
             </form>
             <div class="perfil-container">
                 <form action="perfil" method="post" class="perfil-form">
-                    <a href="#"><img src="./img/usuario.png" alt=""></a>
+                    <img src="./img/usuario.png" alt="">
                     <input type="button" name="irAlPerfil" class="perfil" value="Perfil">
                 </form>
                 <div class="desplegable">
