@@ -373,6 +373,17 @@ class Controlador
 
 
 
+    public function eliminarTarjeta(){
+        if(isset($_POST['idTarjeta'])){
+            $idTarjeta=$_POST['idTarjeta'];
+
+            global $baseDatos;
+            $baseDatos->eliminarTarjeta($idTarjeta);
+
+            $this->irAlPerfil();
+
+        }
+    }
 
     /* JUEGOS */
     public function anadirNuevoJuego()
@@ -490,7 +501,9 @@ if (isset($_POST['loginUsuario'])) {
     $programa->eliminarCuentaUsuario();
 } elseif (isset($_POST['btn_anadir_tarjeta'])) {
     $programa->anadirNuevaTarjeta();
-} elseif (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['btn_eliminar_tarjeta'])){
+    $programa->eliminarTarjeta();
+}elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);

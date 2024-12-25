@@ -55,7 +55,7 @@ include __DIR__ . '/../common/controlSesion.php';
 
             <div class="mostrar_tarjetas">
                 <h3>Tus tarjetas</h3>
-                <form method="post">
+                
                     <table>
                         <thead>
                             <tr>
@@ -63,6 +63,7 @@ include __DIR__ . '/../common/controlSesion.php';
                                 <th>Últimos 4 dígitos</th>
                                 <th>CCV</th>
                                 <th>Caducidad</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,12 +90,19 @@ include __DIR__ . '/../common/controlSesion.php';
                                         }
                                         ?>
                                     </td>
+                                    <td>
+                                        <form method="post">
+                                            <input type="hidden" value="<?php echo $tarjeta['idTarjeta']; ?>" name="idTarjeta">
+                                            <input type="submit" value="Eliminar"  name="btn_eliminar_tarjeta" class="btn_eliminar_tarjeta">
+                                        </form>
+                                    </td>
+
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
 
-                </form>
+                
             </div>
 
             <div class="anadir_tarjetas">
@@ -125,7 +133,7 @@ include __DIR__ . '/../common/controlSesion.php';
             </div>
 
             <div class="eliminar_tarjetas">
-                
+
             </div>
 
         </section>

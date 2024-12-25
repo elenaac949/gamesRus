@@ -163,6 +163,10 @@ section.tarjetas td {
     background-color: #ffffff;
 }
 
+section.tarjetas .btn_eliminar_tarjeta{
+    background: none;
+}
+
 /* Estilo para formularios */
 section.tarjetas .form_anadir_tarjeta {
     display: flex;
@@ -215,7 +219,7 @@ section.tarjetas form input[type="month"]:focus {
 }
 
 section.tarjetas form input[type="submit"] {
-    width: 20%;
+    
     align-self: center;
     font-size: 1.1em;
     cursor: pointer;
