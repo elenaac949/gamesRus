@@ -332,7 +332,6 @@ class Controlador
     public function eliminarJuego()
     {
         global $baseDatos;
-        var_dump($_POST);
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validar campos obligatorios
             if (!empty($_POST['idJuego'])) {
