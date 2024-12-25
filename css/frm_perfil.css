@@ -68,7 +68,7 @@ section.actualizar_datos form input[type="tel"]:focus {
 }
 
 section.actualizar_datos form input[type="submit"] {
-    width: 40%;
+    width: 20%;
     align-self: center;
     font-size: 1.1em;
     cursor: pointer;
@@ -107,12 +107,9 @@ section.borrar_cuenta form input[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-section.tarjetas {
-    padding: 20px;
-    background: #f8f8ff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    color: #3a0ca3;
+
+section.tarjetas .mostrar_tarjetas{
+    margin-bottom: 30px;
 }
 
 section.tarjetas h2 {
@@ -123,7 +120,7 @@ section.tarjetas h2 {
 /* Estilos para la sección general */
 section.tarjetas {
     padding: 20px;
-    background: #f8f8ff;
+    background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     color: #3a0ca3;
@@ -167,11 +164,30 @@ section.tarjetas td {
 }
 
 /* Estilo para formularios */
-section.tarjetas form {
+section.tarjetas .form_anadir_tarjeta {
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+}
+
+section.tarjetas .form_anadir_tarjeta .datos{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+section.tarjetas .form_anadir_tarjeta .datos .dato{
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+
+section.tarjetas .form_anadir_tarjeta .boton{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 section.tarjetas form label {
@@ -199,7 +215,7 @@ section.tarjetas form input[type="month"]:focus {
 }
 
 section.tarjetas form input[type="submit"] {
-    width: 40%;
+    width: 20%;
     align-self: center;
     font-size: 1.1em;
     cursor: pointer;
@@ -218,17 +234,3 @@ section.tarjetas form input[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-/* Estilos para el fieldset en el formulario */
-section.tarjetas form fieldset {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    background-color: #f4f4f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-section.tarjetas form fieldset legend {
-    font-weight: bold;
-    color: #7209b7;
-    padding: 0 10px;
-}

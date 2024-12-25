@@ -53,10 +53,10 @@ include __DIR__ . '/../common/controlSesion.php';
 
         <section class="tarjetas">
 
-            <div>
+            <div class="mostrar_tarjetas">
                 <h3>Tus tarjetas</h3>
                 <form method="post">
-                    <table border="1">
+                    <table>
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -96,18 +96,36 @@ include __DIR__ . '/../common/controlSesion.php';
 
                 </form>
             </div>
-            <div>
+
+            <div class="anadir_tarjetas">
                 <h3>Añadir tarjeta nueva</h3>
 
-                <form action="" method="post">
-                    <label for="numero_tarjeta">Numero de Tarjeta: </label>
-                    <input type="text" name="numero_tarjeta" placeholder="xxxx xxxx xxxx xxxx">
-                    <label for="ccv_tarjeta">CCV: </label>
-                    <input type="text" name="ccv_tarjeta" placeholder="xxx">
-                    <label for="fecha_caducidad_tarjeta">Fecha de caducidad: </label>
-                    <input type="month" name="fecha_caducidad_tarjeta">
-                    <input type="submit" name="btn_anadir_tarjeta" value="Añadir">
+                <form action="" method="post" class="form_anadir_tarjeta">
+                    <div class="datos">
+                        <div class="dato">
+                            <label for="numero_tarjeta">Numero de Tarjeta: </label>
+                            <input type="text" name="numero_tarjeta" placeholder="xxxx xxxx xxxx xxxx">
+                        </div>
+                        <div class="dato">
+                            <label for="ccv_tarjeta">CCV: </label>
+                            <input type="text" name="ccv_tarjeta" placeholder="xxx">
+                        </div>
+                        <div class="dato">
+                            <label for="fecha_caducidad_tarjeta">Fecha de caducidad: </label>
+                            <input type="month" name="fecha_caducidad_tarjeta">
+                        </div>
+
+                    </div>
+                    <div class="boton">
+                        <input type="submit" name="btn_anadir_tarjeta" value="Añadir">
+                    </div>
+
+
                 </form>
+            </div>
+
+            <div class="eliminar_tarjetas">
+                
             </div>
 
         </section>
@@ -116,9 +134,9 @@ include __DIR__ . '/../common/controlSesion.php';
             <!-- si la sesion no es del acministrador podra eliminar su cuenta -->
             <h3>Eliminar Cuenta de usuario</h3>
             <form action="" method="post">
-                
+
                 <input type="submit" name="btn_eliminar_cuenta" value="Eliminar Cuenta">
-                
+
             </form>
 
 
