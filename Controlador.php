@@ -52,6 +52,12 @@ class Controlador
             case 'perfil':
                 Vista::MuestraPerfil($this->data, $this->data1, $this->error);
                 break;
+            case 'catalogo':
+                Vista::MuestraCatalogo($this->data);
+                break;
+            case 'carrito':
+                Vista::MuestraCarrito($this->data);
+                break;
         }
     }
 
@@ -77,6 +83,15 @@ class Controlador
     public function irABiblioteca(){
         $this->action = 'biblioteca';
     }
+
+    public function irAlCatalogo(){
+        $this->action = 'catalogo';
+    }
+
+    public function irAlCarrito(){
+        $this->action = 'carrito';
+    }
+
 
     //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra los juegos del usuario
     private function datosBiblioteca()
@@ -484,7 +499,11 @@ if (isset($_POST['loginUsuario'])) {
     $programa->verificarUsuario();
 } elseif (isset($_POST['irRegistro'])) {
     $programa->irAlRegistro();
-} elseif(isset($_POST['irBiblioteca'])){
+} elseif (isset($_POST['irAlCatalogo'])) {
+    $programa->irAlCatalogo();
+}  elseif (isset($_POST['irAlCarrito'])) {
+    $programa->irAlCarrito();
+}elseif(isset($_POST['irBiblioteca'])){
     $programa->irABiblioteca();
 }else if (isset($_POST['registroUsuario'])) {
     $programa->anadirUsuario();

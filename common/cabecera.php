@@ -7,7 +7,7 @@
             <form action="" method="post">
                 <input type="text" class="buscardor" placeholder="Buscar...">
             </form>
-            <form action="catalogo" method="post">
+            <form action="" method="post">
                 <img src="./img/catalogo.png" alt="" srcset="">
                 <input type="submit" name="irAlCatalogo" class="catalogo" value="Catálogo">
             </form>
@@ -15,7 +15,7 @@
                 <img src="./img/biblioteca.png" alt="" srcset="">
                 <input type="submit" name="irBiblioteca" class="biblioteca" value="Biblioteca">
             </form>
-            <form action="carrito" method="post">
+            <form action="" method="post">
                 <img src="./img/carro-de-la-compra.png" alt="" srcset="">
                 <input type="submit" name="irAlCarrito" class="carrito" value="Carrito">
             </form>

@@ -12,6 +12,15 @@ class Vista
   {
     include "./frm/frm_login.php";
   }
+  public static function MuestraCatalogo($data)
+  {
+    include "./frm/frm_catalogo.php";
+  }
+
+  public static function MuestraCarrito($data)
+  {
+    include "./frm/frm_carrito.php";
+  }
 
   public static function MuestraRegistro($data)
   {
