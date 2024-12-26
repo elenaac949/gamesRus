@@ -85,6 +85,8 @@ class Controlador
     }
 
     public function irAlCatalogo(){
+        global $baseDatos;
+        $this->data = $baseDatos->mostrarJuegos();
         $this->action = 'catalogo';
     }
 

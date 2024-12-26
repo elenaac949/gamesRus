@@ -4,12 +4,22 @@ main {
 }
 
 .contenido_principal {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
     gap: 5%;
     padding: 3%;
     background-color: #f4f4f9;
+}
+
+.filtros {
+    position: sticky; /* Elemento se mantiene visible al hacer scroll */
+    top: 10px; /* Se pega desde 10px de la parte superior */
+    background-color: #ffffff;
+    padding: 3%;
+    border-radius: 10px;
+    height: 30vh;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade un poco de sombra para destacar */
+    z-index: 100; /* Asegura que esté por encima de otros elementos */
 }
 
 .vista_juegos {
@@ -25,13 +35,11 @@ main {
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-
 }
-
 
 .juego {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Asegura que los elementos se alineen verticalmente */
     border: 2px solid #4361ee;
     border-radius: 10px;
     width: 280px;
@@ -111,4 +119,3 @@ main {
 .boton_administrador input:hover {
     background-color: #7209b7;
 }
-
