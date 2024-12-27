@@ -80,17 +80,20 @@ class Controlador
         $this->action = 'registro';
     }
 
-    public function irABiblioteca(){
+    public function irABiblioteca()
+    {
         $this->action = 'biblioteca';
     }
 
-    public function irAlCatalogo(){
+    public function irAlCatalogo()
+    {
         global $baseDatos;
         $this->data = $baseDatos->mostrarJuegos();
         $this->action = 'catalogo';
     }
 
-    public function irAlCarrito(){
+    public function irAlCarrito()
+    {
         $this->action = 'carrito';
     }
 
@@ -274,6 +277,7 @@ class Controlador
 
 
         /* valdria comparar los datos introducidos con los dde la bbdd y si han cambiado cambiarlos */
+        /* añadir un ifelse de exito */
         global $baseDatos;
         $this->data = $baseDatos->actualizarUsuario($nombre, $apellidos, $correo, $nick, $tipoDeVia, $nombreDeVia, $numero, $numeros, $otros, $numeroTelefono);
         $this->irAlPerfil();
@@ -282,8 +286,8 @@ class Controlador
     public function eliminarCuentaUsuario()
     {
         global $baseDatos;
-        if($_SESSION['nickUsuario']=="admin" || $_SESSION['nickUsuario']=="usuario"){
-            $this->error="No puedes eliminar esta cuenta";
+        if ($_SESSION['nickUsuario'] == "admin" || $_SESSION['nickUsuario'] == "usuario") {
+            $this->error = "No puedes eliminar esta cuenta";
             $this->irAlPerfil();
             return;
         }
@@ -298,10 +302,15 @@ class Controlador
 
     public function anadirNuevaTarjeta()
     {
-        if (!empty($_POST['numero_tarjeta']) && !empty($_POST['ccv_tarjeta']) && !empty($_POST['fecha_caducidad_tarjeta'])) {
+        if (!empty($_POST['numero_tarjeta']) && !empty($_POST['ccv_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
             $numeroTarjeta = $_POST['numero_tarjeta'];
             $ccv = $_POST['ccv_tarjeta'];
-            $caducidad = $_POST['fecha_caducidad_tarjeta'];
+
+            $diaCad = 01; //para poder guardarlo en la base de datos
+            $mesCad = intval($_POST['mes_cad_tarjeta']);
+            $anioCad = intval($_POST['anio_cad_tarjeta']);
+
+            $caducidad = $anioCad . "-" . $mesCad . "-" . $diaCad;
             global $baseDatos;
 
             // Validar el número de tarjeta con el algoritmo de Luhn
@@ -325,22 +334,16 @@ class Controlador
                 $this->irAlPerfil();
                 return;
             }
-            // Validar la fecha de caducidad (formato MM/AA o MM/AAAA)
-            /* if (!preg_match('/^(0[1-9]|1[0-2])\/(\d{2}|\d{4})$/', $caducidad)) {
-                $this->error = "La fecha de caducidad debe estar en formato MM/AA o MM/AAAA.";
-                return;
-            } */
 
             // Validar que la tarjeta no esté vencida
-            if (!$this->esFechaCaducidadValida($caducidad)) {
+            if (!$this->esFechaCaducidadValida($diaCad, $mesCad, $anioCad)) {
                 $this->error = "La tarjeta está vencida.";
                 $this->irAlPerfil();
                 return;
             }
 
-            
-            $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']);
-            $this->error = "Tarjeta añadida con exito\n numero: " . $numeroTarjeta . "\n cvv: " . $ccv . "\n caducidad: " . $caducidad;
+
+            $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']) ;
             $this->irAlPerfil();
         } else {
             $this->error = "Revisa la informacion";
@@ -372,36 +375,44 @@ class Controlador
         return ($suma % 10 === 0);
     }
 
-    private function esFechaCaducidadValida($fecha_cad)
+    private function esFechaCaducidadValida($dia, $mes, $anio)
     {
-        $partes = explode('-', $fecha_cad);
-        $anio = intval($partes[0]);
-        $mes = intval($partes[1]);
 
-        // Convertir AA a AAAA si es necesario
         if ($anio < 100) {
             $anio += 2000; // Asumir siglo actual
         }
 
         // Fecha actual
+        $dia_actual = intval(date('d'));
         $mes_actual = intval(date('m'));
         $anio_actual = intval(date('Y'));
 
         // Validar que no esté vencida
-        return ($anio > $anio_actual || ($anio === $anio_actual && $mes >= $mes_actual));
+        if ($anio > $anio_actual) {
+            return true;
+        } elseif ($anio === $anio_actual) {
+            if ($mes > $mes_actual) {
+                return true;
+            } elseif ($mes === $mes_actual) {
+                return $dia >= $dia_actual;
+            }
+        }
+
+        return false;
     }
 
 
 
-    public function eliminarTarjeta(){
-        if(isset($_POST['idTarjeta'])){
-            $idTarjeta=$_POST['idTarjeta'];
+
+    public function eliminarTarjeta()
+    {
+        if (isset($_POST['idTarjeta'])) {
+            $idTarjeta = $_POST['idTarjeta'];
 
             global $baseDatos;
             $baseDatos->eliminarTarjeta($idTarjeta);
 
             $this->irAlPerfil();
-
         }
     }
 
@@ -492,6 +503,17 @@ class Controlador
         echo file_get_contents($urlMobyGames);
         die();
     }
+
+
+
+    /* Funciones para gestionar el carrito */
+    public function anadirAlCarrito()
+    {
+        if (isset($_POST['idJuegoCatalogo'])) {
+            $idJuego = $_POST['idJuegoCatalogo'];
+            $_SESSION['juegosCarrito'];
+        }
+    }
 }
 // El programa en sí comienza aquí
 $programa = new Controlador();
@@ -503,11 +525,11 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAlRegistro();
 } elseif (isset($_POST['irAlCatalogo'])) {
     $programa->irAlCatalogo();
-}  elseif (isset($_POST['irAlCarrito'])) {
+} elseif (isset($_POST['irAlCarrito'])) {
     $programa->irAlCarrito();
-}elseif(isset($_POST['irBiblioteca'])){
+} elseif (isset($_POST['irBiblioteca'])) {
     $programa->irABiblioteca();
-}else if (isset($_POST['registroUsuario'])) {
+} else if (isset($_POST['registroUsuario'])) {
     $programa->anadirUsuario();
 } else if (isset($_POST['administrar'])) {
     //Gracias al parametro administrar (pasado por submit desde biblioteca o por hidden en el mismo panel del administrador) nos muestra la vista de Administrador
@@ -527,9 +549,11 @@ if (isset($_POST['loginUsuario'])) {
     $programa->eliminarCuentaUsuario();
 } elseif (isset($_POST['btn_anadir_tarjeta'])) {
     $programa->anadirNuevaTarjeta();
-} elseif (isset($_POST['btn_eliminar_tarjeta'])){
+} elseif (isset($_POST['btn_eliminar_tarjeta'])) {
     $programa->eliminarTarjeta();
-}elseif (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['btn_anadir_carrito'])) {
+    $programa->anadirAlCarrito();
+} elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);

@@ -1,207 +1,76 @@
-main {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    background: #f4f4f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-section {
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    color: #3a0ca3;
-}
-
-section h3 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #7209b7;
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-section.actualizar_datos form,
-section.borrar_cuenta form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 20px;
-}
-
-section.actualizar_datos form fieldset {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    background-color: #f4f4f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-section.actualizar_datos form fieldset legend {
-    font-weight: bold;
-    color: #7209b7;
-    padding: 0 10px;
-}
-
-section.actualizar_datos form input[type="text"],
-section.actualizar_datos form input[type="email"],
-section.actualizar_datos form input[type="tel"] {
-    font-size: 1em;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    outline: none;
-    background-color: #f4f4f9;
-    color: #3a0ca3;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-section.actualizar_datos form input[type="text"]:focus,
-section.actualizar_datos form input[type="email"]:focus,
-section.actualizar_datos form input[type="tel"]:focus {
-    border-color: #4cc9f0;
-    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
-}
-
-section.actualizar_datos form input[type="submit"] {
-    width: 20%;
-    align-self: center;
-    font-size: 1.1em;
-    cursor: pointer;
-    color: #f4f4f9;
-    background: linear-gradient(to right, #3a0ca3, #7209b7);
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    text-transform: capitalize;
-    transition: background 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-section.actualizar_datos form input[type="submit"]:hover {
-    background: linear-gradient(to right, #7209b7, #f72585);
-    transform: translateY(-2px);
-}
-
-section.borrar_cuenta form input[type="submit"] {
-    width: 30%;
-    align-self: center;
-    font-size: 1.1em;
-    cursor: pointer;
-    color: #f4f4f9;
-    background: linear-gradient(to right, #d00000, #7209b7);
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    text-transform: capitalize;
-    transition: background 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-section.borrar_cuenta form input[type="submit"]:hover {
-    background: linear-gradient(to right, #7209b7, #f72585);
-    transform: translateY(-2px);
-}
-
-
-section.tarjetas .mostrar_tarjetas{
-    margin-bottom: 30px;
-}
-
-section.tarjetas h2 {
-    text-align: center;
-    color: #7209b7;
-}
-
-/* Estilos para la sección general */
+/* CSS actualizado para las tarjetas */
 section.tarjetas {
-    padding: 20px;
-    background: #ffffff;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+    padding: 0;
+}
+
+section.tarjetas .tarjeta {
+    background-color: #f4f4f9;
     border-radius: 8px;
+    padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+section.tarjetas .tarjeta h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
     color: #3a0ca3;
 }
 
-/* Títulos dentro de la sección */
-section.tarjetas h3 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #7209b7;
-    text-align: center;
-    margin-bottom: 20px;
+section.tarjetas .tarjeta p {
+    font-size: 1em;
+    margin: 5px 0;
+    color: #4a4a4a;
 }
 
-section.tarjetas h2 {
-    text-align: center;
-    color: #7209b7;
+/* Botones dentro de las tarjetas */
+section.tarjetas .btn_eliminar_tarjeta,
+section.tarjetas .btn_editar_tarjeta {
+    background-color: #4cc9f0;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
 }
 
-/* Estilos para la tabla */
-section.tarjetas table {
+section.tarjetas .btn_eliminar_tarjeta:hover {
+    background-color: #d90429;
+    transform: translateY(-2px);
+}
+
+section.tarjetas .btn_editar_tarjeta:hover {
+    background-color: #4361ee;
+    transform: translateY(-2px);
+}
+
+/* Formulario dentro de las tarjetas */
+section.tarjetas form {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-section.tarjetas th,
-section.tarjetas td {
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-
-section.tarjetas th {
-    background-color: #f4f4f9;
-    font-weight: bold;
-}
-
-section.tarjetas td {
-    background-color: #ffffff;
-}
-
-section.tarjetas .btn_eliminar_tarjeta{
-    background: none;
-}
-
-/* Estilo para formularios */
-section.tarjetas .form_anadir_tarjeta {
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-}
-
-section.tarjetas .form_anadir_tarjeta .datos{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-section.tarjetas .form_anadir_tarjeta .datos .dato{
-    display: flex;
-    flex-direction: column;
-    margin: 0 10px;
-}
-
-
-section.tarjetas .form_anadir_tarjeta .boton{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 }
 
 section.tarjetas form label {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     color: #3a0ca3;
+    margin-bottom: 5px;
+    display: block;
 }
 
 section.tarjetas form input[type="text"],
-section.tarjetas form input[type="month"] {
+section.tarjetas form select {
     font-size: 1em;
     padding: 10px;
     border: 1px solid #ddd;
@@ -213,28 +82,93 @@ section.tarjetas form input[type="month"] {
 }
 
 section.tarjetas form input[type="text"]:focus,
-section.tarjetas form input[type="month"]:focus {
+section.tarjetas form select:focus {
     border-color: #4cc9f0;
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
 }
 
 section.tarjetas form input[type="submit"] {
-    
-    align-self: center;
-    font-size: 1.1em;
-    cursor: pointer;
-    color: #f4f4f9;
-    background: linear-gradient(to right, #3a0ca3, #7209b7);
+    background-color: #3a0ca3;
+    color: #ffffff;
     border: none;
-    border-radius: 5px;
     padding: 10px 15px;
-    text-transform: capitalize;
-    transition: background 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 section.tarjetas form input[type="submit"]:hover {
-    background: linear-gradient(to right, #7209b7, #f72585);
+    background-color: #7209b7;
     transform: translateY(-2px);
 }
 
+/* Selectores para las fechas de caducidad */
+section.tarjetas form select {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f4f4f9;
+    color: #3a0ca3;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+section.tarjetas form select:focus {
+    border-color: #4cc9f0;
+    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}
+
+/* Estilo adicional para el formulario nuevo */
+.nuevo_formulario {
+    padding: 20px;
+    background-color: #f4f4f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.nuevo_formulario label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #3a0ca3;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.nuevo_formulario input[type="text"],
+.nuevo_formulario select {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f4f4f9;
+    color: #3a0ca3;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nuevo_formulario input[type="text"]:focus,
+.nuevo_formulario select:focus {
+    border-color: #4cc9f0;
+    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}
+
+.nuevo_formulario input[type="submit"] {
+    background-color: #3a0ca3;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nuevo_formulario input[type="submit"]:hover {
+    background-color: #7209b7;
+    transform: translateY(-2px);
+}

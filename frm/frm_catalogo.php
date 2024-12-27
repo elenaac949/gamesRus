@@ -32,8 +32,9 @@ include __DIR__ . '/../common/controlSesion.php';
                     </div>
                     <div class="botones_juego">
                         <form action="" method="post">
+                            <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
                             <input type="button" value="Detalles">
-                            <input type="button" value="Añadir al carrito">
+                            <input type="button" value="Añadir al carrito" name="btn_anadir_carrito">
                         </form>
                     </div>
                 </div>

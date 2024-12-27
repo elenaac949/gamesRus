@@ -232,9 +232,7 @@ INSERT INTO `usuario` (`idUsuario`, `nick`, `email`, `nombre`, `apellidos`, `con
 (30, 'anita90', 'ana@gmail.com', 'Ana', 'Alvarez', '$2y$10$HOGE/jkQZxWCrpx/YPu6XebUZ1ZufqXqtJelXPZeQiAmOONXfH3Q6', 'Camino', 'Las Lomas', 905, '1F, 2G', 'Zona Rural', '+34634567890', 1),
 (31, 'qwerty', 'qwerty@qwerty.com', 'qwerty', 'qwerty', '$2y$10$t3eUlMMVgfYQ2EJ4.BmkquHqEMf.oYbEuenn/wMK6uJ2D7Kk7u6y.', 'Paseo', 'Los Álamos', 1001, 'A4, B5', 'Zona Residencial', '+34645678901', 1);
 
---
--- Índices para tablas volcadas
---
+
 
 --
 -- Indices de la tabla `comprado`
@@ -398,6 +396,46 @@ ALTER TABLE `regalado`
 ALTER TABLE `usuario`
   ADD CONSTRAINT `fk_usuario_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id_rol`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+
+
+--
+-- tabla carrito-juego
+--
+CREATE TABLE carrito(
+    idCarrito INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT(11) NOT NULL,
+    CONSTRAINT fk_car_idu_usu_idu FOREIGN KEY (idUsuario) REFERENCES usuario (idUsuario)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE carritoJuego(
+    idCarrito INT(11) NOT NULL,
+    idJuego INT(11) NOT NULL,
+    CONSTRAINT pk_caj PRIMARY KEY (idCarrito, idJuego),
+    CONSTRAINT fk_caj_idc_car_idc FOREIGN KEY (idCarrito) REFERENCES carrito (idCarrito)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_caj_idj_jue_idj FOREIGN KEY (idJuego) REFERENCES juego (idJuego)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE poseeJuego(
+    idUsuario INT(11) NOT NULL,
+    idJuego INT(11) NOT NULL,
+    CONSTRAINT fk_poseeJuego PRIMARY KEY(idUsuario,idJuego),
+    CONSTRAINT fk_poj_idu_usu_idu FOREIGN KEY (idUsuario) REFERENCES usuario (idUsuario)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_poj_idj_jue_idj FOREIGN KEY (idJuego) REFERENCES juego (idJuego)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
