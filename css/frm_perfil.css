@@ -1,76 +1,56 @@
-/* CSS actualizado para las tarjetas */
-section.tarjetas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+/* Estilos generales */
+main {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
-    margin: 20px 0;
-    padding: 0;
-}
-
-section.tarjetas .tarjeta {
-    background-color: #f4f4f9;
-    border-radius: 8px;
     padding: 20px;
+    background: #f4f4f9;
+    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: start;
 }
 
-section.tarjetas .tarjeta h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+section {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     color: #3a0ca3;
 }
 
-section.tarjetas .tarjeta p {
-    font-size: 1em;
-    margin: 5px 0;
-    color: #4a4a4a;
-}
-
-/* Botones dentro de las tarjetas */
-section.tarjetas .btn_eliminar_tarjeta,
-section.tarjetas .btn_editar_tarjeta {
-    background-color: #4cc9f0;
-    color: #ffffff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 10px;
-}
-
-section.tarjetas .btn_eliminar_tarjeta:hover {
-    background-color: #d90429;
-    transform: translateY(-2px);
-}
-
-section.tarjetas .btn_editar_tarjeta:hover {
-    background-color: #4361ee;
-    transform: translateY(-2px);
-}
-
-/* Formulario dentro de las tarjetas */
-section.tarjetas form {
-    width: 100%;
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-section.tarjetas form label {
-    font-size: 1rem;
+section h3 {
+    font-size: 2rem;
     font-weight: 600;
-    color: #3a0ca3;
-    margin-bottom: 5px;
-    display: block;
+    color: #7209b7;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
-section.tarjetas form input[type="text"],
-section.tarjetas form select {
+/* Formularios */
+section form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+}
+
+section form fieldset {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f4f4f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+section form fieldset legend {
+    font-weight: bold;
+    color: #7209b7;
+    padding: 0 10px;
+}
+
+section form input[type="text"],
+section form input[type="email"],
+section form input[type="tel"],
+section form select {
     font-size: 1em;
     padding: 10px;
     border: 1px solid #ddd;
@@ -81,94 +61,255 @@ section.tarjetas form select {
     transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
-section.tarjetas form input[type="text"]:focus,
-section.tarjetas form select:focus {
+section form input[type="text"]:focus,
+section form input[type="email"]:focus,
+section form input[type="tel"]:focus,
+section form select:focus {
     border-color: #4cc9f0;
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
 }
 
-section.tarjetas form input[type="submit"] {
-    background-color: #3a0ca3;
-    color: #ffffff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 1em;
+section form input[type="submit"] {
+    align-self: center;
+    font-size: 1.1em;
     cursor: pointer;
-    margin-top: 15px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    color: #f4f4f9;
+    background: linear-gradient(to right, #3a0ca3, #7209b7);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-section.tarjetas form input[type="submit"]:hover {
-    background-color: #7209b7;
+section form input[type="submit"]:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
     transform: translateY(-2px);
 }
 
-/* Selectores para las fechas de caducidad */
-section.tarjetas form select {
-    font-size: 1em;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    outline: none;
-    background-color: #f4f4f9;
-    color: #3a0ca3;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-}
-
-section.tarjetas form select:focus {
-    border-color: #4cc9f0;
-    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
-}
-
-/* Estilo adicional para el formulario nuevo */
-.nuevo_formulario {
+/* Tarjetas */
+section.tarjetas {
     padding: 20px;
-    background-color: #f4f4f9;
+    background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #3a0ca3;
+}
+
+section.tarjetas h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #7209b7;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+section.tarjetas table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
 }
 
-.nuevo_formulario label {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #3a0ca3;
-    margin-bottom: 5px;
-    display: block;
+section.tarjetas th,
+section.tarjetas td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
 }
 
-.nuevo_formulario input[type="text"],
-.nuevo_formulario select {
-    font-size: 1em;
+section.tarjetas th {
+    background-color: #f4f4f9;
+    font-weight: bold;
+}
+
+section.tarjetas td {
+    background-color: #ffffff;
+}
+
+section.tarjetas .mostrar_tarjetas {
+    margin-bottom: 30px;
+}
+
+/* Botones de eliminar y añadir tarjeta */
+
+
+section.tarjetas .form_anadir_tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+section.tarjetas .form_anadir_tarjeta .datos {
+    display: flex;
+    justify-content: center;
+}
+
+section.tarjetas .form_anadir_tarjeta .datos .dato {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+section.tarjetas .form_anadir_tarjeta .boton {
+    display: flex;
+    justify-content: center;
+}
+
+/* Sección de botones específicos */
+section.actualizar_datos form input[type="submit"],
+section.borrar_cuenta form input[type="submit"] {
+    width: 20%;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #f4f4f9;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section.actualizar_datos form input[type="submit"] {
+    background: linear-gradient(to right, #3a0ca3, #7209b7);
+}
+
+section.actualizar_datos form input[type="submit"]:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
+    transform: translateY(-2px);
+}
+
+section.borrar_cuenta form input[type="submit"] {
+    width: 30%;
+    background: linear-gradient(to right, #d00000, #7209b7);
+}
+
+section.borrar_cuenta form input[type="submit"]:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
+    transform: translateY(-2px);
+}
+
+
+/* Contenedor principal de las tarjetas */
+.mostrar_tarjetas {
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #3a0ca3;
+}
+
+.mostrar_tarjetas h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #7209b7;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Tabla de tarjetas */
+.mostrar_tarjetas table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.mostrar_tarjetas th,
+.mostrar_tarjetas td {
     padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.mostrar_tarjetas th {
+    background-color: #f4f4f9;
+    font-weight: bold;
+}
+
+.mostrar_tarjetas td {
+    background-color: #ffffff;
+}
+
+/* formulario de cada tarjeta */
+/* .mostrar_tarjetas .form_mostrar_tarjeta {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+} */
+
+.mostrar_tarjetas .form_mostrar_tarjeta td {
+    padding: 10px;
+    vertical-align: middle;
+}
+
+/* CCV */
+.form_mostrar_tarjeta input[type="text"] {
+    font-size: 1em;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #0d0da7;
+    color: #3a0ca3;
+    width: 100px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mostrar_tarjetas .form_mostrar_tarjeta input[type="text"]:focus {
+    border-color: #4cc9f0;
+    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}
+
+/* Estilo para las opciones de fecha (mes y año) */
+.mostrar_tarjetas select {
+    font-size: 1em;
+    padding: 8px;
     border: 1px solid #ddd;
     border-radius: 5px;
     outline: none;
     background-color: #f4f4f9;
     color: #3a0ca3;
+    margin-right: 10px;
     transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
-.nuevo_formulario input[type="text"]:focus,
-.nuevo_formulario select:focus {
+.mostrar_tarjetas select:focus {
     border-color: #4cc9f0;
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
 }
 
-.nuevo_formulario input[type="submit"] {
-    background-color: #3a0ca3;
-    color: #ffffff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+/* Estilo para los botones de eliminar y editar */
+.mostrar_tarjetas .editar-eliminar {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
-.nuevo_formulario input[type="submit"]:hover {
-    background-color: #7209b7;
+.mostrar_tarjetas .btn_eliminar_tarjeta,
+.mostrar_tarjetas .btn_editar_tarjeta {
+    width: 120px;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #f4f4f9;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to right, #3a0ca3, #7209b7);
+}
+
+.mostrar_tarjetas .btn_eliminar_tarjeta:hover,
+.mostrar_tarjetas .btn_editar_tarjeta:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
     transform: translateY(-2px);
 }
+
+
+
+
+

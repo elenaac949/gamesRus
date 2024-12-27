@@ -416,6 +416,47 @@ class Controlador
         }
     }
 
+    public function editarTarjeta(){
+        if (!empty($_POST['ccv_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
+            
+            $ccv = $_POST['ccv_tarjeta'];
+
+            $diaCad = 01; //para poder guardarlo en la base de datos
+            $mesCad = intval($_POST['mes_cad_tarjeta']);
+            $anioCad = intval($_POST['anio_cad_tarjeta']);
+
+            $caducidad = $anioCad . "-" . $mesCad . "-" . $diaCad;
+            global $baseDatos;
+
+           
+
+            // Validar CCV (debe ser un número de 3 o 4 dígitos)
+            if (!preg_match('/^\d{3,4}$/', $ccv)) {
+                $this->error = "El CCV debe contener 3 o 4 dígitos.";
+                $this->irAlPerfil();
+                return;
+            }
+
+
+            // Validar que la tarjeta no esté vencida
+            if (!$this->esFechaCaducidadValida($diaCad, $mesCad, $anioCad)) {
+                $this->error = "La tarjeta está vencida.";
+                $this->irAlPerfil();
+                return;
+            }
+
+
+            $baseDatos->editarTarjeta($ccv, $caducidad, $_SESSION['idUsuario']) ;
+            $this->irAlPerfil();
+        } else {
+            $this->error = "Revisa la informacion";
+        }
+
+        $this->action = 'perfil';
+    }
+
+
+
     /* JUEGOS */
     public function anadirNuevoJuego()
     {
@@ -551,6 +592,8 @@ if (isset($_POST['loginUsuario'])) {
     $programa->anadirNuevaTarjeta();
 } elseif (isset($_POST['btn_eliminar_tarjeta'])) {
     $programa->eliminarTarjeta();
+} elseif (isset($_POST['btn_editar_tarjeta'])) {
+    $programa->editarTarjeta();
 } elseif (isset($_POST['btn_anadir_carrito'])) {
     $programa->anadirAlCarrito();
 } elseif (isset($_POST['cerrar_sesion'])) {

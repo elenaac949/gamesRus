@@ -22,7 +22,7 @@ include __DIR__ . '/../common/controlSesion.php';
             <h3>Actualizar Datos de Usuario</h3>
             <form action="" method="post">
 
-                <?php  /* var_dump($data); var_dump($data1);  */ ?>
+                <?php  /*  var_dump($data); var_dump($data1);  */  ?>
                 <fieldset>
                     <legend>Credenciales</legend>
                     <input required type="text" name="alias" id="alias" placeholder="Nick o Alias*" value="<?php echo $data['nick']; ?>">
@@ -78,7 +78,6 @@ include __DIR__ . '/../common/controlSesion.php';
 
             <div class="mostrar_tarjetas">
                 <h3>Tus tarjetas</h3>
-
                 <table>
                     <thead>
                         <tr>
@@ -98,12 +97,12 @@ include __DIR__ . '/../common/controlSesion.php';
                             list($anioCaducidad, $mesCaducidad, $diaCaducidad) = explode('-', $fechaCaducidad);
                             ?>
                             <tr>
-                                <form method="post">
+                                <form action="" method="post" class="form_mostrar_tarjeta">
                                     <!-- Número de fila -->
                                     <td><?php echo $contador++; ?></td>
 
                                     <!-- Últimos 4 dígitos de la tarjeta -->
-                                    <td><input type="text" name="numero_tarjeta" placeholder="xxxx xxxx xxxx xxxx" pattern="\d{13,19}" value="<?php echo $tarjeta['numeroTarjeta']; ?>"></td>
+                                    <td><?php echo substr($tarjeta['numeroTarjeta'],-4); ?></td>
 
                                     <!-- CCV oculto -->
                                     <td><input type="text" name="ccv_tarjeta" placeholder="xxx" value="<?php echo $tarjeta['ccv']; ?>"></td>
@@ -111,7 +110,7 @@ include __DIR__ . '/../common/controlSesion.php';
                                     <!-- Fecha de caducidad -->
                                     <td>
                                         <label for="mes_cad_tarjeta">Mes</label>
-                                        <select name="mes_cad_tarjeta" id="mes_cad_tarjeta">
+                                        <select name="mes_cad_tarjeta">
                                             <?php foreach ($meses as $numeroMes => $nombreMes): ?>
                                                 <option value="<?= $numeroMes ?>" <?= $numeroMes == intval($mesCaducidad) ? 'selected' : '' ?>>
                                                     <?= $nombreMes ?>
@@ -120,7 +119,7 @@ include __DIR__ . '/../common/controlSesion.php';
                                         </select>
 
                                         <label for="anio_cad_tarjeta">Año</label>
-                                        <select name="anio_cad_tarjeta" id="anio_cad_tarjeta">
+                                        <select name="anio_cad_tarjeta">
                                             <?php for ($i = 0; $i <= $aniosFuturos; $i++):
                                                 $anio = $anioActual + $i;
                                             ?>
@@ -131,11 +130,9 @@ include __DIR__ . '/../common/controlSesion.php';
                                         </select>
                                     </td>
                                     <td class="editar-eliminar">
-
                                         <input type="hidden" value="<?php echo $tarjeta['idTarjeta']; ?>" name="idTarjeta">
                                         <input type="submit" value="Eliminar" name="btn_eliminar_tarjeta" class="btn_eliminar_tarjeta">
                                         <input type="submit" value="Editar" name="btn_editar_tarjeta" class="btn_editar_tarjeta">
-
                                     </td>
                                 </form>
                             </tr>

@@ -167,27 +167,28 @@ class Database
     }
 
 
-    public function editarTarjeta($ccv, $caducidad)
+    public function editarTarjeta($ccv, $caducidad, $idUsuario)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "UPDATE `tarjeta` 
-                    SET `ccv` = :ccv, `caducidad` = :caducidad 
-                    WHERE `idUsuario` = :id";
-
+                    SET `ccv` = :ccv, `fechaCaducidad` = :caducidad 
+                    WHERE `idUsuario` = :idUsuario";  
+    
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
-
-            // Asignar valores a las etiquetas
-            $stmt->bindParam(':cvc', $cvc);
+    
+            $stmt->bindParam(':ccv', $ccv); 
             $stmt->bindParam(':caducidad', $caducidad);
-
+            $stmt->bindParam(':idUsuario', $idUsuario);
+    
             // Ejecutar la consulta
             $stmt->execute();
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+    
 
     //Eliminar tarjeta
     function eliminarTarjeta($idTarjeta)
