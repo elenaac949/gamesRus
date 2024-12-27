@@ -146,12 +146,24 @@ CREATE TABLE comprado(
 
 CREATE TABLE prestado(
     idPrestamo INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    idUsuRegala INT(11) NOT NULL,
-    idUsuRecibe INT(11) NOT NULL,
+    idUsuPresta INT(11) NOT NULL,
+    idUsuRecibePrest INT(11) NOT NULL,
     idJuego INT(11) NOT NULL,
     fechaInicio DATETIME NOT NULL,
     fechaFin DATETIME NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE regalado(
+    idRegalo INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idUsuRegala INT(11) NOT NULL,
+    idUsuRecibe INT(11) NOT NULL,
+    idJuego INT(11) NOT NULL,
+    fechaRegalo DATETIME NOT NULL,
+    
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 
 /* INSERTAR DATOS */
 
@@ -217,7 +229,6 @@ INSERT INTO juego (idJuego, titulo, desarrollador, distribuidor, anio, ruta, des
 (18, 'Celeste', 'Maddy Makes Games', 'Maddy Makes Games', '2018', '/imagenes/celeste.jpg', 'Un juego de plataformas desafiante sobre la vida de una joven llamada Madeline mientras asciende a la montaña Celeste.', NULL),
 (19, 'DOOM Eternal', 'id Software', 'Bethesda Softworks', '2020', '/imagenes/doom_eternal.jpg', 'Un juego de disparos en primera persona en el que los jugadores controlan al Doom Slayer, luchando contra demonios en escenarios infernales.', NULL),
 (20, 'League of Legends', 'Riot Games', 'Riot Games', '2009', '/imagenes/league_of_legends.jpg', 'Un juego de estrategia en tiempo real multijugador donde dos equipos de campeones luchan por destruir la base del enemigo.', NULL);
-
 
 
 

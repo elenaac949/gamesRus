@@ -35,7 +35,7 @@ class Database
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "INSERT INTO `usuario` 
-                    (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `TipoDeVia`, `NombreDeVia`, `Numero`, `NumeroTelefono`, `id_rol` ) 
+                    (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `tipoDeVia`, `nombreDeVia`, `numeroDeVia`, `numeroTelefono`, `idRol` ) 
                     VALUES 
                     (:nick, :correo, :nombre, :apellidos, :contrasenia, :tipoDeVia, :nombreDeVia, :numero, :numeroTelefono,1)";
 
@@ -66,7 +66,7 @@ class Database
         $userId = $_SESSION['idUsuario'];
         try {
 
-            $sql = "SELECT nick, email, nombre, apellidos,contrasenia, TipoDeVia, NombreDeVia, Numero, Numeros, NumeroTelefono, Otros FROM usuario WHERE idUsuario = :id";
+            $sql = "SELECT * FROM usuario WHERE idUsuario = :id";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':id', $userId);
             $stmt->execute();
@@ -90,12 +90,12 @@ class Database
                         `nombre` = :nombre, 
                         `apellidos` = :apellidos, 
                         
-                        `TipoDeVia` = :tipoDeVia, 
-                        `NombreDeVia` = :nombreDeVia, 
-                        `Numero` = :numeroVia, 
-                        `Numeros` = :numeros, 
-                        `Otros` = :otros, 
-                        `NumeroTelefono` = :numeroTelefono
+                        `tipoDeVia` = :tipoDeVia, 
+                        `nombreDeVia` = :nombreDeVia, 
+                        `numeroDeVia` = :numeroVia, 
+                        `numeros` = :numeros, 
+                        `otros` = :otros, 
+                        `numeroTelefono` = :numeroTelefono
                     WHERE `idUsuario` = :id";
 
             // Preparar la consulta

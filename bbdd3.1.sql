@@ -159,7 +159,7 @@ CREATE TABLE `regalado` (
 --
 
 CREATE TABLE `rol` (
-  `id_rol` int(11) NOT NULL,
+  `idRol` int(11) NOT NULL,
   `rol` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -167,7 +167,7 @@ CREATE TABLE `rol` (
 -- Volcado de datos para la tabla `rol`
 --
 
-INSERT INTO `rol` (`id_rol`, `rol`) VALUES
+INSERT INTO `rol` (`idRol`, `rol`) VALUES
 (1, 'usuario'),
 (2, 'admin');
 
@@ -186,13 +186,13 @@ CREATE TABLE `usuario` (
   `nombre` varchar(50) NOT NULL,
   `apellidos` varchar(50) NOT NULL,
   `contrasenia` varchar(255) NOT NULL,
-  `TipoDeVia` varchar(50) DEFAULT NULL,
-  `NombreDeVia` varchar(100) DEFAULT NULL,
-  `Numero` int(11) DEFAULT NULL,
-  `Numeros` varchar(50) DEFAULT NULL,
-  `Otros` varchar(255) DEFAULT NULL,
-  `NumeroTelefono` varchar(15) DEFAULT NULL,
-  `id_rol` int(11) NOT NULL
+  `tipoDeVia` varchar(50) DEFAULT NULL,
+  `nombreDeVia` varchar(100) DEFAULT NULL,
+  `numeroDeVia` int(11) DEFAULT NULL,
+  `numeros` varchar(50) DEFAULT NULL,
+  `otros` varchar(255) DEFAULT NULL,
+  `numeroTelefono` varchar(15) DEFAULT NULL,
+  `idRol` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -215,7 +215,7 @@ CREATE TABLE `tarjeta` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `TipoDeVia`, `NombreDeVia`, `Numero`, `Numeros`, `Otros`, `NumeroTelefono`, `id_rol`) VALUES
+INSERT INTO `usuario` (`idUsuario`, `nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `tipoDeVia`, `nombreDeVia`, `numeroDeVia`, `numeros`, `otros`, `numeroTelefono`, `idRol`) VALUES
 (1, 'dickDestroy', 'disckDestroyer69@gmail.com', 'Escro', 'Tolamo', '$2y$10$lkwk.6NdxTvG7WHBJGl/7O8iurq2RdxW3DiFEnJsnJ1UBDbEREmNC', 'Calle', 'Gran Vía', 123, '12B, 14C', 'Departamento 5B', '+34612345678', 1),
 (3, 'PirateKing', 'mugiwara@gmail.com', 'Monkey D.', 'Luffy', '$2y$10$JpJFZgRXO2KUMnvKhE.TW.hmfILFTQIsydW5m1QxGvE5KO617w3A6', 'Avenida', 'Sunny Road', 456, '4A, 4B', 'Barco Pirata', '+34623456789', 1),
 (4, 'admin', 'admin@admin.es', 'admin', '', '$2y$10$PnVKzoYkiWcoLm/5H.0M0O8HHvbeCdQnHQa6xdbPMY90fynijS8nK', 'Plaza', 'Central', 1, NULL, 'Oficina Principal', '+34634567890', 1),
@@ -277,7 +277,7 @@ ALTER TABLE `regalado`
 -- Indices de la tabla `rol`
 --
 ALTER TABLE `rol`
-  ADD PRIMARY KEY (`id_rol`);
+  ADD PRIMARY KEY (`idRol`);
 
 --
 -- Indices de la tabla `tarjeta`
@@ -299,7 +299,7 @@ ON UPDATE CASCADE
 ALTER TABLE `usuario`
   ADD UNIQUE KEY `nick` (`nick`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `fk_usuario_rol` (`id_rol`);
+  ADD KEY `fk_usuario_rol` (`idRol`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -339,7 +339,7 @@ ALTER TABLE `regalado`
 -- AUTO_INCREMENT de la tabla `rol`
 --
 ALTER TABLE `rol`
-  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tarjeta`
@@ -394,7 +394,7 @@ ALTER TABLE `regalado`
 -- Filtros para la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  ADD CONSTRAINT `fk_usuario_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id_rol`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_usuario_rol` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 
