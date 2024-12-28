@@ -56,7 +56,7 @@ class Controlador
                 Vista::MuestraCatalogo($this->data, $this->error);
                 break;
             case 'carrito':
-                Vista::MuestraCarrito($this->data);
+                Vista::MuestraCarrito($this->data, $this->error);
                 break;
         }
     }
@@ -94,7 +94,13 @@ class Controlador
 
     public function irAlCarrito()
     {
+        global $baseDatos;
+
+        $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+        
+        $this->data=$baseDatos-> obtenerJuegosDelCarrito($idCarrito);
         $this->action = 'carrito';
+
     }
 
 
@@ -565,6 +571,45 @@ class Controlador
             
         }
     }
+
+
+    public function quitarDelCarrito(){
+        global $baseDatos;
+        
+        if (isset($_POST['idJuegoCatalogo'])) {
+            $idJuego = $_POST['idJuegoCatalogo'];
+            $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+            
+            // Verifica si obtenemos el carrito correctamente
+            if ($idCarrito) {
+                $this->error = $baseDatos->eliminarJuegoCarrito($idCarrito, $idJuego);
+            } else {
+                // Si no se encuentra el carrito
+                $this->error = "Carrito no encontrado para el usuario.";
+            }
+        } else {
+            $this->error = "ID del juego no recibido.";
+        }
+    
+        // Redirige al carrito pero no redirige AAAAAAAAAAAAAAA
+        $this->irAlCarrito();
+    }
+
+    public function pagarCompra(){
+        global $baseDatos;
+        $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+        $juegos=$baseDatos->obtenerJuegosDelCarrito($idCarrito);
+
+        if(!empty($juegos)){
+            $this->error= $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+        }else{
+            $this->error="No hay nada que pagar";
+        }
+
+        $this->irAlCarrito();
+
+    }
+    
 }
 // El programa en sí comienza aquí
 $programa = new Controlador();
@@ -606,7 +651,11 @@ if (isset($_POST['loginUsuario'])) {
     $programa->editarTarjeta();
 } elseif (isset($_POST['btn_anadir_carrito'])) {
     $programa->anadirAlCarrito();
-} elseif (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['btn_eliminar_del_carrito'])) {
+    $programa->quitarDelCarrito();
+} elseif (isset($_POST['btn_pagar'])) {
+    $programa->pagarCompra();
+}elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);

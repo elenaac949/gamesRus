@@ -17,7 +17,7 @@ class Vista
     include "./frm/frm_catalogo.php";
   }
 
-  public static function MuestraCarrito($data)
+  public static function MuestraCarrito($data,$error)
   {
     include "./frm/frm_carrito.php";
   }

@@ -1,0 +1,102 @@
+
+main {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; 
+    justify-content: space-around;
+    margin: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+
+/* Estilos para el área de pago */
+.total_pago {
+    width: 30%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-self: start;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    justify-content: center;
+    align-items: center;
+}
+
+.total_pago div{
+    height: 70%;
+    text-align: center;
+}
+
+/* Contenedor de juegos en el carrito */
+.juegos_carrito {
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+
+.juego {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.juego img {
+    
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor de título y botones de cada juego */
+.titulo_botones {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Estilo para el título del juego */
+.titulo_botones p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #3a0ca3;
+    margin-bottom: 10px;
+}
+
+/* Estilo para los botones de los juegos */
+.botones_juego {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+main input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background: linear-gradient(to right, #3a0ca3, #7209b7);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+main input[type="submit"]:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
+    transform: translateY(-2px);
+}
+
+
+
+
+
