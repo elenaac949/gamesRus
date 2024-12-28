@@ -37,12 +37,12 @@ include __DIR__ . '/../common/controlSesion.php';
                 </fieldset>
                 <fieldset>
                     <legend>Datos de contacto</legend>
-                    <input required type="text" name="tipo_via" placeholder="Tipo de vía" value="<?php echo $data['TipoDeVia']; ?>">
-                    <input required type="text" name="nombre_via" placeholder="Nombre de la vía" value="<?php echo $data['NombreDeVia']; ?>">
-                    <input required type="text" name="numero_via" placeholder="Número Vía" value="<?php echo $data['Numero']; ?>">
-                    <input required type="text" name="numeros" placeholder="Número Piso" value="<?php echo $data['Numeros']; ?>">
-                    <input required type="text" name="otros" placeholder="Otros datos" value="<?php echo $data['Otros']; ?>">
-                    <input required type="tel" name="telefono" placeholder="Teléfono*" value="<?php echo $data['NumeroTelefono']; ?>">
+                    <input required type="text" name="tipo_via" placeholder="Tipo de vía" value="<?php echo $data['tipoDeVia']; ?>">
+                    <input required type="text" name="nombre_via" placeholder="Nombre de la vía" value="<?php echo $data['nombreDeVia']; ?>">
+                    <input required type="text" name="numero_via" placeholder="Número Vía" value="<?php echo $data['numeroDeVia']; ?>">
+                    <input required type="text" name="numeros" placeholder="Número Piso" value="<?php echo $data['numeros']; ?>">
+                    <input required type="text" name="otros" placeholder="Otros datos" value="<?php echo $data['otros']; ?>">
+                    <input required type="tel" name="telefono" placeholder="Teléfono*" value="<?php echo $data['numeroTelefono']; ?>">
 
                 </fieldset>
 

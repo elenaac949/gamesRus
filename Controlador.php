@@ -53,7 +53,7 @@ class Controlador
                 Vista::MuestraPerfil($this->data, $this->data1, $this->error);
                 break;
             case 'catalogo':
-                Vista::MuestraCatalogo($this->data);
+                Vista::MuestraCatalogo($this->data, $this->error);
                 break;
             case 'carrito':
                 Vista::MuestraCarrito($this->data);
@@ -550,9 +550,19 @@ class Controlador
     /* Funciones para gestionar el carrito */
     public function anadirAlCarrito()
     {
+        global $baseDatos;
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = $_POST['idJuegoCatalogo'];
-            $_SESSION['juegosCarrito'];
+
+            $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+            $existeJuego=$baseDatos->verificarJuegoEnCarrito($idCarrito, $idJuego);
+            if($existeJuego!=true){
+                $this->error=$baseDatos->anadirJuegoAlCarrito($idCarrito,$idJuego);
+            }else{
+                $this->error="El juego ya está en el carrito";
+            }
+            $this->irAlCatalogo();
+            
         }
     }
 }

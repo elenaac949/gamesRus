@@ -16,12 +16,15 @@ include __DIR__ . '/../common/controlSesion.php';
     <?php
     include './common/cabecera.php';
     ?>
-
+     <p class="errores"><?= $error ?></p>
+     <?php /* var_dump($data)  */ ?>
     <main class="contenido_principal">
         <aside class="filtros">
             <p>aqui van los filtros</p>
         </aside>
         <section class="vista_juegos">
+       
+        
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
                     <div class="imagen_juego">
@@ -34,7 +37,7 @@ include __DIR__ . '/../common/controlSesion.php';
                         <form action="" method="post">
                             <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
                             <input type="button" value="Detalles">
-                            <input type="button" value="Añadir al carrito" name="btn_anadir_carrito">
+                            <input type="submit" value="Añadir al carrito" name="btn_anadir_carrito">
                         </form>
                     </div>
                 </div>
