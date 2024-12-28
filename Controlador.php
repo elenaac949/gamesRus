@@ -594,7 +594,8 @@ class Controlador
         // Redirige al carrito pero no redirige AAAAAAAAAAAAAAA
         $this->irAlCarrito();
     }
-
+  
+    /* Esta funcion está a medias todavia */
     public function pagarCompra(){
         global $baseDatos;
         $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
