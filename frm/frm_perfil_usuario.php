@@ -89,7 +89,7 @@ include __DIR__ . '/../common/controlSesion.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $contador = 1; 
+                        <?php $contador = 1;
                         ?>
                         <?php foreach ($data1 as $tarjeta): ?>
                             <?php
@@ -102,7 +102,7 @@ include __DIR__ . '/../common/controlSesion.php';
                                     <td><?php echo $contador++; ?></td>
 
                                     <!-- Últimos 4 dígitos de la tarjeta -->
-                                    <td><?php echo substr($tarjeta['numeroTarjeta'],-4); ?></td>
+                                    <td><?php echo substr($tarjeta['numeroTarjeta'], -4); ?></td>
 
                                     <!-- CCV oculto -->
                                     <td><input type="text" name="ccv_tarjeta" placeholder="xxx" value="<?php echo $tarjeta['ccv']; ?>"></td>
@@ -150,7 +150,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <div class="datos">
                         <div class="dato">
                             <label for="numero_tarjeta">Numero de Tarjeta: </label>
-                            <input type="text" name="numero_tarjeta" placeholder="xxxx xxxx xxxx xxxx" pattern="\d{13,19}">
+                            <input type="text" name="numero_tarjeta" placeholder="xxxx xxxx xxxx xxxx" maxlength="19" pattern="\d{13,19}">
                         </div>
                         <div class="dato">
                             <label for="ccv_tarjeta">CCV: </label>
@@ -171,7 +171,7 @@ include __DIR__ . '/../common/controlSesion.php';
                             <select name="anio_cad_tarjeta">
                                 <?php
                                 $anioActual = date("Y");
-                                
+
                                 for ($i = 0; $i <= $aniosFuturos; $i++) {
                                     $anio = $anioActual + $i;
                                     echo "<option value=\"$anio\">$anio</option>";

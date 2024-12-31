@@ -124,3 +124,33 @@ details ul li {
     cursor: pointer;
 
 }
+
+.genero_lista {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual ancho */
+    gap: 10px; /* Espacio entre los elementos */
+    margin: 0;
+    padding: 0;
+}
+
+.genero_item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f4f4f9;;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.genero_item:hover {
+    background-color: #f4f4f9;;
+    border-color: #ccc;
+}
+
+.genero-item input[type="checkbox"] {
+    accent-color: #7209b7;
+    /* Cambia el color del checkbox */
+    cursor: pointer;
+}

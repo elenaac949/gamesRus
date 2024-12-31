@@ -57,14 +57,16 @@ include __DIR__ . '/../common/controlSesion.php';
                 </form>
                 <form action="#" method="post" name="formulario_anadir_juego">
                     <input type="text" name="titulo_juego" placeholder="Título" id="titulo_juego">
-                    <div id="genero_juego">
+                    <span>Géneros:</span>
+                    <div id="genero_juego" class="genero_lista">
                         <?php foreach ($data as $genero) : ?>
-                            <label>
+                            <label class="genero_item">
                                 <input type="checkbox" name="genero_juego[]" data-api-id="<?= $genero['idGeneroApi'] ?>" value="<?= $genero['idGenero']; ?>">
                                 <?= $genero['genero']; ?>
                             </label>
                         <?php endforeach; ?>
                     </div>
+
 
                     <input type="text" name="desarrollador_juego" placeholder="Desarrollador" id="desarrollador_juego">
                     <input type="text" name="distribuidor_juego" placeholder="Distribuidor" id="distribuidor_juego">
