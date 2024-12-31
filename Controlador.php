@@ -476,7 +476,7 @@ class Controlador
                 !empty($_POST['descripcion_juego'] && !empty($_POST['portada_juego']))
             ) {
                 $titulo = $_POST['titulo_juego'];
-                $genero = $_POST['genero_juego'];
+                $generos = $_POST['genero_juego'];
                 $desarrollador = $_POST['desarrollador_juego'];
                 $distribuidor = $_POST['distribuidor_juego'];
                 $lanzamiento = $_POST['anio_lanzamiento'];
@@ -485,7 +485,7 @@ class Controlador
                 $portada = $_POST['portada_juego'];
                 //falta una funcion para verificar si el juego existe ya
                 //falta que se añada la descripcion y la portada
-                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $genero, $descripcion, $portada);
+                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $generos, $descripcion, $portada);
                 $this->error = 'Juego añadido correctamente';
                 $this->action = 'administracion';
             } else {

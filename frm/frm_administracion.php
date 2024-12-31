@@ -51,20 +51,21 @@ include __DIR__ . '/../common/controlSesion.php';
                         <summary>Total resultados: <span id="total-resultados"></span></summary>
                         <ul id="lista_juegos">
                             <!-- Aquí se mostrarán los juegos que coincidan con la búsqueda -->
-
                         </ul>
-
                     </details>
                     <hr>
                 </form>
                 <form action="#" method="post" name="formulario_anadir_juego">
                     <input type="text" name="titulo_juego" placeholder="Título" id="titulo_juego">
-                    <select name="genero_juego" id="genero_juego">
-                        <option value="">Selecciona un género</option>
+                    <div id="genero_juego">
                         <?php foreach ($data as $genero) : ?>
-                            <option value="<?= $genero['idGenero']; ?>"><?= $genero['genero']; ?></option>
-                        <?php endforeach ?>
-                    </select>
+                            <label>
+                                <input type="checkbox" name="genero_juego[]" data-api-id="<?= $genero['idGeneroApi'] ?>" value="<?= $genero['idGenero']; ?>">
+                                <?= $genero['genero']; ?>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+
                     <input type="text" name="desarrollador_juego" placeholder="Desarrollador" id="desarrollador_juego">
                     <input type="text" name="distribuidor_juego" placeholder="Distribuidor" id="distribuidor_juego">
                     <input type="date" name="anio_lanzamiento" placeholder="Año" id="anio_lanzamiento">
@@ -100,8 +101,8 @@ include __DIR__ . '/../common/controlSesion.php';
                             <option value="<?= $titulo['idJuego']; ?>"><?= $titulo['titulo']; ?></option>
                         <?php endforeach ?>
                     </select>
-                    
-                   
+
+
 
                     <input type="text" name="desarrollador_juego" placeholder="Desarrollador" value="">
                     <input type="text" name="distribuidor_juego" placeholder="Distribuidor">
@@ -127,6 +128,8 @@ include __DIR__ . '/../common/controlSesion.php';
             const formBuscar = document.querySelector("#buscador_juego");
             formBuscar.addEventListener("submit", async (e) => {
                 e.preventDefault();
+                document.querySelector("#total-resultados").innerHTML = 0;
+                document.querySelector("#lista_juegos").innerHTML = "";
                 const url = new URL(window.location.href);
                 const titulo = document.querySelector("#buscar_juego").value;
                 const mobyGamesUrl = new URL("https://api.mobygames.com/v1/games");
@@ -148,7 +151,9 @@ include __DIR__ . '/../common/controlSesion.php';
                     li.textContent = juego.title;
                     li.addEventListener("click", () => {
                         document.querySelector("#titulo_juego").value = juego.title;
-                        markSelectedOptions(juego.genres[0].genre_name);
+                        for (let i = 0; i < Math.min(juego.genres.length, 5); i++) {
+                            markSelectedCheckboxes(juego.genres[i].genre_id);
+                        }
                         // document.querySelector("#genero_juego").value = juego.genres[0].genre_name
                         // document.querySelector("#desarrollador_juego").value = juego.developers[0].name;
                         // document.querySelector("#distribuidor_juego").value = juego.publishers[0].name;
@@ -168,15 +173,15 @@ include __DIR__ . '/../common/controlSesion.php';
             return tempDiv.textContent || tempDiv.innerText || ""; // Retorna el texto limpio
         }
 
-        function markSelectedOptions(selectedGenre) {
-            const selectElement = document.getElementById("genero_juego"); // Obtener el elemento <select>
-            const options = selectElement.options; // Obtener todas las opciones
+        function markSelectedCheckboxes(selectedGenre) {
+            const checkboxes = document.querySelectorAll('#genero_juego input[type="checkbox"]'); // Obtener todos los checkboxes
 
-            for (let i = 0; i < options.length; i++) {
-                const option = options[i];
-                // Si el valor o texto coincide, marcar como seleccionado
-                option.selected = selectedGenre.includes(option.textContent) || selectedGenre.includes(option.value);
-            }
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    // Comparar el atributo data-api-id con el género seleccionado
+                    checkbox.checked = Number(checkbox.dataset.apiId) === selectedGenre;
+                }
+            });
         }
     </script>
 </body>

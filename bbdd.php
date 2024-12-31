@@ -522,14 +522,14 @@ class Database
 
 
     //Agregar un juego nuevo - HEMOS QUITADO LA RUTA PARA QUE FUNCIONE 
-    public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio,  $genero, $descripcion, $portada)
+    public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio,  $generos, $descripcion, $portada)
     {
         try {
             // Consulta SQL actualizada
             $sql = "INSERT INTO `juego` 
-                (`titulo`, `desarrollador`, `distribuidor`, `anio`, `idGenero`, `descripcion`, `portada`) 
+                (`titulo`, `desarrollador`, `distribuidor`, `anio`,`descripcion`, `portada`) 
                 VALUES 
-                (:titulo, :desarrollador, :distribuidor, :anio,:idGenero, :descripcion, :portada)";
+                (:titulo, :desarrollador, :distribuidor, :anio, :descripcion, :portada)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -539,13 +539,38 @@ class Database
             $stmt->bindParam(':desarrollador', $desarrollador);
             $stmt->bindParam(':distribuidor', $distribuidor);
             $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
-
-            $stmt->bindParam(':idGenero', $genero, PDO::PARAM_INT);
             $stmt->bindParam(':descripcion', $descripcion);
             $stmt->bindParam(':portada', $portada);
 
             // Ejecutar la consulta
             $stmt->execute();
+            // Llamamos a la función que añade los géneros al juego después de insertarlo
+            $this->agnadirGeneroJuego($this->conexion->lastInsertId(), $generos);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    public function agnadirGeneroJuego($idJuego, $arrayIdGeneros)
+    {
+        try {
+            // Consulta SQL actualizada
+            $sql = "INSERT INTO `generoJuego` 
+                (`idJuego`, `idGenero`) 
+                VALUES 
+                (:idJuego, :idGenero)";
+
+            foreach ($arrayIdGeneros as $genero) {
+                // Preparar la consulta
+                $stmt = $this->conexion->prepare($sql);
+
+                // Asignar valores a las etiquetas
+                $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+                $stmt->bindParam(':idGenero', $genero, PDO::PARAM_INT);
+
+                // Ejecutar la consulta
+                $stmt->execute();
+            }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
