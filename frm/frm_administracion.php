@@ -160,8 +160,8 @@ include __DIR__ . '/../common/controlSesion.php';
                         }
                         // document.querySelector("#genero_juego").value = juego.genres[0].genre_name
                         // document.querySelector("#desarrollador_juego").value = juego.developers[0].name;
-                        //document.querySelector("#distribuidor_juego").value = juego.publishers[0].name;
                         document.querySelector("#anio_lanzamiento").value = juego.platforms[0].first_release_date;
+                        document.querySelector("#distribuidor_juego").value = juego.platforms[0].platform_name;;
                         // document.querySelector("#ruta_juego").value = juego.url;
                         document.querySelector("#descripcion_juego").value = removeHTMLTags(juego.description);
                         document.querySelector("#portada_juego").value = juego.sample_cover.image;
