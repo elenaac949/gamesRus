@@ -66,6 +66,7 @@ section form {
     align-self: center;
 }
 
+section form input[type="text"],
 section form select {
     font-size: 1em;
     padding: 10px;
@@ -78,7 +79,7 @@ section form select {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
+section form input[type="text"]:focus,
 section form select option {
     border-color: #4cc9f0;
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);

@@ -16,15 +16,17 @@ include __DIR__ . '/../common/controlSesion.php';
     <?php
     include './common/cabecera.php';
     ?>
-     <p class="errores"><?= $error ?></p>
-     <?php /* var_dump($data)  */ ?>
+    <p class="errores"><?= !$error  ? $data1 : $error ?></p>
+
+
+    <?php /*var_dump($data1)*/   ?>
     <main class="contenido_principal">
         <aside class="filtros">
             <p>aqui van los filtros</p>
         </aside>
         <section class="vista_juegos">
-       
-        
+
+
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
                     <div class="imagen_juego">

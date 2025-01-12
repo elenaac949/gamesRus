@@ -17,23 +17,19 @@ include __DIR__ . '/../common/controlSesion.php';
     include './common/cabecera.php';
     ?>
     <p class="errores"><?= $error ?></p>
-    <?php /* var_dump($data)  */ ?>
+    <?php /* var_dump($_POST['idJuegoCatalogo'];)  */ ?>
     <main class="contenido_principal">
         <aside class="filtros">
             <p>aqui van los filtros</p>
         </aside>
         <section class="vista-formulario">
             <h2>Préstamo de juegos</h2>
+            <?php var_dump($data) ?>
             <form action="#" method="post" name="formulario_prestar_juego">
-                <select name="idJuego">
-                    <option value="">Selecciona un titulo</option>
-                    <?php foreach ($data as $titulo) : ?>
-                        <option value="<?= $titulo['idJuego']; ?>"><?= $titulo['titulo']; ?></option>
-                    <?php endforeach ?>
-                </select>
-                <select name="idUsuario" id="">
-                    <option value="">Selecciona un usuario</option>
-                </select>
+                <input type="hidden" name="idJuego" id="" value="<?= $data ?>">
+                <!-- HACER UNA QUERY QUE ACCEDA AL NOMBRE DEL JUEGO POR EL ID -->
+                <input type="text" eadonly id="" value="Nombre del juego">
+                <input type="text" name="nombre-usuario" id="" placeholder="Usuario a quien prestas" required>
                 <input type="submit" name="prestar-juego" value="Prestar">
             </form>
         </section>

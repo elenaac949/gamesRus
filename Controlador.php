@@ -53,7 +53,7 @@ class Controlador
                 Vista::MuestraPerfil($this->data, $this->data1, $this->error);
                 break;
             case 'catalogo':
-                Vista::MuestraCatalogo($this->data, $this->error);
+                Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
                 break;
             case 'carrito':
                 Vista::MuestraCarrito($this->data, $this->error);
@@ -168,7 +168,7 @@ class Controlador
 
             $patron = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
             //Hacer una consulta a la bbdd que verifiqeu si ese email o nick existen
-            if (!$baseDatos->verificarSiExisteUsuario($nick, $correo)) {
+            if ($baseDatos->existeUsuario($nick, $correo)) {
                 $this->data = 'Correo o nick ya existentes';
                 $this->action = 'registro';
             } else {
@@ -260,6 +260,31 @@ class Controlador
     {
         global $baseDatos;
         $this->data = $baseDatos->mostrarJuegos();
+    }
+
+    // Función para prestar juego a otro usuario
+    public function prestarJuego()
+    {
+
+        if (!empty($_POST['idJuego']) && !empty($_POST['nombre-usuario'])) {
+            global $baseDatos;
+            $nick = $_POST['nombre-usuario'];
+            $idJuego = $_POST['idJuego'];
+            $idUsuarioPresta = $_SESSION['idUsuario'];
+            $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
+
+            
+            // var_dump($baseDatos->existeUsuario($nick, ''));
+            if ($baseDatos->existeUsuario($nick, '')) {
+                $baseDatos->agnadirPrestamos($idUsuarioPresta,$idUsuarioRecibe,$idJuego);
+                $this->data = $baseDatos->mostrarJuegos();
+                $this->data1 = 'Juego prestado correctamente';
+                $this->action = 'catalogo';
+            } else {
+                $this->error = 'Error: El usuario ' . $nick . ' no existe';
+                $this->action = 'prestar';
+            }
+        }
     }
 
     public function irAlPerfil()
@@ -557,6 +582,7 @@ class Controlador
     // Funciones para manejar el préstamos de juegos
     public function irAPrestar()
     {
+        $this->data = $_POST['idJuegoCatalogo'];
         $this->action = 'prestar';
     }
 
@@ -670,6 +696,8 @@ if (isset($_POST['loginUsuario'])) {
     $programa->mobyGames($_GET['mobyGames']);
 } elseif (isset($_POST['prestar'])) {
     $programa->irAPrestar();
+} elseif (isset($_POST['prestar-juego'])) {
+    $programa->prestarJuego();
 }
 
 $programa->Inicio();

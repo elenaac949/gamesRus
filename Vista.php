@@ -12,7 +12,7 @@ class Vista
   {
     include "./frm/frm_login.php";
   }
-  public static function MuestraCatalogo($data, $error)
+  public static function MuestraCatalogo($data,$data1, $error)
   {
     include "./frm/frm_catalogo.php";
   }
