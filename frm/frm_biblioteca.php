@@ -43,7 +43,8 @@ include __DIR__ . '/../common/controlSesion.php';
                         <form action="" method="post">
                             <input type="button" value="Detalles">
                             <input type="button" value="Jugar">
-                            <input type="button" value="Prestar">
+                            <input type="submit" value="Prestar"
+                            name="prestar">
                         </form>
                     </div>
                 </div>

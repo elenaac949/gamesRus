@@ -1,0 +1,111 @@
+main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 1fr;
+
+}
+
+aside {
+    padding: 5%;
+    display: flex;
+
+}
+
+aside form input[type="submit"] {
+    width: 200px;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #f4f4f9;
+    background: linear-gradient(to right, #7209b7, #3a0ca3);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+aside form input[type="submit"]:hover {
+    background: linear-gradient(to right, #3a0ca3, #4cc9f0);
+    color: #f72585;
+    transform: translateY(-2px);
+}
+
+aside form input[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #3a0ca3;
+    /* max-height: 80vh; */
+}
+
+section h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #7209b7;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+section form {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    align-self: center;
+}
+
+section form select {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f4f4f9;
+    color: #3a0ca3;
+    transition: border 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+section form select option {
+    border-color: #4cc9f0;
+    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}
+
+
+section form input[type="submit"] {
+    width: 30%;
+    align-self: center;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #f4f4f9;
+    background: linear-gradient(to right, #3a0ca3, #7209b7);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: capitalize;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section form input[type="submit"]:hover {
+    background: linear-gradient(to right, #7209b7, #f72585);
+    transform: translateY(-2px);
+}
+
+section form input[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

@@ -58,6 +58,9 @@ class Controlador
             case 'carrito':
                 Vista::MuestraCarrito($this->data, $this->error);
                 break;
+            case 'prestar':
+                Vista::MuestraPrestar($this->data, $this->error);
+                break;
         }
     }
 
@@ -96,11 +99,10 @@ class Controlador
     {
         global $baseDatos;
 
-        $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-        
-        $this->data=$baseDatos-> obtenerJuegosDelCarrito($idCarrito);
-        $this->action = 'carrito';
+        $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
 
+        $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
+        $this->action = 'carrito';
     }
 
 
@@ -349,7 +351,7 @@ class Controlador
             }
 
 
-            $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']) ;
+            $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']);
             $this->irAlPerfil();
         } else {
             $this->error = "Revisa la informacion";
@@ -422,9 +424,10 @@ class Controlador
         }
     }
 
-    public function editarTarjeta(){
+    public function editarTarjeta()
+    {
         if (!empty($_POST['ccv_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
-            
+
             $ccv = $_POST['ccv_tarjeta'];
 
             $diaCad = 01; //para poder guardarlo en la base de datos
@@ -434,7 +437,7 @@ class Controlador
             $caducidad = $anioCad . "-" . $mesCad . "-" . $diaCad;
             global $baseDatos;
 
-           
+
 
             // Validar CCV (debe ser un número de 3 o 4 dígitos)
             if (!preg_match('/^\d{3,4}$/', $ccv)) {
@@ -452,7 +455,7 @@ class Controlador
             }
 
 
-            $baseDatos->editarTarjeta($ccv, $caducidad, $_SESSION['idUsuario']) ;
+            $baseDatos->editarTarjeta($ccv, $caducidad, $_SESSION['idUsuario']);
             $this->irAlPerfil();
         } else {
             $this->error = "Revisa la informacion";
@@ -551,6 +554,12 @@ class Controlador
         die();
     }
 
+    // Funciones para manejar el préstamos de juegos
+    public function irAPrestar()
+    {
+        $this->action = 'prestar';
+    }
+
 
 
     /* Funciones para gestionar el carrito */
@@ -560,26 +569,26 @@ class Controlador
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = $_POST['idJuegoCatalogo'];
 
-            $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-            $existeJuego=$baseDatos->verificarJuegoEnCarrito($idCarrito, $idJuego);
-            if($existeJuego!=true){
-                $this->error=$baseDatos->anadirJuegoAlCarrito($idCarrito,$idJuego);
-            }else{
-                $this->error="El juego ya está en el carrito";
+            $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+            $existeJuego = $baseDatos->verificarJuegoEnCarrito($idCarrito, $idJuego);
+            if ($existeJuego != true) {
+                $this->error = $baseDatos->anadirJuegoAlCarrito($idCarrito, $idJuego);
+            } else {
+                $this->error = "El juego ya está en el carrito";
             }
             $this->irAlCatalogo();
-            
         }
     }
 
 
-    public function quitarDelCarrito(){
+    public function quitarDelCarrito()
+    {
         global $baseDatos;
-        
+
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = $_POST['idJuegoCatalogo'];
             $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-            
+
             // Verifica si obtenemos el carrito correctamente
             if ($idCarrito) {
                 $this->error = $baseDatos->eliminarJuegoCarrito($idCarrito, $idJuego);
@@ -590,27 +599,26 @@ class Controlador
         } else {
             $this->error = "ID del juego no recibido.";
         }
-    
+
         // Redirige al carrito pero no redirige AAAAAAAAAAAAAAA
         $this->irAlCarrito();
     }
-  
-    /* Esta funcion está a medias todavia */
-    public function pagarCompra(){
-        global $baseDatos;
-        $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-        $juegos=$baseDatos->obtenerJuegosDelCarrito($idCarrito);
 
-        if(!empty($juegos)){
-            $this->error= $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
-        }else{
-            $this->error="No hay nada que pagar";
+    /* Esta funcion está a medias todavia */
+    public function pagarCompra()
+    {
+        global $baseDatos;
+        $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+        $juegos = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
+
+        if (!empty($juegos)) {
+            $this->error = $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+        } else {
+            $this->error = "No hay nada que pagar";
         }
 
         $this->irAlCarrito();
-
     }
-    
 }
 // El programa en sí comienza aquí
 $programa = new Controlador();
@@ -656,10 +664,12 @@ if (isset($_POST['loginUsuario'])) {
     $programa->quitarDelCarrito();
 } elseif (isset($_POST['btn_pagar'])) {
     $programa->pagarCompra();
-}elseif (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);
+} elseif (isset($_POST['prestar'])) {
+    $programa->irAPrestar();
 }
 
 $programa->Inicio();
