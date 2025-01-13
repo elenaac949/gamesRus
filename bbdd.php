@@ -677,7 +677,7 @@ class Database
         }
     }
 
-    // Función para prestar juego (faltan los parámetros de fecha estoy pensando)
+    // Función para prestar juego 
     public function agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego)
     {
         try {
@@ -700,7 +700,7 @@ class Database
 
             // Asociar parámetros con bindParam
             $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
-            var_dump($idJuego);
+
             $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
             $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
             $stmt->bindParam(':fechaHoy', $fechaInicioFormateada, PDO::PARAM_STR);
@@ -709,6 +709,33 @@ class Database
 
             // Ejecutar el INSERT
             return $stmt->execute();
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    // Función para regalar juego 
+    public function agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego)
+    {
+        try {
+            $fechaRegalo = new DateTime();
+            $fechaInicioFormateada = $fechaRegalo->format('Y-m-d H:i:s');
+
+            // Preparar el SQL de inserción
+            $sql = "INSERT INTO `regalado` (`idUsuarioRegala`, `idUsuarioRecibe`, `idJuego`, `fechaRegalo`) 
+                    VALUES (:idUSuarioRegala, :idUsuarioRecibe, :idJuego, :fechaInicioFormateada)";
+
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':idUSuarioRegala', $idUsuarioRegala, PDO::PARAM_INT);
+
+            $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            $stmt->bindParam(':fechaInicioFormateada', $fechaInicioFormateada, PDO::PARAM_STR);
+            return $stmt->execute();
+
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
             return false;

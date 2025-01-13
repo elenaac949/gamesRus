@@ -61,6 +61,9 @@ class Controlador
             case 'prestar':
                 Vista::MuestraPrestar($this->data, $this->error);
                 break;
+            case 'regalar':
+                Vista::MuestraRegalar($this->data, $this->error);
+                break;
         }
     }
 
@@ -103,6 +106,34 @@ class Controlador
 
         $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
         $this->action = 'carrito';
+    }
+
+    // Función que te lleva al panel de administración
+    public function irAlAdministrador()
+    {
+        $this->action = 'administracion';
+    }
+
+    public function irAlPerfil()
+    {
+        global $baseDatos;
+        $this->data = $baseDatos->obtenerDatosUsuario();
+        $this->data1 = $baseDatos->mostrarTarjetas($_SESSION['idUsuario']);
+        $this->action = 'perfil';
+    }
+
+    // Funciones para manejar el préstamos de juegos
+    public function irAPrestar()
+    {
+        $this->data = $_POST['idJuegoCatalogo'];
+        $this->action = 'prestar';
+    }
+
+    // Función para regalar juegos
+    public function irARegalar()
+    {
+        $this->data = $_POST['idJuegoCatalogo'];
+        $this->action = 'regalar';
     }
 
 
@@ -211,11 +242,6 @@ class Controlador
         $this->data = 'Sesión cerrada';
     }
 
-    // Función que te lleva al panel de administración
-    public function irAlAdministrador()
-    {
-        $this->action = 'administracion';
-    }
 
     // Función para mostrar Formularios de añadir, eliminar y editar
     public function mostrarFormulario()
@@ -273,10 +299,10 @@ class Controlador
             $idUsuarioPresta = $_SESSION['idUsuario'];
             $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
 
-            
+
             // var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
-                $baseDatos->agnadirPrestamos($idUsuarioPresta,$idUsuarioRecibe,$idJuego);
+                $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
                 $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego prestado correctamente';
                 $this->action = 'catalogo';
@@ -287,13 +313,33 @@ class Controlador
         }
     }
 
-    public function irAlPerfil()
+    public function regalarJuego()
     {
-        global $baseDatos;
-        $this->data = $baseDatos->obtenerDatosUsuario();
-        $this->data1 = $baseDatos->mostrarTarjetas($_SESSION['idUsuario']);
-        $this->action = 'perfil';
+        if (!empty($_POST['idJuego']) && !empty($_POST['nombre-usuario'])) {
+            global $baseDatos;
+            $nick = $_POST['nombre-usuario'];
+            $idJuego = $_POST['idJuego'];
+            $idUsuarioRegala = $_SESSION['idUsuario'];
+            $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
+
+
+            var_dump($baseDatos->existeUsuario($nick, ''));
+            if ($baseDatos->existeUsuario($nick, '')) {
+                $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
+                // $this->data = $baseDatos->mostrarJuegos();
+                $this->data1 = 'Juego regalado correctamente';
+                $this->action = 'carrito';
+            } else {
+                $this->error = 'Error: El usuario ' . $nick . ' no existe';
+                $this->action = 'regalar';
+            }
+        } else {
+            $this->action = 'regalar';
+            $this->error = 'No entra en el if';
+        }
     }
+
+
 
     public function actualizarDatosUsuario()
     {
@@ -579,12 +625,7 @@ class Controlador
         die();
     }
 
-    // Funciones para manejar el préstamos de juegos
-    public function irAPrestar()
-    {
-        $this->data = $_POST['idJuegoCatalogo'];
-        $this->action = 'prestar';
-    }
+
 
 
 
@@ -698,6 +739,10 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAPrestar();
 } elseif (isset($_POST['prestar-juego'])) {
     $programa->prestarJuego();
+} elseif (isset($_POST['btn_regalar_juego'])) {
+    $programa->irARegalar();
+} elseif (isset($_POST['regalar-juego'])) {
+    $programa->regalarJuego();
 }
 
 $programa->Inicio();

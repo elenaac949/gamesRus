@@ -18,6 +18,7 @@ include __DIR__ . '/../common/controlSesion.php';
     ?>
     <p class="errores"><?= $error ?></p>
     <main>
+        <?php /*var_dump($data);*/?>
         <section class="juegos_carrito">
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
@@ -29,7 +30,7 @@ include __DIR__ . '/../common/controlSesion.php';
                             <form action="" method="post">
                                 <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
                                 <input type="submit" value="Eliminar" name="btn_eliminar_del_carrito">
-                                <input type="button" value="Regalar" name="btn_regalar_juego">
+                                <input type="submit" value="Regalar" name="btn_regalar_juego">
                             </form>
                         </div>
                     </div>
