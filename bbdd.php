@@ -653,6 +653,9 @@ class Database
     }
 
 
+    
+
+
     // Este metodo se ejecuta al finalizar la ejecución de la web,
     // Eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido
     function __destruct()

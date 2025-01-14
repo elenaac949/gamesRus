@@ -225,23 +225,6 @@ class Controlador
         } elseif (isset($_POST['mostrar_eliminar_juego'])) {
             $this->mostrarLosJuegos();
         }
-        // falta post de editar
-        //falta post de eliminar
-        // No hace falta ya esto
-        // if(isset($_POST['boton'])){
-        //     if($_POST['boton']=="Nuevo"){
-        //         $this->mostrarGeneros();
-        //     }
-        // }
-        /* if (isset($_POST['mostrar_anadir_juego'])){
-            
-         
-           
-        }else if(isset($_POST['mostrar_eliminar_juego'])){
-            $this->mostrarLosJuegos();
-        }else if(isset($_POST['mostrar_editar_juego'])){
-            $this->mostrarLosJuegos();
-        } */
     }
 
 
@@ -610,6 +593,13 @@ class Controlador
         $this->irAlCarrito();
 
     }
+
+
+    public function mostrarDetalles(){
+        
+    }
+
+
     
 }
 // El programa en sí comienza aquí
@@ -660,6 +650,10 @@ if (isset($_POST['loginUsuario'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);
+}
+
+if(isset($_POST['btn_mostrar_detalles'])){
+    $programa->mostrarDetalles();
 }
 
 $programa->Inicio();

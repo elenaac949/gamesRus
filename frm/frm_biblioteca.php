@@ -41,7 +41,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     </div>
                     <div class="botones_juego">
                         <form action="" method="post">
-                            <input type="button" value="Detalles">
+                            <input type="submit" value="Detalles" id="btn_mostrar_detalles" name="btn_mostrar_detalles">
                             <input type="button" value="Jugar">
                             <input type="button" value="Prestar">
                         </form>
@@ -53,11 +53,30 @@ include __DIR__ . '/../common/controlSesion.php';
 
     </main>
 
+    <dialog name="detalles_juego" id="detalles_juego">
+        <?php
+        include './frm/frm_detalles.php';
+        ?>
+    </dialog>
+
     <?php
     include './common/footer.php';
     ?>
 
-
+    <script>
+        let btn_detalles = document.querySelector("#btn_mostrar_detalles");
+        btn_detalles.addEventListener("click", (e) => {
+            e.preventDefault();
+            let dialogo = document.querySelector("#detalles_juego");
+            dialogo.show(); //muestra el dialogo
+        });
+//no funciona el salir
+        let cerrar = document.querySelector("#cerrar_detalles");
+        cerrar.addEventListener("click", (e) => {
+            e.preventDefault();
+            cerrar.close();
+        });
+    </script>
 </body>
 
 </html>

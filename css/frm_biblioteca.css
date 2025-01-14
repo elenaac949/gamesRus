@@ -65,14 +65,13 @@ main {
     margin-top: auto; /* Empuja este elemento hacia la parte inferior del contenedor */
     display: flex;
     justify-content: center;
-    align-self: flex-end;
+    align-items: end;
     gap: 10px;
-    margin-bottom: 10px; /* Opcional: Espacio interno extra abajo */
+    margin-bottom: 10px; 
 }
 .botones_juego form {
     display: flex;
     justify-content: center;
-    align-self: flex-end;
     gap: 10px;
     margin: 10px 0;
 }
