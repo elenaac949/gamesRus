@@ -53,10 +53,16 @@ class Controlador
                 Vista::MuestraPerfil($this->data, $this->data1, $this->error);
                 break;
             case 'catalogo':
-                Vista::MuestraCatalogo($this->data, $this->error);
+                Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
                 break;
             case 'carrito':
                 Vista::MuestraCarrito($this->data, $this->error);
+                break;
+            case 'prestar':
+                Vista::MuestraPrestar($this->data, $this->error);
+                break;
+            case 'regalar':
+                Vista::MuestraRegalar($this->data, $this->error);
                 break;
         }
     }
@@ -96,11 +102,38 @@ class Controlador
     {
         global $baseDatos;
 
-        $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-        
-        $this->data=$baseDatos-> obtenerJuegosDelCarrito($idCarrito);
-        $this->action = 'carrito';
+        $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
 
+        $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
+        $this->action = 'carrito';
+    }
+
+    // Función que te lleva al panel de administración
+    public function irAlAdministrador()
+    {
+        $this->action = 'administracion';
+    }
+
+    public function irAlPerfil()
+    {
+        global $baseDatos;
+        $this->data = $baseDatos->obtenerDatosUsuario();
+        $this->data1 = $baseDatos->mostrarTarjetas($_SESSION['idUsuario']);
+        $this->action = 'perfil';
+    }
+
+    // Funciones para manejar el préstamos de juegos
+    public function irAPrestar()
+    {
+        $this->data = $_POST['idJuegoCatalogo'];
+        $this->action = 'prestar';
+    }
+
+    // Función para regalar juegos
+    public function irARegalar()
+    {
+        $this->data = $_POST['idJuegoCatalogo'];
+        $this->action = 'regalar';
     }
 
 
@@ -166,7 +199,7 @@ class Controlador
 
             $patron = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
             //Hacer una consulta a la bbdd que verifiqeu si ese email o nick existen
-            if (!$baseDatos->verificarSiExisteUsuario($nick, $correo)) {
+            if ($baseDatos->existeUsuario($nick, $correo)) {
                 $this->data = 'Correo o nick ya existentes';
                 $this->action = 'registro';
             } else {
@@ -209,11 +242,6 @@ class Controlador
         $this->data = 'Sesión cerrada';
     }
 
-    // Función que te lleva al panel de administración
-    public function irAlAdministrador()
-    {
-        $this->action = 'administracion';
-    }
 
     // Función para mostrar Formularios de añadir, eliminar y editar
     public function mostrarFormulario()
@@ -243,13 +271,58 @@ class Controlador
         $this->data = $baseDatos->mostrarJuegos();
     }
 
-    public function irAlPerfil()
+    // Función para prestar juego a otro usuario
+    public function prestarJuego()
     {
-        global $baseDatos;
-        $this->data = $baseDatos->obtenerDatosUsuario();
-        $this->data1 = $baseDatos->mostrarTarjetas($_SESSION['idUsuario']);
-        $this->action = 'perfil';
+
+        if (!empty($_POST['idJuego']) && !empty($_POST['nombre-usuario'])) {
+            global $baseDatos;
+            $nick = $_POST['nombre-usuario'];
+            $idJuego = $_POST['idJuego'];
+            $idUsuarioPresta = $_SESSION['idUsuario'];
+            $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
+
+
+            // var_dump($baseDatos->existeUsuario($nick, ''));
+            if ($baseDatos->existeUsuario($nick, '')) {
+                $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
+                $this->data = $baseDatos->mostrarJuegos();
+                $this->data1 = 'Juego prestado correctamente';
+                $this->action = 'catalogo';
+            } else {
+                $this->error = 'Error: El usuario ' . $nick . ' no existe';
+                $this->action = 'prestar';
+            }
+        }
     }
+
+    public function regalarJuego()
+    {
+        if (!empty($_POST['idJuego']) && !empty($_POST['nombre-usuario'])) {
+            global $baseDatos;
+            $nick = $_POST['nombre-usuario'];
+            $idJuego = $_POST['idJuego'];
+            $idUsuarioRegala = $_SESSION['idUsuario'];
+            $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
+
+
+            var_dump($baseDatos->existeUsuario($nick, ''));
+            if ($baseDatos->existeUsuario($nick, '')) {
+                $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
+                // $this->data = $baseDatos->mostrarJuegos();
+                $this->data1 = 'Juego regalado correctamente';
+                $this->action = 'carrito';
+            } else {
+                $this->error = 'Error: El usuario ' . $nick . ' no existe';
+                $this->action = 'regalar';
+            }
+        } else {
+            $this->action = 'regalar';
+            $this->error = 'No entra en el if';
+        }
+    }
+
+
 
     public function actualizarDatosUsuario()
     {
@@ -332,7 +405,7 @@ class Controlador
             }
 
 
-            $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']) ;
+            $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']);
             $this->irAlPerfil();
         } else {
             $this->error = "Revisa la informacion";
@@ -405,9 +478,10 @@ class Controlador
         }
     }
 
-    public function editarTarjeta(){
+    public function editarTarjeta()
+    {
         if (!empty($_POST['ccv_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
-            
+
             $ccv = $_POST['ccv_tarjeta'];
 
             $diaCad = 01; //para poder guardarlo en la base de datos
@@ -417,7 +491,7 @@ class Controlador
             $caducidad = $anioCad . "-" . $mesCad . "-" . $diaCad;
             global $baseDatos;
 
-           
+
 
             // Validar CCV (debe ser un número de 3 o 4 dígitos)
             if (!preg_match('/^\d{3,4}$/', $ccv)) {
@@ -435,7 +509,7 @@ class Controlador
             }
 
 
-            $baseDatos->editarTarjeta($ccv, $caducidad, $_SESSION['idUsuario']) ;
+            $baseDatos->editarTarjeta($ccv, $caducidad, $_SESSION['idUsuario']);
             $this->irAlPerfil();
         } else {
             $this->error = "Revisa la informacion";
@@ -536,6 +610,8 @@ class Controlador
 
 
 
+
+
     /* Funciones para gestionar el carrito */
     public function anadirAlCarrito()
     {
@@ -543,26 +619,26 @@ class Controlador
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = $_POST['idJuegoCatalogo'];
 
-            $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-            $existeJuego=$baseDatos->verificarJuegoEnCarrito($idCarrito, $idJuego);
-            if($existeJuego!=true){
-                $this->error=$baseDatos->anadirJuegoAlCarrito($idCarrito,$idJuego);
-            }else{
-                $this->error="El juego ya está en el carrito";
+            $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+            $existeJuego = $baseDatos->verificarJuegoEnCarrito($idCarrito, $idJuego);
+            if ($existeJuego != true) {
+                $this->error = $baseDatos->anadirJuegoAlCarrito($idCarrito, $idJuego);
+            } else {
+                $this->error = "El juego ya está en el carrito";
             }
             $this->irAlCatalogo();
-            
         }
     }
 
 
-    public function quitarDelCarrito(){
+    public function quitarDelCarrito()
+    {
         global $baseDatos;
-        
+
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = $_POST['idJuegoCatalogo'];
             $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-            
+
             // Verifica si obtenemos el carrito correctamente
             if ($idCarrito) {
                 $this->error = $baseDatos->eliminarJuegoCarrito($idCarrito, $idJuego);
@@ -573,25 +649,25 @@ class Controlador
         } else {
             $this->error = "ID del juego no recibido.";
         }
-    
+
         // Redirige al carrito pero no redirige AAAAAAAAAAAAAAA
         $this->irAlCarrito();
     }
-  
-    /* Esta funcion está a medias todavia */
-    public function pagarCompra(){
-        global $baseDatos;
-        $idCarrito=$baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-        $juegos=$baseDatos->obtenerJuegosDelCarrito($idCarrito);
 
-        if(!empty($juegos)){
-            $this->error= $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
-        }else{
-            $this->error="No hay nada que pagar";
+    /* Esta funcion está a medias todavia */
+    public function pagarCompra()
+    {
+        global $baseDatos;
+        $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+        $juegos = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
+
+        if (!empty($juegos)) {
+            $this->error = $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+        } else {
+            $this->error = "No hay nada que pagar";
         }
 
         $this->irAlCarrito();
-
     }
 
 
@@ -646,10 +722,18 @@ if (isset($_POST['loginUsuario'])) {
     $programa->quitarDelCarrito();
 } elseif (isset($_POST['btn_pagar'])) {
     $programa->pagarCompra();
-}elseif (isset($_POST['cerrar_sesion'])) {
+} elseif (isset($_POST['cerrar_sesion'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);
+} elseif (isset($_POST['prestar'])) {
+    $programa->irAPrestar();
+} elseif (isset($_POST['prestar-juego'])) {
+    $programa->prestarJuego();
+} elseif (isset($_POST['btn_regalar_juego'])) {
+    $programa->irARegalar();
+} elseif (isset($_POST['regalar-juego'])) {
+    $programa->regalarJuego();
 }
 
 if(isset($_POST['btn_mostrar_detalles'])){

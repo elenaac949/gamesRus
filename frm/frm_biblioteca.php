@@ -38,12 +38,15 @@ include __DIR__ . '/../common/controlSesion.php';
                     </div>
                     <div class="nombre_juego">
                         <p><?php echo $juego['titulo']; ?></p>
+
                     </div>
                     <div class="botones_juego">
                         <form action="" method="post">
+                            <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
                             <input type="submit" value="Detalles" id="btn_mostrar_detalles" name="btn_mostrar_detalles">
                             <input type="button" value="Jugar">
-                            <input type="button" value="Prestar">
+                            <input type="submit" value="Prestar"
+                                name="prestar">
                         </form>
                     </div>
                 </div>

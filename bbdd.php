@@ -14,6 +14,56 @@ class Database
         }
     }
 
+
+    /* ----USUARIOS--- */
+
+    public function existeUsuario($nick, $correo)
+    {
+        try {
+            // Preparar la consulta
+            $sql = "SELECT idUsuario FROM usuario WHERE `nick` = :nick OR `email` = :correo";
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':nick', $nick, PDO::PARAM_STR);
+            $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Buscar el primer resultado
+            $coincidencias = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Devolver true si se encontró una coincidencia, false en caso contrario
+            return $coincidencias !== false;
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    public function obtenerIdUsuario($nick)
+    {
+        try {
+            $sql = "SELECT idUsuario FROM usuario WHERE `nick` = :nick";
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':nick', $nick, PDO::PARAM_STR);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Obtener el resultado
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Si se encontró un resultado, devolver el id como entero, de lo contrario devolver null
+            return $resultado ? (int) $resultado['idUsuario'] : null;
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
+
+
     public function controlLogin($credencial)
     {
         try {
@@ -470,31 +520,6 @@ class Database
 
 
 
-    /* ----USUARIOS--- */
-
-    public function verificarSiExisteUsuario($nick, $correo)
-    {
-        try {
-            // Preparar la consulta
-            $sql = "SELECT idUsuario FROM usuario WHERE `nick` = :nick OR `email` = :correo";
-            $stmt = $this->conexion->prepare($sql);
-
-            // Asociar parámetros con bindParam
-            $stmt->bindParam(':nick', $nick, PDO::PARAM_STR);
-            $stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
-
-            // Ejecutar la consulta
-            $stmt->execute();
-
-            // Buscar el primer resultado
-            $coincidencias = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // Si hay coincidencias, devuelve false (usuario ya existe)
-            return !$coincidencias;
-        } catch (\Throwable $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
 
     // Función que muestra todos los juegos
     public function mostrarJuegos()
@@ -649,6 +674,71 @@ class Database
         } catch (Exception $e) {
             // Si hay un error, mostrar el mensaje
             echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Función para prestar juego 
+    public function agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego)
+    {
+        try {
+            // Crear un objeto DateTime con la fecha actual
+            $fechaInicio = new DateTime();
+
+            // Clonar el objeto para fechaFin y añadir 30 días
+            $fechaFin = clone $fechaInicio;
+            $fechaFin->modify('+30 days');
+
+            // Formatear las fechas
+            $fechaInicioFormateada = $fechaInicio->format('Y-m-d H:i:s');
+            $fechaFinFormateada = $fechaFin->format('Y-m-d H:i:s');
+
+            // Preparar el SQL de inserción
+            $sql = "INSERT INTO `prestado` (`idUsuarioPresta`, `idUsuarioRecibe`, `idJuego`, `fechaInicio`, `fechaFin`) 
+                    VALUES (:idUsuarioPresta, :idUsuarioRecibe, :idJuego, :fechaHoy, :fechaDevolver)";
+
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
+
+            $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            $stmt->bindParam(':fechaHoy', $fechaInicioFormateada, PDO::PARAM_STR);
+            $stmt->bindParam(':fechaDevolver', $fechaFinFormateada, PDO::PARAM_STR);
+
+
+            // Ejecutar el INSERT
+            return $stmt->execute();
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    // Función para regalar juego 
+    public function agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego)
+    {
+        try {
+            $fechaRegalo = new DateTime();
+            $fechaInicioFormateada = $fechaRegalo->format('Y-m-d H:i:s');
+
+            // Preparar el SQL de inserción
+            $sql = "INSERT INTO `regalado` (`idUsuarioRegala`, `idUsuarioRecibe`, `idJuego`, `fechaRegalo`) 
+                    VALUES (:idUSuarioRegala, :idUsuarioRecibe, :idJuego, :fechaInicioFormateada)";
+
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':idUSuarioRegala', $idUsuarioRegala, PDO::PARAM_INT);
+
+            $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            $stmt->bindParam(':fechaInicioFormateada', $fechaInicioFormateada, PDO::PARAM_STR);
+            return $stmt->execute();
+
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
         }
     }
 
