@@ -18,7 +18,7 @@ include __DIR__ . '/../common/controlSesion.php';
     include './common/cabecera.php';
     ?>
 
-    <?php /* var_dump($data)  */ ?>
+    <?php /* var_dump($data) */  ?>
     <main class="contenido_principal">
         <h2>Tus Juegos</h2>
         <div class="boton_administrador" style="display: <?php if ($_SESSION['idUsuario'] != 4) {
@@ -57,29 +57,47 @@ include __DIR__ . '/../common/controlSesion.php';
     </main>
 
     <dialog name="detalles_juego" id="detalles_juego">
-        <?php
-        include './frm/frm_detalles.php';
-        ?>
+        <?php if (is_array($data1) && !empty($data1)): ?>
+            <img src="<?php echo $data1[0]['portada'] ?? 'https://placehold.co/600x400'; ?>" alt="Imagen Portada Juego">
+            <p>Título: <?php echo $data1[0]['titulo']; ?></p>
+            <p>Desarrollador: <?php echo $data1[0]['desarrollador']; ?></p>
+            <p>Distribuidor: <?php echo $data1[0]['distribuidor']; ?></p>
+            <p>Año de Lanzamiento: <?php echo $data1[0]['anio']; ?></p>
+            <p>Género(s): <?php echo $data1[0]['genero']; ?></p>
+            <p>Descripción: <?php echo $data1[0]['descripcion']; ?></p>
+        <?php else: ?>
+            <p>No se encontraron detalles del juego.</p>
+        <?php endif; ?>
+        <button id="cerrar_detalles">Salir</button>
     </dialog>
+
 
     <?php
     include './common/footer.php';
     ?>
 
     <script>
-        let btn_detalles = document.querySelector("#btn_mostrar_detalles");
-        btn_detalles.addEventListener("click", (e) => {
-            e.preventDefault();
-            let dialogo = document.querySelector("#detalles_juego");
-            dialogo.show(); //muestra el dialogo
+        // botón para mostrar detalles
+        let btn_detalles = document.querySelectorAll("#btn_mostrar_detalles");
+
+        btn_detalles.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                let dialogo = document.querySelector("#detalles_juego");
+                dialogo.show();
+            });
         });
-//no funciona el salir
+
+
+        //botón para cerrar el diálogo
         let cerrar = document.querySelector("#cerrar_detalles");
         cerrar.addEventListener("click", (e) => {
             e.preventDefault();
-            cerrar.close();
+            let dialogo = document.querySelector("#detalles_juego");
+            dialogo.close(); // Cierra el diálogo
         });
     </script>
+
 </body>
 
 </html>

@@ -43,7 +43,8 @@ class Controlador
                 break;
             case 'biblioteca':
                 $this->datosBiblioteca();
-                Vista::MuestraBiblioteca($this->data);
+                Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
+                
                 break;
             case 'administracion':
                 $this->mostrarFormulario();
@@ -413,12 +414,13 @@ class Controlador
 
 
             $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']);
-            $this->irAlPerfil();
+            
         } else {
             $this->error = "Revisa la informacion";
+            
         }
-
-        $this->action = 'perfil';
+        $this->irAlPerfil();
+        //$this->action = 'perfil';
     }
 
     private function esTarjetaValida($numero_tarjeta)
@@ -448,7 +450,7 @@ class Controlador
     {
 
         if ($anio < 100) {
-            $anio += 2000; // Asumir siglo actual
+            $anio += 2000; // Asumimos siglo actual
         }
 
         // Fecha actual
@@ -678,10 +680,31 @@ class Controlador
     }
 
 
-    public function mostrarDetalles() {}
+    public function mostrarDetalles() {
+        global $baseDatos;
+        
+        if (isset($_POST['idJuegoCatalogo'])) {
+            $idJuego = $_POST['idJuegoCatalogo'];
+            $this->data1 = $baseDatos->mostrarDetallesJuegos($idJuego);
+        } else {
+            $this->data1 = "No se ha cargado data1";
+        }
+    
+        // Renderiza la vista con los datos de detalles del juego
+        $this->irABiblioteca();
+    }
+    
+
+
+    
 }
 // El programa en sí comienza aquí
 $programa = new Controlador();
+
+
+if(isset($_POST['btn_mostrar_detalles'])){
+    $programa->mostrarDetalles();
+}
 
 // var_dump($_POST);
 if (isset($_POST['loginUsuario'])) {
@@ -738,8 +761,6 @@ if (isset($_POST['loginUsuario'])) {
     $programa->regalarJuego();
 }
 
-if (isset($_POST['btn_mostrar_detalles'])) {
-    $programa->mostrarDetalles();
-}
+
 
 $programa->Inicio();

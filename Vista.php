@@ -27,7 +27,7 @@ class Vista
     include "./frm/frm_signup.php";
   }
 
-  public static function MuestraBiblioteca($data) //Necesario para que la vista tenga los datos a mostrar 
+  public static function MuestraBiblioteca($data, $data1, $error) //Necesario para que la vista tenga los datos a mostrar 
   {
     include "./frm/frm_biblioteca.php";
   }
@@ -51,4 +51,7 @@ class Vista
   public static function MuestraRegalar($data,$error){
     include "./frm/frm_regalar.php";
   }
+
+
+
 }
