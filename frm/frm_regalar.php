@@ -37,6 +37,8 @@ include __DIR__ . '/../common/controlSesion.php';
     <?php
     include './common/footer.php';
     ?>
+
+    
 </body>
 
 </html>

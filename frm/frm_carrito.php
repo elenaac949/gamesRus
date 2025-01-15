@@ -18,7 +18,7 @@ include __DIR__ . '/../common/controlSesion.php';
     ?>
     <p class="errores"><?= $error ?></p>
     <main>
-        <?php /*var_dump($data);*/?>
+        <?php var_dump($data); ?>
         <section class="juegos_carrito">
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
@@ -29,8 +29,10 @@ include __DIR__ . '/../common/controlSesion.php';
                         <div class="botones_juego">
                             <form action="" method="post">
                                 <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
+
+
                                 <input type="submit" value="Eliminar" name="btn_eliminar_del_carrito">
-                                <input type="submit" value="Regalar" name="btn_regalar_juego">
+                                <button type="button" class="btn_regalar" data-id="<?php echo $juego['idJuego']; ?>" data-titulo="<?php echo $juego['titulo']; ?>">Regalar</button>
                             </form>
                         </div>
                     </div>
@@ -47,9 +49,51 @@ include __DIR__ . '/../common/controlSesion.php';
         </aside>
     </main>
 
+    <!-- Diálogo para regalar juego -->
+    <dialog id="dialogo_regalar">
+        <form method="post" action="">
+            <h3>Regalar <span id="nombre_juego"></span></h3>
+            <input type="hidden" name="idJuego" id="input_id_juego">
+            <input type="text" name="nombre-usuario" placeholder="Nombre del usuario" required>
+            <menu>
+                <button type="button" id="btn_cancelar">Cancelar</button>
+                <button type="submit" name="btn_confirmar_regalo">Confirmar</button>
+            </menu>
+        </form>
+    </dialog>
+
     <?php
     include './common/footer.php';
     ?>
+
+    <script>
+        // Seleccionamos todos los botones de "Regalar"
+        let botonesRegalar = document.querySelectorAll(".btn_regalar");
+        let dialogo = document.querySelector("#dialogo_regalar");
+        let inputIdJuego = document.querySelector("#input_id_juego");
+        let nombreJuegoSpan = document.querySelector("#nombre_juego");
+        let btnCancelar = document.querySelector("#btn_cancelar");
+
+        // Añadimos el evento a cada botón "Regalar"
+        botonesRegalar.forEach(boton => {
+            boton.addEventListener("click", (e) => {
+                let idJuego = boton.getAttribute("data-id");
+                let tituloJuego = boton.getAttribute("data-titulo");
+
+                // Rellenamos el diálogo con los datos del juego
+                inputIdJuego.value = idJuego;
+                nombreJuegoSpan.textContent = tituloJuego;
+
+                // Mostramos el diálogo
+                dialogo.showModal();
+            });
+        });
+
+        // Evento para cerrar el diálogo al pulsar "Cancelar"
+        btnCancelar.addEventListener("click", () => {
+            dialogo.close();
+        });
+    </script>
 </body>
 
 </html>
