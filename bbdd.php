@@ -735,16 +735,52 @@ class Database
             $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
             $stmt->bindParam(':fechaInicioFormateada', $fechaInicioFormateada, PDO::PARAM_STR);
             return $stmt->execute();
-
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
             return false;
         }
     }
 
+    /* Funcion para seleccionar los detalles de los juegos */
 
+
+    public function mostrarDetallesJuegos($id)
+    {
+        try {
+            // Preparar el SQL de selección
+            $sql = "SELECT  
+                        juego.titulo, 
+                        juego.desarrollador, 
+                        juego.distribuidor, 
+                        juego.anio, 
+                        juego.ruta, 
+                        juego.descripcion, 
+                        juego.portada, 
+                        genero.genero
+                    FROM 
+                        juego
+                    LEFT JOIN 
+                        generoJuego ON juego.idJuego =generoJuego.idJuego
+                    LEFT JOIN 
+                        genero ON generoJuego.idGenero = genero.idGenero
+                    WHERE 
+                        juego.idJuego = :idJuego;"; 
     
-
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idJuego', $id, PDO::PARAM_INT); 
+            $stmt->execute();
+    
+            // Obtener los datos
+            $detalles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $detalles;
+    
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+    
 
     // Este metodo se ejecuta al finalizar la ejecución de la web,
     // Eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido
