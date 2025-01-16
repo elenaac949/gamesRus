@@ -18,7 +18,7 @@ include __DIR__ . '/../common/controlSesion.php';
     ?>
     <p class="errores"><?= $error ?></p>
     <main>
-        <?php var_dump($data); ?>
+        <?php /*var_dump($data);*/ ?>
         <section class="juegos_carrito">
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
@@ -32,7 +32,17 @@ include __DIR__ . '/../common/controlSesion.php';
 
 
                                 <input type="submit" value="Eliminar" name="btn_eliminar_del_carrito">
-                                <button type="button" class="btn_regalar" data-id="<?php echo $juego['idJuego']; ?>" data-titulo="<?php echo $juego['titulo']; ?>">Regalar</button>
+                                <!-- Tiene que ser boton porque solo activa una funcionalidad del HTML, no manda datos -->
+                                <?php if (!isset($data1)) {
+
+                                ?>
+                                    <button type="button" class="btn_regalar" data-id="<?php echo $juego['idJuego']; ?>" data-titulo="<?php echo $juego['titulo']; ?>">Regalar</button>
+                                <?php
+                                } else {
+                                ?>
+                                    <p <?= $data1 ?>></p>
+                                <?php
+                                } ?>
                             </form>
                         </div>
                     </div>
@@ -47,20 +57,21 @@ include __DIR__ . '/../common/controlSesion.php';
                 <input type="submit" value="Pagar" name="btn_pagar">
             </form>
         </aside>
+        <!-- Diálogo para regalar juego -->
+        <dialog id="dialogo_regalar">
+            <form method="post" action="">
+                <h3>Regalar <span id="nombre_juego"></span></h3>
+                <input type="hidden" name="idJuego" id="input_id_juego">
+                <input type="text" name="nombre-usuario" placeholder="Nombre del usuario" required>
+                <menu>
+                    <!-- Tiene que ser boton porque solo activa una funcionalidad del HTML, no manda datos -->
+                    <button type="button" id="btn_cancelar">Cancelar</button>
+                    <button type="submit" name="btn_confirmar_regalo">Confirmar</button>
+                </menu>
+            </form>
+        </dialog>
     </main>
 
-    <!-- Diálogo para regalar juego -->
-    <dialog id="dialogo_regalar">
-        <form method="post" action="">
-            <h3>Regalar <span id="nombre_juego"></span></h3>
-            <input type="hidden" name="idJuego" id="input_id_juego">
-            <input type="text" name="nombre-usuario" placeholder="Nombre del usuario" required>
-            <menu>
-                <button type="button" id="btn_cancelar">Cancelar</button>
-                <button type="submit" name="btn_confirmar_regalo">Confirmar</button>
-            </menu>
-        </form>
-    </dialog>
 
     <?php
     include './common/footer.php';

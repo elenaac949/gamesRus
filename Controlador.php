@@ -63,9 +63,7 @@ class Controlador
             case 'prestar':
                 Vista::MuestraPrestar($this->data, $this->error);
                 break;
-            case 'regalar':
-                Vista::MuestraRegalar($this->data, $this->error);
-                break;
+           
         }
     }
 
@@ -131,12 +129,7 @@ class Controlador
         $this->action = 'prestar';
     }
 
-    // Función para regalar juegos
-    public function irARegalar()
-    {
-        $this->data = $_POST['idJuegoCatalogo'];
-        $this->action = 'regalar';
-    }
+   
 
 
     //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra los juegos del usuario
@@ -307,17 +300,11 @@ class Controlador
             $idUsuarioRegala = $_SESSION['idUsuario'];
             $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
 
-            
-
-
-
-
-
             var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
                 $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
                 // $this->data = $baseDatos->mostrarJuegos();
-                $this->data1 = 'Juego regalado correctamente';
+                $this->data1 = 'Regalo para ' . $nick;
 
                
             } else {
@@ -755,8 +742,7 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAPrestar();
 } elseif (isset($_POST['prestar-juego'])) {
     $programa->prestarJuego();
-    // } elseif (isset($_POST['btn_regalar_juego'])) {
-    //     $programa->irARegalar();
+  
 } elseif (isset($_POST['btn_confirmar_regalo'])) {
     $programa->regalarJuego();
 }

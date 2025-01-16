@@ -1,8 +1,7 @@
-
 main {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     justify-content: space-around;
     margin: 30px;
     border-radius: 8px;
@@ -19,12 +18,12 @@ main {
     flex-direction: column;
     justify-self: start;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     justify-content: center;
     align-items: center;
 }
 
-.total_pago div{
+.total_pago div {
     height: 70%;
     text-align: center;
 }
@@ -50,7 +49,7 @@ main {
 }
 
 .juego img {
-    
+
     max-width: 100%;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -79,7 +78,8 @@ main {
     gap: 10px;
 }
 
-main input[type="submit"] {
+main input[type="submit"],
+button {
     padding: 10px 20px;
     font-size: 1rem;
     color: #fff;
@@ -91,12 +91,63 @@ main input[type="submit"] {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-main input[type="submit"]:hover {
+#btn_cancelar{
+    background: linear-gradient(to right, #d00000, #7209b7);
+}
+
+#btn_cancelar:hover{
+    background: linear-gradient(to right, #7209b7, #f72585);
+    transform: translateY(-2px); 
+}
+
+main input[type="submit"]:hover,
+button:hover {
     background: linear-gradient(to right, #7209b7, #f72585);
     transform: translateY(-2px);
 }
 
+dialog {
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    margin: auto;
+    border: none;
+    padding: 40px 50px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #3a0ca3;
+    gap: 10px;
 
 
+}
 
+dialog form{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;    
+    gap: 18px;
+}
 
+dialog form menu{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+dialog form input[type="text"] {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f4f4f9;
+    color: #3a0ca3;
+    transition: border 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+dialog form input[type="text"]:focus {
+    border-color: #4cc9f0;
+    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}

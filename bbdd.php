@@ -764,23 +764,62 @@ class Database
                     LEFT JOIN 
                         genero ON generoJuego.idGenero = genero.idGenero
                     WHERE 
-                        juego.idJuego = :idJuego;"; 
-    
+                        juego.idJuego = :idJuego;";
+
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':idJuego', $id, PDO::PARAM_INT); 
+            $stmt->bindParam(':idJuego', $id, PDO::PARAM_INT);
             $stmt->execute();
-    
+
             // Obtener los datos
             $detalles = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $detalles;
-    
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
             return false;
         }
     }
-    
+
+    /*  PRUEBAS EVA
+    public function mostrarDetallesJuegos($id)
+{
+    try {
+        // Preparar el SQL de selección con alias
+        $sql = "SELECT  
+                    juego.titulo, 
+                    juego.desarrollador, 
+                    juego.distribuidor, 
+                    juego.anio, 
+                    juego.ruta, 
+                    juego.descripcion, 
+                    juego.portada, 
+                    g.genero
+                FROM 
+                    juego
+                LEFT JOIN 
+                    generoJuego gj ON juego.idJuego = gj.idJuego
+                LEFT JOIN 
+                    genero g ON gj.idGenero = g.idGenero
+                WHERE 
+                    juego.idJuego = :idJuego;";
+        
+        // Preparar la consulta
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(':idJuego', $id, PDO::PARAM_INT); 
+        $stmt->execute();
+
+        // Obtener el dato (solo un resultado)
+        $detalles = $stmt->fetch(PDO::FETCH_ASSOC); // Si solo esperas un resultado
+        return $detalles;
+
+    } catch (\Throwable $e) {
+        // Registrar el error y retornar un mensaje genérico
+        error_log("Error al ejecutar la consulta: " . $e->getMessage()); 
+        return ["error" => "Hubo un problema al obtener los detalles del juego"];
+    }
+}
+*/
+
 
     // Este metodo se ejecuta al finalizar la ejecución de la web,
     // Eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido

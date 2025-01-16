@@ -57,14 +57,14 @@ include __DIR__ . '/../common/controlSesion.php';
     </main>
 
     <dialog name="detalles_juego" id="detalles_juego">
-        <?php if (is_array($data1) && !empty($data1)): ?>
-            <img src="<?php echo $data1[0]['portada'] ?? 'https://placehold.co/600x400'; ?>" alt="Imagen Portada Juego">
-            <p>Título: <?php echo $data1[0]['titulo']; ?></p>
-            <p>Desarrollador: <?php echo $data1[0]['desarrollador']; ?></p>
-            <p>Distribuidor: <?php echo $data1[0]['distribuidor']; ?></p>
-            <p>Año de Lanzamiento: <?php echo $data1[0]['anio']; ?></p>
-            <p>Género(s): <?php echo $data1[0]['genero']; ?></p>
-            <p>Descripción: <?php echo $data1[0]['descripcion']; ?></p>
+        <?php if (is_array($data) && !empty($data)): ?>
+            <img src="<?php echo $data['portada'] ?? 'https://placehold.co/600x400'; ?>" alt="Imagen Portada Juego">
+            <p>Título: <?php echo $data['titulo']; ?></p>
+            <p>Desarrollador: <?php echo $data['desarrollador']; ?></p>
+            <p>Distribuidor: <?php echo $data['distribuidor']; ?></p>
+            <p>Año de Lanzamiento: <?php echo $data['anio']; ?></p>
+            <p>Género(s): <?php echo $data['genero']; ?></p>
+            <p>Descripción: <?php echo $data['descripcion']; ?></p>
         <?php else: ?>
             <p>No se encontraron detalles del juego.</p>
         <?php endif; ?>
