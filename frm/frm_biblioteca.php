@@ -1,5 +1,10 @@
 <?php
 include __DIR__ . '/../common/controlSesion.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    var_dump($_POST);
+    //exit; // Detener la ejecución temporalmente para revisar los datos
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +50,7 @@ include __DIR__ . '/../common/controlSesion.php';
                             <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
                             <input type="submit" value="Detalles" id="btn_mostrar_detalles" name="btn_mostrar_detalles">
                             <input type="button" value="Jugar">
-                            <input type="submit" value="Prestar"
-                                name="prestar">
+                            <input type="submit" value="Prestar" name="prestar">
                         </form>
                     </div>
                 </div>
@@ -57,17 +61,16 @@ include __DIR__ . '/../common/controlSesion.php';
     </main>
 
     <dialog name="detalles_juego" id="detalles_juego">
-        <?php if (is_array($data) && !empty($data)): ?>
-            <img src="<?php echo $data['portada'] ?? 'https://placehold.co/600x400'; ?>" alt="Imagen Portada Juego">
-            <p>Título: <?php echo $data['titulo']; ?></p>
-            <p>Desarrollador: <?php echo $data['desarrollador']; ?></p>
-            <p>Distribuidor: <?php echo $data['distribuidor']; ?></p>
-            <p>Año de Lanzamiento: <?php echo $data['anio']; ?></p>
-            <p>Género(s): <?php echo $data['genero']; ?></p>
-            <p>Descripción: <?php echo $data['descripcion']; ?></p>
-        <?php else: ?>
-            <p>No se encontraron detalles del juego.</p>
-        <?php endif; ?>
+
+        <?php
+        var_dump($data1);
+        var_dump($error);
+        //var_dump($data[0]);
+        echo "<br>";
+        ?>
+        <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+
+
         <button id="cerrar_detalles">Salir</button>
     </dialog>
 
@@ -78,24 +81,28 @@ include __DIR__ . '/../common/controlSesion.php';
 
     <script>
         // botón para mostrar detalles
-        let btn_detalles = document.querySelectorAll("#btn_mostrar_detalles");
+        let post = false;
 
-        btn_detalles.forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                let dialogo = document.querySelector("#detalles_juego");
-                dialogo.show();
+        <?php   ?>
+        if (post = true) {
+            let btn_detalles = document.querySelectorAll("#btn_mostrar_detalles");
+
+            btn_detalles.forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                    // e.preventDefault();
+                    let dialogo = document.querySelector("#detalles_juego");
+                    dialogo.show();
+                });
             });
-        });
 
 
-        //botón para cerrar el diálogo
-        let cerrar = document.querySelector("#cerrar_detalles");
-        cerrar.addEventListener("click", (e) => {
-            e.preventDefault();
-            let dialogo = document.querySelector("#detalles_juego");
-            dialogo.close(); // Cierra el diálogo
-        });
+            //botón para cerrar el diálogo
+            let cerrar = document.querySelector("#cerrar_detalles");
+            cerrar.addEventListener("click", (e) => {
+                let dialogo = document.querySelector("#detalles_juego");
+                dialogo.close();
+            });
+        }
     </script>
 
 </body>
