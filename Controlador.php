@@ -42,9 +42,7 @@ class Controlador
                 Vista::MuestraLanding();
                 break;
             case 'biblioteca':
-                $this->datosBiblioteca();
                 Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
-                
                 break;
             case 'administracion':
                 $this->mostrarFormulario();
@@ -89,8 +87,48 @@ class Controlador
 
     public function irABiblioteca()
     {
+        if (isset($_POST['btn_mostrar_detalles'])) {
+            $this->mostrarDetalles();
+        } else {
+            $this->error = "pasamos a mosrar biblioteca";
+            $this->datosBiblioteca();
+        }
+
         $this->action = 'biblioteca';
     }
+
+    //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra los juegos del usuario
+    private function datosBiblioteca()
+    {
+        global $baseDatos;
+        if ($_SESSION['nickUsuario'] === 'admin') {
+            $this->data = $baseDatos->mostrarJuegos();
+        } else {
+            $idUsuario = $_SESSION['idUsuario'];
+            $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
+        }
+    }
+
+    public function mostrarDetalles()
+    {
+        global $baseDatos;
+        if (isset($_POST['idJuegoCatalogo'])) {
+            $idJuego = (int) $_POST['idJuegoCatalogo'];
+            $this->data1 = $baseDatos->obtenerGenero($idJuego);
+        
+            if (!$this->data1) {
+                $this->data1 = "No se encontraron detalles para el ID proporcionado.";
+                
+            }
+            exit;
+        } else {
+            $this->data1 = "ID del juego no proporcionado.";
+            
+        }
+
+        
+    }
+
 
     public function irAlCatalogo()
     {
@@ -138,17 +176,7 @@ class Controlador
     }
 
 
-    //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra los juegos del usuario
-    private function datosBiblioteca()
-    {
-        global $baseDatos;
-        if ($_SESSION['nickUsuario'] === 'admin') {
-            $this->data = $baseDatos->mostrarJuegos();
-        } else {
-            $idUsuario = $_SESSION['idUsuario'];
-            $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
-        }
-    }
+
 
 
 
@@ -167,7 +195,7 @@ class Controlador
                     $_SESSION['idUsuario'] = $usuarioCorrecto['idUsuario'];
 
                     $_SESSION['nickUsuario'] = $usuarioCorrecto['nick'];
-                    $this->action = 'biblioteca';
+                    $this->irABiblioteca();/* cambio */
                     return;
                 } else {
                     $this->data = 'Contraseña incorrecta';
@@ -407,10 +435,8 @@ class Controlador
 
 
             $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']);
-            
         } else {
             $this->error = "Revisa la informacion";
-            
         }
         $this->irAlPerfil();
         //$this->action = 'perfil';
@@ -671,33 +697,12 @@ class Controlador
 
         $this->irAlCarrito();
     }
-
-
-    public function mostrarDetalles() {
-        global $baseDatos;
-        
-        if (isset($_POST['idJuegoCatalogo'])) {
-            $idJuego = $_POST['idJuegoCatalogo'];
-            $this->data1 = $baseDatos->mostrarDetallesJuegos($idJuego);
-        } else {
-            $this->data1 = "No se ha cargado data1";
-        }
-    
-        // Renderiza la vista con los datos de detalles del juego
-        $this->irABiblioteca();
-    }
-    
-
-
-    
 }
 // El programa en sí comienza aquí
 $programa = new Controlador();
 
 
-if(isset($_POST['btn_mostrar_detalles'])){
-    $programa->mostrarDetalles();
-}
+
 
 // var_dump($_POST);
 if (isset($_POST['loginUsuario'])) {
@@ -753,7 +758,6 @@ if (isset($_POST['loginUsuario'])) {
 } elseif (isset($_POST['regalar-juego'])) {
     $programa->regalarJuego();
 }
-
 
 
 $programa->Inicio();

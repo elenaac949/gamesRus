@@ -570,13 +570,13 @@ class Database
             // Ejecutar la consulta
             $stmt->execute();
             // Llamamos a la función que añade los géneros al juego después de insertarlo
-            $this->agnadirGeneroJuego($this->conexion->lastInsertId(), $generos);
+            $this->anadirGeneroJuego($this->conexion->lastInsertId(), $generos);
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
 
-    public function agnadirGeneroJuego($idJuego, $arrayIdGeneros)
+    public function anadirGeneroJuego($idJuego, $arrayIdGeneros)
     {
         try {
             // Consulta SQL actualizada
@@ -744,7 +744,7 @@ class Database
     /* Funcion para seleccionar los detalles de los juegos */
 
 
-    public function mostrarDetallesJuegos($id)
+/*     public function mostrarDetallesJuegos($id)
     {
         try {
             // Preparar el SQL de selección
@@ -779,8 +779,32 @@ class Database
             echo "Error: " . $e->getMessage();
             return false;
         }
+    } */
+    
+    public function obtenerGenero($idJuego) {
+        try {
+            // Preparar el SQL de selección
+            $sql = "SELECT g.genero
+                    FROM generoJuego gj
+                    INNER JOIN genero g ON gj.idGenero = g.idGenero
+                    WHERE gj.idJuego = :idJuego;"; 
+        
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT); 
+            $stmt->execute();
+        
+            // Obtener los datos
+            $generos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $generos;
+        
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
     }
     
+
 
     // Este metodo se ejecuta al finalizar la ejecución de la web,
     // Eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido
