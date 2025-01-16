@@ -55,7 +55,8 @@ class Controlador
                 Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
                 break;
             case 'carrito':
-                Vista::MuestraCarrito($this->data, $this->error);
+
+                Vista::MuestraCarrito($this->data, $this->error, $this->data1);
                 break;
             case 'prestar':
                 Vista::MuestraPrestar($this->data, $this->error);
@@ -334,21 +335,27 @@ class Controlador
             $idUsuarioRegala = $_SESSION['idUsuario'];
             $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
 
+            
+
+
+
+
 
             var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
                 $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
                 // $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego regalado correctamente';
-                $this->action = 'carrito';
+
+               
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
-                $this->action = 'regalar';
             }
         } else {
-            $this->action = 'regalar';
+
             $this->error = 'No entra en el if';
         }
+        $this->irAlCarrito();
     }
 
 
@@ -753,9 +760,9 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAPrestar();
 } elseif (isset($_POST['prestar-juego'])) {
     $programa->prestarJuego();
-} elseif (isset($_POST['btn_regalar_juego'])) {
-    $programa->irARegalar();
-} elseif (isset($_POST['regalar-juego'])) {
+    // } elseif (isset($_POST['btn_regalar_juego'])) {
+    //     $programa->irARegalar();
+} elseif (isset($_POST['btn_confirmar_regalo'])) {
     $programa->regalarJuego();
 }
 
