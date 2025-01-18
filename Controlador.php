@@ -61,7 +61,6 @@ class Controlador
             case 'prestar':
                 Vista::MuestraPrestar($this->data, $this->error);
                 break;
-           
         }
     }
 
@@ -110,22 +109,19 @@ class Controlador
 
     public function mostrarDetalles()
     {
+        var_dump($_POST);
         global $baseDatos;
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = (int) $_POST['idJuegoCatalogo'];
             $this->data1 = $baseDatos->obtenerGenero($idJuego);
-        
+            
             if (!$this->data1) {
                 $this->data1 = "No se encontraron detalles para el ID proporcionado.";
-                
             }
             exit;
         } else {
             $this->data1 = "ID del juego no proporcionado.";
-            
         }
-
-        
     }
 
 
@@ -167,7 +163,7 @@ class Controlador
         $this->action = 'prestar';
     }
 
-   
+
 
 
 
@@ -333,8 +329,6 @@ class Controlador
                 $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
                 // $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Regalo para ' . $nick;
-
-               
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
             }
@@ -747,10 +741,12 @@ if (isset($_POST['loginUsuario'])) {
     $programa->irAPrestar();
 } elseif (isset($_POST['prestar-juego'])) {
     $programa->prestarJuego();
-  
 } elseif (isset($_POST['btn_confirmar_regalo'])) {
     $programa->regalarJuego();
 }
+// } elseif (isset($_POST['a'])) {
+//     echo "hola";
+// }
 
 
 $programa->Inicio();

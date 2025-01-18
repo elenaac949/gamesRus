@@ -33,6 +33,9 @@ include __DIR__ . '/../common/controlSesion.php';
 
                                 <input type="submit" value="Eliminar" name="btn_eliminar_del_carrito">
                                 <!-- Tiene que ser boton porque solo activa una funcionalidad del HTML, no manda datos -->
+
+                                <!-- Esto esta mal lo tengo que cambiar -->
+                                 <!-- MENSAJE DE JUEGO YA REGALADO -->
                                 <?php if (!isset($data1)) {
 
                                 ?>
