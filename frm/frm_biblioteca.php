@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // var_dump($data);
     //exit; // Detener la ejecución temporalmente para revisar los datos
 
-    var_dump($_POST);
+    // var_dump($_POST);
 }
 ?>
 <!DOCTYPE html>
@@ -66,13 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div id="contenido_detalles"></div>
         <?php
-        //var_dump($_POST);
-        var_dump($data1);
+        var_dump($_POST);
+        //var_dump($data);
         // var_dump($error);
         //var_dump($data[0]);
-        echo "<br>";
+        // echo "<br>";
         ?>
-        <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+        <!-- <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p> -->
 
 
         <button id="cerrar_detalles">Salir</button>
@@ -84,31 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ?>
 
     <script>
-        // // botón para mostrar detalles
-        // let post = false;
-
-        // <?php   ?>
-        // if (post = true) {
-        //     let btn_detalles = document.querySelectorAll("#btn_mostrar_detalles");
-
-        //     btn_detalles.forEach((btn) => {
-        //         btn.addEventListener("click", (e) => {
-        //             e.preventDefault();
-        //             let dialogo = document.querySelector("#detalles_juego");
-        //             dialogo.show();
-        //         });
-        //     });
-
-
-        //     //botón para cerrar el diálogo
-        //     let cerrar = document.querySelector("#cerrar_detalles");
-        //     cerrar.addEventListener("click", (e) => {
-        //         let dialogo = document.querySelector("#detalles_juego");
-        //         dialogo.close();
-        //     });
-        // }
-
-
         // Seleccionamos todos los botones
         let botones = document.querySelectorAll("#btn_mostrar_detalles");
         let dialogo = document.querySelector("#detalles_juego");
@@ -137,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <img src="${juegoSeleccionado.portada}" alt="${juegoSeleccionado.titulo}">
                     <p>Descripción: ${juegoSeleccionado.descripcion}</p>                    
                     <p>Fecha de Lanzamiento: ${juegoSeleccionado.anio}</p>
-                    <p>Género: Aquí los género</p>
+                    <p>Género: ${juegoSeleccionado.genero}</p>
                     <p>Desarrollador: ${juegoSeleccionado.desarrollador}</p>
                     
                     <p>Distribuidor: ${juegoSeleccionado.distribuidor}</p>

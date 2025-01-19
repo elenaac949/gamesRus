@@ -17,7 +17,7 @@ include __DIR__ . '/../common/controlSesion.php';
     include './common/cabecera.php';
     ?>
     <p class="errores"><?= $error ?></p>
-    <?php /* var_dump($_POST['idJuegoCatalogo'];)  */ ?>
+    <?php $data;  ?>
     <main class="contenido_principal">
         <aside class="filtros">
             <p>aqui van los filtros</p>
@@ -25,10 +25,11 @@ include __DIR__ . '/../common/controlSesion.php';
         <section class="vista-formulario">
             <h2>Préstamo de juegos</h2>
             <?php var_dump($data) ?>
+            <?php /*var_dump($_POST)*/ ?>
             <form action="#" method="post" name="formulario_prestar_juego">
-                <input type="hidden" name="idJuego" id="" value="<?= $data ?>">
+                <input type="hidden" name="idJuego" id="" value="<?= 'hola'; ?>">
                 <!-- HACER UNA QUERY QUE ACCEDA AL NOMBRE DEL JUEGO POR EL ID -->
-                <input type="text" readonly id="" value="Nombre del juego">
+                <input type="text" readonly id="" value="<?php echo $data['titulo']; ?>">
                 <input type="text" name="nombre-usuario" id="" placeholder="Usuario a quien prestas" required>
                 <input type="submit" name="prestar-juego" value="Prestar">
             </form>

@@ -91,13 +91,13 @@ button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#btn_cancelar{
+#btn_cancelar {
     background: linear-gradient(to right, #d00000, #7209b7);
 }
 
-#btn_cancelar:hover{
+#btn_cancelar:hover {
     background: linear-gradient(to right, #7209b7, #f72585);
-    transform: translateY(-2px); 
+    transform: translateY(-2px);
 }
 
 main input[type="submit"]:hover,
@@ -123,19 +123,19 @@ dialog {
 
 }
 
-dialog form{
+/* dialog form {
     display: flex;
     flex-direction: column;
-    justify-content: left;    
+    justify-content: left;
     gap: 18px;
-}
+} */
 
-dialog form menu{
+dialog menu {
     display: flex;
     justify-content: space-evenly;
 }
 
-dialog form input[type="text"] {
+dialog input[type="text"] {
     font-size: 1em;
     padding: 10px;
     border: 1px solid #ddd;
@@ -145,9 +145,10 @@ dialog form input[type="text"] {
     color: #3a0ca3;
     transition: border 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 8px;
 }
 
-dialog form input[type="text"]:focus {
+dialog input[type="text"]:focus {
     border-color: #4cc9f0;
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
 }

@@ -109,11 +109,11 @@ class Controlador
 
     public function mostrarDetalles()
     {
-        var_dump($_POST);
+
         global $baseDatos;
         if (isset($_POST['idJuegoCatalogo'])) {
-            $idJuego = (int) $_POST['idJuegoCatalogo'];
-            $this->data1 = $baseDatos->obtenerGenero($idJuego);
+            $idJuego = intval($_POST['idJuegoCatalogo']);
+            $this->data1 = $baseDatos->obtenerDatosJuegoConGenero($idJuego);
             
             if (!$this->data1) {
                 $this->data1 = "No se encontraron detalles para el ID proporcionado.";
@@ -159,7 +159,11 @@ class Controlador
     // Funciones para manejar el préstamos de juegos
     public function irAPrestar()
     {
-        $this->data = $_POST['idJuegoCatalogo'];
+        if (isset($_POST['idJuegoCatalogo'])) {
+            $idJuego =  intval($_POST['idJuegoCatalogo']);
+            global $baseDatos;
+            $this->data = $baseDatos->obtenerDatosJuegoConGenero($idJuego);
+        }
         $this->action = 'prestar';
     }
 

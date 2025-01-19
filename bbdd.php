@@ -744,7 +744,7 @@ class Database
     /* Funcion para seleccionar los detalles de los juegos */
 
 
-/*     public function mostrarDetallesJuegos($id)
+    /*     public function mostrarDetallesJuegos($id)
     {
         try {
             // Preparar el SQL de selección
@@ -779,69 +779,71 @@ class Database
             return false;
         }
     } */
-    
-    public function obtenerGenero($idJuego) {
+
+    public function obtenerGenero($idJuego)
+    {
         try {
             // Preparar el SQL de selección
             $sql = "SELECT g.genero
                     FROM generoJuego gj
                     INNER JOIN genero g ON gj.idGenero = g.idGenero
-                    WHERE gj.idJuego = :idJuego;"; 
-        
+                    WHERE gj.idJuego = :idJuego;";
+
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT); 
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
             $stmt->execute();
-        
+
             // Obtener los datos
             $generos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $generos;
-        
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
             return false;
         }
     }
-
-    /*  PRUEBAS EVA
-    public function mostrarDetallesJuegos($id)
-{
-    try {
-        // Preparar el SQL de selección con alias
-        $sql = "SELECT  
-                    juego.titulo, 
-                    juego.desarrollador, 
-                    juego.distribuidor, 
-                    juego.anio, 
-                    juego.ruta, 
-                    juego.descripcion, 
-                    juego.portada, 
-                    g.genero
+    // PRUEBAS EVA
+    public function obtenerDatosJuegoConGenero($idJuego)
+    {
+        try {
+            // Consulta SQL
+            $sql = "SELECT 
+                    j.titulo, 
+                    j.desarrollador, 
+                    j.distribuidor, 
+                    j.anio, 
+                    j.ruta, 
+                    j.descripcion, 
+                    j.portada, 
+                    GROUP_CONCAT(g.genero SEPARATOR ', ') AS generos
                 FROM 
-                    juego
-                LEFT JOIN 
-                    generoJuego gj ON juego.idJuego = gj.idJuego
-                LEFT JOIN 
+                    juego j
+                INNER JOIN 
+                    generoJuego gj ON j.idJuego = gj.idJuego
+                INNER JOIN 
                     genero g ON gj.idGenero = g.idGenero
                 WHERE 
-                    juego.idJuego = :idJuego;";
-        
-        // Preparar la consulta
-        $stmt = $this->conexion->prepare($sql);
-        $stmt->bindParam(':idJuego', $id, PDO::PARAM_INT); 
-        $stmt->execute();
+                    j.idJuego = :idJuego
+                GROUP BY 
+                    j.idJuego;";
 
-        // Obtener el dato (solo un resultado)
-        $detalles = $stmt->fetch(PDO::FETCH_ASSOC); // Si solo esperas un resultado
-        return $detalles;
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+            // Enlazar el parámetro
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            // Ejecutar la consulta
+            $stmt->execute();
 
-    } catch (\Throwable $e) {
-        // Registrar el error y retornar un mensaje genérico
-        error_log("Error al ejecutar la consulta: " . $e->getMessage()); 
-        return ["error" => "Hubo un problema al obtener los detalles del juego"];
+            // Obtener los resultados
+            $datosJuego = $stmt->fetch(PDO::FETCH_ASSOC); // fetch devuelve una única fila como array asociativo
+            return $datosJuego;
+        } catch (\Throwable $e) {
+            // Capturar errores
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
     }
-}
-*/
+
 
 
 
