@@ -17,14 +17,25 @@ class Controlador
     public function __construct()
     {
         session_start();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        /*         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['irInicioSesion'])) {
                 Vista::MuestraLogin($this->data);
             }
         } else {
             Vista::MuestraLanding();exit;
+        } */
+
+        // Redirección inicial según el estado de sesión o parámetros iniciales
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['irInicioSesion'])) {
+            Vista::MuestraLogin($this->data);
+            exit; // Detenemos la ejecución tras redirigir.
         }
 
+        // Mostrar la landing solo si no es una solicitud específica (ni POST ni GET)
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && empty($_GET)) {
+            Vista::MuestraLanding();
+            exit; // Detenemos la ejecución tras mostrar la página inicial.
+        }
     }
 
     public function handlePost()
@@ -57,13 +68,13 @@ class Controlador
 
         ];
 
-        
+
         $this->procesarAcciones($_POST, $accionesPost);
     }
 
 
 
-    private function procesarAcciones($datos, $acciones)
+/*     private function procesarAcciones($datos, $acciones)
     {
         foreach ($acciones as $key => $metodo) {
             if (isset($datos[$key]) && method_exists($this, $metodo)) {
@@ -71,7 +82,23 @@ class Controlador
                 return; // Terminamos después de la acción.
             }
         }
-        
+    } */
+    private function procesarAcciones($datos, $acciones)
+    {
+        foreach ($acciones as $key => $metodo) {
+            if (isset($datos[$key]) && method_exists($this, $metodo)) {
+                // Ejecutamos la acción correspondiente
+                if ($key === 'mobyGames') {
+                    $this->$metodo($datos[$key]); // Pasar el parámetro para mobyGames
+                } else {
+                    $this->$metodo();
+                }
+                return; // Terminamos después de la acción.
+            }
+        }
+
+        // Si no se encuentra ninguna acción válida
+        echo "Acción no encontrada.";
     }
 
 
@@ -92,7 +119,7 @@ class Controlador
 
 
 
- /*    private function procesarAcciones($datos, $acciones)
+    /*    private function procesarAcciones($datos, $acciones)
     {
         foreach ($acciones as $key => $metodo) {
             if (isset($datos[$key]) && method_exists($this, $metodo)) {
@@ -108,7 +135,7 @@ class Controlador
 
 
 
-/*     public function Inicio()
+    /*     public function Inicio()
     {
         // var_dump($this->action);
         switch ($this->action) {
@@ -160,7 +187,7 @@ class Controlador
 
     public function irAlRegistro()
     {
-       // $this->action = 'registro';
+        // $this->action = 'registro';
         Vista::MuestraRegistro($this->data);
     }
 
@@ -334,7 +361,7 @@ class Controlador
                     }
                 } else {
                     $this->data = 'El correo electónico no es válido.';
-                   // $this->action = 'registro';
+                    // $this->action = 'registro';
                     Vista::MuestraRegistro($this->data);
                 }
             }
@@ -399,7 +426,6 @@ class Controlador
                 $this->data1 = 'Juego prestado correctamente';
                 //$this->action = 'catalogo';
                 Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
-
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
                 //$this->action = 'prestar';
@@ -625,66 +651,67 @@ class Controlador
 
     /* Funcion para gestionar la importacion de los jegos a partir de un fichero */
 
-    public function importarJuegos(){}
+    public function importarJuegos() {}
 
-        
-    
 
-    function importarJson() {
+
+
+    function importarJson()
+    {
         // Verificar si el archivo existe
-        $dirJson=".\gamesRus\archivos\JSON\juegos.json";
+        $dirJson = ".\gamesRus\archivos\JSON\juegos.json";
         if (!file_exists($dirJson)) {
             echo "Error: El archivo JSON no existe en la ruta especificada.";
             return null;
         }
-    
+
         // Intentar leer el contenido del archivo
         $contenidoJson = file_get_contents($dirJson);
         if ($contenidoJson === false) {
             echo "Error: No se pudo leer el archivo JSON.";
             return null;
         }
-    
+
         // Eliminar espacios en blanco y saltos de línea al principio y al final
         $contenidoJson = trim($contenidoJson);
-    
+
         // Verificar si el contenido parece ser JSON válido
         if (empty($contenidoJson) || $contenidoJson[0] != '{' || $contenidoJson[strlen($contenidoJson) - 1] != '}') {
             echo "Error: El archivo JSON tiene un formato inválido.";
             return null;
         }
-    
+
         // Convertir el JSON en un arreglo asociativo manualmente
         // El contenido del archivo JSON está en formato texto, así que tenemos que hacerlo a mano
         $data = [];
         $contenidoJson = substr($contenidoJson, 1, strlen($contenidoJson) - 2); // Eliminar las llaves inicial y final
-    
-        
+
+
         $entradas = explode(',', $contenidoJson);
-    
-        
+
+
         foreach ($entradas as $entrada) {
             $entrada = trim($entrada);
-            
+
             // Dividir la entrada por los dos puntos para separar la clave y el valor
             $keyValue = explode(':', $entrada, 2);
             if (count($keyValue) != 2) {
                 continue; // Si no tiene el formato clave:valor, ignorar esta entrada
             }
-    
+
             // Limpiar las claves y los valores
             $key = trim($keyValue[0], '"');
             $value = trim($keyValue[1]);
-    
+
             // Si el valor es una cadena, eliminar las comillas
             if ($value[0] == '"' && $value[strlen($value) - 1] == '"') {
                 $value = trim($value, '"');
             }
-    
+
             // Agregar al arreglo de datos
             $data[$key] = $value;
         }
-    
+
         return $data;
     }
 
