@@ -16,19 +16,99 @@ class Controlador
 
     public function __construct()
     {
-        // $this->modelo= new Modelo();
         session_start();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             if (isset($_POST['irInicioSesion'])) {
-                $this->action = 'login';
+                Vista::MuestraLogin($this->data);
             }
         } else {
-            $this->action = 'landing';
+            Vista::MuestraLanding();exit;
         }
+
     }
 
-    public function Inicio()
+    public function handlePost()
+    {
+        $accionesPost = [
+            'loginUsuario' => 'verificarUsuario',
+            'irRegistro' => 'irAlRegistro',
+            'irAlCatalogo' => 'irAlCatalogo',
+            'irAlCarrito' => 'irAlCarrito',
+            'irBiblioteca' => 'irABiblioteca',
+            'registroUsuario' => 'anadirUsuario',
+            'administrar' => 'irAlAdministrador',
+            'anadir-juego' => 'anadirNuevoJuego',
+            'editar-juego' => 'editarJuego',
+            'eliminar-juego' => 'eliminarJuego',
+            'verPerfil' => 'irAlPerfil',
+            'btn_actualizar_datos' => 'actualizarDatosUsuario',
+            'btn_eliminar_cuenta' => 'eliminarCuentaUsuario',
+            'btn_anadir_tarjeta' => 'anadirNuevaTarjeta',
+            'btn_eliminar_tarjeta' => 'eliminarTarjeta',
+            'btn_editar_tarjeta' => 'editarTarjeta',
+            'btn_anadir_carrito' => 'anadirAlCarrito',
+            'btn_eliminar_del_carrito' => 'quitarDelCarrito',
+            'btn_pagar' => 'pagarCompra',
+            'cerrar_sesion' => 'cerrarSesion',
+            'prestar' => 'irAPrestar',
+            'prestar-juego' => 'prestarJuego',
+            'btn_confirmar_regalo' => 'regalarJuego',
+            'mobyGames' => 'mobyGames',
+
+        ];
+
+        
+        $this->procesarAcciones($_POST, $accionesPost);
+    }
+
+
+
+    private function procesarAcciones($datos, $acciones)
+    {
+        foreach ($acciones as $key => $metodo) {
+            if (isset($datos[$key]) && method_exists($this, $metodo)) {
+                $this->$metodo($datos[$key]);
+                return; // Terminamos después de la acción.
+            }
+        }
+        
+    }
+
+
+    public function mobyGames($urlMobyGames)
+    {
+        echo file_get_contents($urlMobyGames);
+        die();
+    }
+
+
+    public function handleGet()
+    {
+        $accionesGet = [
+            'mobyGames' => 'mobyGames',
+        ];
+        $this->procesarAcciones($_GET, $accionesGet);
+    }
+
+
+
+ /*    private function procesarAcciones($datos, $acciones)
+    {
+        foreach ($acciones as $key => $metodo) {
+            if (isset($datos[$key]) && method_exists($this, $metodo)) {
+                if ($datos === $_GET) {
+                    $this->$metodo($datos[$key]); // Pasamos el valor en caso de GET
+                } else {
+                    $this->$metodo();
+                }
+                break; 
+            }
+        }
+    } */
+
+
+
+/*     public function Inicio()
     {
         // var_dump($this->action);
         switch ($this->action) {
@@ -62,7 +142,7 @@ class Controlador
                 Vista::MuestraPrestar($this->data, $this->error);
                 break;
         }
-    }
+    } */
 
 
     //Estamos trabajando en ello (No es requisito de Luis para esta entrega)
@@ -80,7 +160,8 @@ class Controlador
 
     public function irAlRegistro()
     {
-        $this->action = 'registro';
+       // $this->action = 'registro';
+        Vista::MuestraRegistro($this->data);
     }
 
     public function irABiblioteca()
@@ -91,8 +172,8 @@ class Controlador
             $this->error = "pasamos a mosrar biblioteca";
             $this->datosBiblioteca();
         }
-
-        $this->action = 'biblioteca';
+        Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
+        //$this->action = 'biblioteca';
     }
 
     //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra los juegos del usuario
@@ -129,7 +210,8 @@ class Controlador
     {
         global $baseDatos;
         $this->data = $baseDatos->mostrarJuegos();
-        $this->action = 'catalogo';
+        //$this->action = 'catalogo';
+        Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
     }
 
     public function irAlCarrito()
@@ -139,13 +221,16 @@ class Controlador
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
 
         $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
-        $this->action = 'carrito';
+        Vista::MuestraCarrito($this->data, $this->error, $this->data1);
     }
+
 
     // Función que te lleva al panel de administración
     public function irAlAdministrador()
     {
-        $this->action = 'administracion';
+        //$this->action = 'administracion';
+        $this->mostrarFormulario();
+        Vista::MuestraAdministración($this->data, $this->error);
     }
 
     public function irAlPerfil()
@@ -153,7 +238,9 @@ class Controlador
         global $baseDatos;
         $this->data = $baseDatos->obtenerDatosUsuario();
         $this->data1 = $baseDatos->mostrarTarjetas($_SESSION['idUsuario']);
-        $this->action = 'perfil';
+
+        Vista::MuestraPerfil($this->data, $this->data1, $this->error);
+        //$this->action = 'perfil';
     }
 
     // Funciones para manejar el préstamos de juegos
@@ -164,14 +251,9 @@ class Controlador
             global $baseDatos;
             $this->data = $baseDatos->obtenerDatosJuegoConGenero($idJuego);
         }
-        $this->action = 'prestar';
+        //$this->action = 'prestar';
+        Vista::MuestraPrestar($this->data, $this->error);
     }
-
-
-
-
-
-
 
 
     // Función que verifica si el usuario se ha logeado bien
@@ -198,7 +280,8 @@ class Controlador
                 $this->data = 'Usuario no existe';
             }
         }
-        $this->action = 'login';
+        //$this->action = 'login';
+        Vista::MuestraLogin($this->data);
         return;
     }
 
@@ -224,7 +307,8 @@ class Controlador
             //Hacer una consulta a la bbdd que verifiqeu si ese email o nick existen
             if ($baseDatos->existeUsuario($nick, $correo)) {
                 $this->data = 'Correo o nick ya existentes';
-                $this->action = 'registro';
+                //$this->action = 'registro';
+                Vista::MuestraRegistro($this->data);
             } else {
                 if (preg_match($patron, $correo)) {
                     // Validar si las contraseñas coinciden
@@ -241,19 +325,23 @@ class Controlador
                         //$baseDatos->crearCarrito($usuario['idUsuario']);
 
                         $this->data = 'Usuario registrado correctamente.';
-                        $this->action = 'login';
+                        //$this->action = 'login';
+                        Vista::MuestraLogin($this->data);
                     } else {
                         $this->data = 'Las contraseñas no coinciden.';
-                        $this->action = 'registro';
+                        //$this->action = 'registro';
+                        Vista::MuestraRegistro($this->data);
                     }
                 } else {
                     $this->data = 'El correo electónico no es válido.';
-                    $this->action = 'registro';
+                   // $this->action = 'registro';
+                    Vista::MuestraRegistro($this->data);
                 }
             }
         } else {
             $this->data = 'Datos incompletos.';
-            $this->action = 'registro';
+            Vista::MuestraRegistro($this->data);
+            //$this->action = 'registro';
         }
     }
 
@@ -261,8 +349,9 @@ class Controlador
     public function cerrarSesion()
     {
         session_destroy();
-        $this->action = 'login';
+        //$this->action = 'login';
         $this->data = 'Sesión cerrada';
+        Vista::MuestraLogin($this->data);
     }
 
 
@@ -283,7 +372,6 @@ class Controlador
     // Función que muestra los géneros de los juegos
     public function mostrarGeneros()
     {
-
         global $baseDatos;
         $this->data = $baseDatos->accederGeneros();
     }
@@ -304,17 +392,18 @@ class Controlador
             $idJuego = $_POST['idJuego'];
             $idUsuarioPresta = $_SESSION['idUsuario'];
             $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
-
-
             // var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
                 $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
                 $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego prestado correctamente';
-                $this->action = 'catalogo';
+                //$this->action = 'catalogo';
+                Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
+
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
-                $this->action = 'prestar';
+                //$this->action = 'prestar';
+                Vista::MuestraPrestar($this->data, $this->error);
             }
         }
     }
@@ -358,7 +447,6 @@ class Controlador
         $otros = $_POST['otros'];
         $numeroTelefono = $_POST['telefono'];
 
-
         /* valdria comparar los datos introducidos con los dde la bbdd y si han cambiado cambiarlos */
         /* añadir un ifelse de exito */
         global $baseDatos;
@@ -375,7 +463,8 @@ class Controlador
             return;
         }
         $baseDatos->eliminarUsuario($_SESSION['nickUsuario']);
-        $this->action = 'landing';
+        //$this->action = 'landing';
+        Vista::MuestraLanding();
     }
 
 
@@ -431,7 +520,6 @@ class Controlador
             $this->error = "Revisa la informacion";
         }
         $this->irAlPerfil();
-        //$this->action = 'perfil';
     }
 
     private function esTarjetaValida($numero_tarjeta)
@@ -490,10 +578,8 @@ class Controlador
     {
         if (isset($_POST['idTarjeta'])) {
             $idTarjeta = $_POST['idTarjeta'];
-
             global $baseDatos;
             $baseDatos->eliminarTarjeta($idTarjeta);
-
             $this->irAlPerfil();
         }
     }
@@ -501,17 +587,13 @@ class Controlador
     public function editarTarjeta()
     {
         if (!empty($_POST['ccv_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
-
             $ccv = $_POST['ccv_tarjeta'];
-
             $diaCad = 01; //para poder guardarlo en la base de datos
             $mesCad = intval($_POST['mes_cad_tarjeta']);
             $anioCad = intval($_POST['anio_cad_tarjeta']);
 
             $caducidad = $anioCad . "-" . $mesCad . "-" . $diaCad;
             global $baseDatos;
-
-
 
             // Validar CCV (debe ser un número de 3 o 4 dígitos)
             if (!preg_match('/^\d{3,4}$/', $ccv)) {
@@ -528,14 +610,13 @@ class Controlador
                 return;
             }
 
-
             $baseDatos->editarTarjeta($ccv, $caducidad, $_SESSION['idUsuario']);
             $this->irAlPerfil();
         } else {
             $this->error = "Revisa la informacion";
         }
 
-        $this->action = 'perfil';
+        $this->irAlPerfil();
     }
 
 
@@ -544,23 +625,67 @@ class Controlador
 
     /* Funcion para gestionar la importacion de los jegos a partir de un fichero */
 
-    public function importarJuegos()
-    {
+    public function importarJuegos(){}
 
-        if ($_FILES['archivo']['error'] != 0) {
-            $this->error = "se ha producido un error en la carga";
-        } else {
-            $archivo = $_FILES['archivo']['tmp_name'];
-            /* En este caso no queremos guardarnos el archivo, solo leerlo
-            $directorioFinal = 'C:\xampp\htdocs\gamesRus';
-            $nombre = $_FILES['archivo']['name'];
-            move_uploaded_file($directorioTemp, $directorioFinal . "/" . $nombre); */
-            $archivo=fopen($archivo,"r");
-            
+        
+    
 
+    function importarJson() {
+        // Verificar si el archivo existe
+        $dirJson=".\gamesRus\archivos\JSON\juegos.json";
+        if (!file_exists($dirJson)) {
+            echo "Error: El archivo JSON no existe en la ruta especificada.";
+            return null;
         }
-
-        $this->action = 'administracion';
+    
+        // Intentar leer el contenido del archivo
+        $contenidoJson = file_get_contents($dirJson);
+        if ($contenidoJson === false) {
+            echo "Error: No se pudo leer el archivo JSON.";
+            return null;
+        }
+    
+        // Eliminar espacios en blanco y saltos de línea al principio y al final
+        $contenidoJson = trim($contenidoJson);
+    
+        // Verificar si el contenido parece ser JSON válido
+        if (empty($contenidoJson) || $contenidoJson[0] != '{' || $contenidoJson[strlen($contenidoJson) - 1] != '}') {
+            echo "Error: El archivo JSON tiene un formato inválido.";
+            return null;
+        }
+    
+        // Convertir el JSON en un arreglo asociativo manualmente
+        // El contenido del archivo JSON está en formato texto, así que tenemos que hacerlo a mano
+        $data = [];
+        $contenidoJson = substr($contenidoJson, 1, strlen($contenidoJson) - 2); // Eliminar las llaves inicial y final
+    
+        
+        $entradas = explode(',', $contenidoJson);
+    
+        
+        foreach ($entradas as $entrada) {
+            $entrada = trim($entrada);
+            
+            // Dividir la entrada por los dos puntos para separar la clave y el valor
+            $keyValue = explode(':', $entrada, 2);
+            if (count($keyValue) != 2) {
+                continue; // Si no tiene el formato clave:valor, ignorar esta entrada
+            }
+    
+            // Limpiar las claves y los valores
+            $key = trim($keyValue[0], '"');
+            $value = trim($keyValue[1]);
+    
+            // Si el valor es una cadena, eliminar las comillas
+            if ($value[0] == '"' && $value[strlen($value) - 1] == '"') {
+                $value = trim($value, '"');
+            }
+    
+            // Agregar al arreglo de datos
+            $data[$key] = $value;
+        }
+    
+        return $data;
     }
 
 
@@ -587,11 +712,13 @@ class Controlador
                 //falta que se añada la descripcion y la portada
                 $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $generos, $descripcion, $portada);
                 $this->error = 'Juego añadido correctamente';
-                $this->action = 'administracion';
+                //$this->action = 'administracion';
             } else {
                 $this->error = 'Datos incompletos.';
-                $this->action = 'administracion';
+                //$this->action = 'administracion';
             }
+            $this->mostrarFormulario();
+            Vista::MuestraAdministración($this->data, $this->error);
         }
     }
     //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
@@ -619,11 +746,13 @@ class Controlador
                 $baseDatos->editarJuego($idJuego, $desarrollador, $distribuidor, $lanzamiento, $portada, $descripcion);
 
                 $this->error = 'Juego añadido correctamente';
-                $this->action = 'administracion';
+                //$this->action = 'administracion';
             } else {
                 $this->error = 'Datos incompletos.';
-                $this->action = 'administracion';
+                //$this->action = 'administracion';
             }
+            $this->mostrarFormulario();
+            Vista::MuestraAdministración($this->data, $this->error);
         }
     }
 
@@ -637,18 +766,14 @@ class Controlador
                 $idJuego = $_POST['idJuego'];
                 $baseDatos->eliminarJuego($idJuego);
                 $this->error = 'Juego eliminado correctamente';
-                $this->action = 'administracion';
+                //$this->action = 'administracion';
             } else {
                 $this->error = 'Datos incompletos.';
-                $this->action = 'administracion';
+                //$this->action = 'administracion';
             }
+            $this->mostrarFormulario();
+            Vista::MuestraAdministración($this->data, $this->error);
         }
-    }
-
-    public function mobyGames($urlMobyGames)
-    {
-        echo file_get_contents($urlMobyGames);
-        die();
     }
 
 
@@ -716,11 +841,17 @@ class Controlador
 // El programa en sí comienza aquí
 $programa = new Controlador();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $programa->handlePost();
+} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $programa->handleGet();
+}
+ 
 
 
 
 // var_dump($_POST);
-if (isset($_POST['loginUsuario'])) {
+/* if (isset($_POST['loginUsuario'])) {
     $programa->verificarUsuario();
 } elseif (isset($_POST['irRegistro'])) {
     $programa->irAlRegistro();
@@ -764,6 +895,8 @@ if (isset($_POST['loginUsuario'])) {
     $programa->cerrarSesion();
 } elseif (isset($_GET['mobyGames'])) {
     $programa->mobyGames($_GET['mobyGames']);
+
+
 } elseif (isset($_POST['prestar'])) {
     $programa->irAPrestar();
 } elseif (isset($_POST['prestar-juego'])) {
@@ -772,10 +905,10 @@ if (isset($_POST['loginUsuario'])) {
     $programa->regalarJuego();
 } elseif (isset($_POST['btn_subir_archivo'])) {
     $programa->importarJuegos();
-}
+} */
 // } elseif (isset($_POST['a'])) {
 //     echo "hola";
 // }
 
 
-$programa->Inicio();
+/* $programa->Inicio(); */
