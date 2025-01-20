@@ -1,0 +1,14 @@
+<!ELEMENT juegos (juego)*>
+<!ELEMENT juego (titulo, desarrollador, distribuidor, año, relacionados, portada, ruta, sistemas, generos)>
+<!ELEMENT titulo (#PCDATA)>
+<!ELEMENT desarrollador (#PCDATA)>
+<!ELEMENT distribuidor (#PCDATA)>
+<!ELEMENT año (#PCDATA)>
+<!ELEMENT relacionados (relacionado)*>
+<!ELEMENT relacionado (#PCDATA)>
+<!ELEMENT portada (#PCDATA)>
+<!ELEMENT ruta (#PCDATA)>
+<!ELEMENT sistemas (sistema)+>
+<!ELEMENT sistema (#PCDATA)>
+<!ELEMENT generos (genero)+>
+<!ELEMENT genero (#PCDATA)>

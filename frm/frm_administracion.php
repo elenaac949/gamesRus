@@ -37,7 +37,7 @@ include __DIR__ . '/../common/controlSesion.php';
         </aside>
         <section>
 
-            <p class="errores"><?= $error ?></p>
+            <p class="errores"><?=$error;?></p>
             <!-- si damos al boton de añadir juego se muestra el formulario correspondiente-->
             <?php if (isset($_POST['mostrar_anadir_juego'])) : ?>
 
@@ -76,6 +76,14 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="text" name="portada_juego" placeholder="Portada" id="portada_juego">
                     <input type="submit" name="anadir-juego" value="Añadir Juego">
 
+                </form>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div>
+                        <span>Subir un archivo</span>
+                        <input type="file"  accept=".json, .xml">
+                    </div>
+                    <input type="submit" name="btn_subir_archivo" value="Subir">
+                    
                 </form>
             <?php endif ?>
 

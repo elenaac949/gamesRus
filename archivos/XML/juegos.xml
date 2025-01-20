@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE juegos SYSTEM "juegos.dtd">
+<juegos>
+  <juego>
+    <titulo>Lemmings</titulo>
+    <desarrollador>DMA Design Limited</desarrollador>
+    <distribuidor>Psygnosis Limited</distribuidor>
+    <año>1991</año>
+    <relacionados>
+      <relacionado>Oh No! More Lemmings</relacionado>
+      <relacionado>Lemmings 2: The Tribes</relacionado>
+    </relacionados>
+    <portada>lemmings.jpg</portada>
+    <ruta>lemmings.zip</ruta>
+    <sistemas>
+      <sistema>DOS</sistema>
+    </sistemas>
+    <generos>
+      <genero>action</genero>
+      <genero>puzzle</genero>
+    </generos>
+  </juego>
+  <juego>
+    <titulo>Oh No! More Lemmings</titulo>
+    <desarrollador>DMA Design Limited</desarrollador>
+    <distribuidor>Psygnosis Limited</distribuidor>
+    <año>1991</año>
+    <relacionados>
+      <relacionado>Lemmings</relacionado>
+      <relacionado>Lemmings 2: The Tribes</relacionado>
+    </relacionados>
+    <portada>oh_no_more_lemmings.jpg</portada>
+    <ruta>oh_no_more_lemmings.jpg</ruta>
+    <sistemas>
+      <sistema>DOS</sistema>
+    </sistemas>
+    <generos>
+      <genero>add-on</genero>
+      <genero>puzzle</genero>
+    </generos>
+  </juego>
+    <juego>
+    <titulo>Lemmings 2: The Tribes</titulo>
+    <desarrollador>DMA Design Limited</desarrollador>
+    <distribuidor>Psygnosis Limited</distribuidor>
+    <año>1993</año>
+    <relacionados>
+      <relacionado>Lemmings</relacionado>
+      <relacionado>Oh No! More Lemmings</relacionado>
+    </relacionados>
+    <portada>lemmings_2_the_tribes.jpg</portada>
+    <ruta>lemmings_2_the_tribes.zip</ruta>
+    <sistemas>
+      <sistema>DOS</sistema>
+    </sistemas>
+    <generos>
+      <genero>puzzle</genero>
+    </generos>
+  </juego>
+</juegos>

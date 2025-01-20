@@ -1,0 +1,24 @@
+{
+  "0": {
+    "titulo": "Test Drive",
+    "desarrollador": "Distinctive Software, Inc.",
+    "distribuidor": "Accolade, Inc.",
+    "año": 1987,
+    "relacionados": ["The Duel: Test Drive II"],
+    "portada": "test_drive.jpg",
+    "ruta": "test_drive.zip",
+    "sistemas": ["DOS"],
+    "generos": ["racing/driving", "simulation"]
+  },
+  "1": {
+    "titulo": "The Duel: Test Drive II",
+    "desarrollador": "Distinctive Software, Inc.",
+    "distribuidor": "Accolade, Inc.",
+    "año": 1989,
+    "relacionados": ["Test Drive"],
+    "portada": "the_duel_test_drive_2.jpg",
+    "ruta": "the_duel_test_drive_2.zip",
+    "sistemas": ["DOS"],
+    "generos": ["racing/driving", "simulation"]
+  }
+}

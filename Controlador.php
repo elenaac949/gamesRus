@@ -114,7 +114,7 @@ class Controlador
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = intval($_POST['idJuegoCatalogo']);
             $this->data1 = $baseDatos->obtenerDatosJuegoConGenero($idJuego);
-            
+
             if (!$this->data1) {
                 $this->data1 = "No se encontraron detalles para el ID proporcionado.";
             }
@@ -541,6 +541,29 @@ class Controlador
 
 
     /* JUEGOS */
+
+    /* Funcion para gestionar la importacion de los jegos a partir de un fichero */
+
+    public function importarJuegos()
+    {
+
+        if ($_FILES['archivo']['error'] != 0) {
+            $this->error = "se ha producido un error en la carga";
+        } else {
+            $archivo = $_FILES['archivo']['tmp_name'];
+            /* En este caso no queremos guardarnos el archivo, solo leerlo
+            $directorioFinal = 'C:\xampp\htdocs\gamesRus';
+            $nombre = $_FILES['archivo']['name'];
+            move_uploaded_file($directorioTemp, $directorioFinal . "/" . $nombre); */
+            $archivo=fopen($archivo,"r");
+            
+
+        }
+
+        $this->action = 'administracion';
+    }
+
+
     public function anadirNuevoJuego()
     {
         global $baseDatos;
@@ -747,6 +770,8 @@ if (isset($_POST['loginUsuario'])) {
     $programa->prestarJuego();
 } elseif (isset($_POST['btn_confirmar_regalo'])) {
     $programa->regalarJuego();
+} elseif (isset($_POST['btn_subir_archivo'])) {
+    $programa->importarJuegos();
 }
 // } elseif (isset($_POST['a'])) {
 //     echo "hola";
