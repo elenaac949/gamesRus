@@ -1,6 +1,6 @@
 main {
     flex: 1;
-    
+
 }
 
 .contenido_principal {
@@ -12,14 +12,64 @@ main {
 }
 
 .filtros {
-    position: sticky; /* Elemento se mantiene visible al hacer scroll */
-    top: 10px; /* Se pega desde 10px de la parte superior */
+    position: sticky;
+    /* Elemento se mantiene visible al hacer scroll */
+    top: 10px;
+    /* Se pega desde 10px de la parte superior */
     background-color: #ffffff;
     padding: 3%;
     border-radius: 10px;
-    height: 30vh;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade un poco de sombra para destacar */
-    z-index: 100; /* Asegura que esté por encima de otros elementos */
+    height: 40vh;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Añade un poco de sombra para destacar */
+    z-index: 100;
+    /* Asegura que esté por encima de otros elementos */
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    /* align-self: center; */
+}
+
+.formulario_filtrar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.formulario_filtrar input[type="text"] {
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f4f4f9;
+    color: #3a0ca3;
+    transition: border 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formulario_filtrar input[type="submit"] {
+    background-color: #4361ee;
+    color: #f4f4f9;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.formulario_filtrar input[type="submit"]:hover {
+    background-color: #4cc9f0;
+}
+
+h4 {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #7209b7;
+    
 }
 
 .vista_juegos {
@@ -39,7 +89,8 @@ main {
 
 .juego {
     display: flex;
-    flex-direction: column; /* Asegura que los elementos se alineen verticalmente */
+    flex-direction: column;
+    /* Asegura que los elementos se alineen verticalmente */
     border: 2px solid #4361ee;
     border-radius: 10px;
     width: 280px;
@@ -70,13 +121,16 @@ main {
 }
 
 .botones_juego {
-    margin-top: auto; /* Empuja este elemento hacia la parte inferior del contenedor */
+    margin-top: auto;
+    /* Empuja este elemento hacia la parte inferior del contenedor */
     display: flex;
     justify-content: center;
     align-self: flex-end;
     gap: 10px;
-    margin-bottom: 10px; /* Opcional: Espacio interno extra abajo */
+    margin-bottom: 10px;
+    /* Opcional: Espacio interno extra abajo */
 }
+
 .botones_juego form {
     display: flex;
     justify-content: center;
