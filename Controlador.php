@@ -196,7 +196,7 @@ class Controlador
         if (isset($_POST['btn_mostrar_detalles'])) {
             $this->mostrarDetalles();
         } else {
-            $this->error = "pasamos a mosrar biblioteca";
+            $this->error = "Mostrar biblioteca";
             $this->datosBiblioteca();
         }
         Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
@@ -244,9 +244,7 @@ class Controlador
     public function irAlCarrito()
     {
         global $baseDatos;
-
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-
         $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
         Vista::MuestraCarrito($this->data, $this->error, $this->data1);
     }
