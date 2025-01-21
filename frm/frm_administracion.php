@@ -75,16 +75,10 @@ include __DIR__ . '/../common/controlSesion.php';
                     <textarea name="descripcion_juego" placeholder="Descripción" id="descripcion_juego"></textarea>
                     <input type="text" name="portada_juego" placeholder="Portada" id="portada_juego">
                     <input type="submit" name="anadir-juego" value="Añadir Juego">
+                    <input type="submit" name="btn_subir_archivo" value="Subir Juegos">
 
                 </form>
-                <form action="" method="post" enctype="multipart/form-data">
-                    <div>
-                        <span>Subir un archivo</span>
-                        <input type="file"  accept=".json, .xml">
-                    </div>
-                    <input type="submit" name="btn_subir_archivo" value="Subir">
-                    
-                </form>
+                
             <?php endif ?>
 
             <!-- ELIMINAR LOS JUEGOS -->
@@ -111,9 +105,6 @@ include __DIR__ . '/../common/controlSesion.php';
                             <option value="<?= $titulo['idJuego']; ?>"><?= $titulo['titulo']; ?></option>
                         <?php endforeach ?>
                     </select>
-
-
-
                     <input type="text" name="desarrollador_juego" placeholder="Desarrollador" value="">
                     <input type="text" name="distribuidor_juego" placeholder="Distribuidor">
                     <input type="date" name="anio_lanzamiento" placeholder="Año">

@@ -17,7 +17,7 @@ class Controlador
     public function __construct()
     {
         session_start();
-    
+
         // Redirección inicial según el estado de sesión o parámetros iniciales
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['irInicioSesion'])) {
             Vista::MuestraLogin($this->data);
@@ -58,7 +58,7 @@ class Controlador
             'prestar-juego' => 'prestarJuego',
             'btn_confirmar_regalo' => 'regalarJuego',
             'mobyGames' => 'mobyGames',
-
+            'btn_subir_archivo' => 'subirArchivos'
         ];
 
 
@@ -67,7 +67,7 @@ class Controlador
 
 
 
-/*     private function procesarAcciones($datos, $acciones)
+    /*     private function procesarAcciones($datos, $acciones)
     {
         foreach ($acciones as $key => $metodo) {
             if (isset($datos[$key]) && method_exists($this, $metodo)) {
@@ -789,7 +789,97 @@ class Controlador
 
         $this->irAlCarrito();
     }
+
+    public function subirArchivos()
+    {
+        //$this->subirArchivosJSON();
+        $this->subirArchivosXML();
+    }
+
+
+    public function subirArchivosXML(){
+        $xmlFile='.\archivos\XML\juegos.xml';
+        if (file_exists($xmlFile)) {
+            $xml = simplexml_load_file($xmlFile);
+            var_dump($xml);
+        } else {
+            exit('Failed to open test.xml.');
+        }
+        $this->irAlAdministrador();
+
+    }
+
+
+    public function subirArchivosJSON()
+    {
+        // Ruta al archivo JSON
+        $archivoJSON = '.\archivos\JSON\juegos.json';
+
+        $rutaRelativa='.\archivos\JSON';
+        // Leer el contenido del archivo JSON
+        $datos = file_get_contents($archivoJSON);
+
+        if (!$datos) {
+            $this->error = "No existen datos en el archivo";
+        } else {
+            $datosDecode = json_decode($datos, true); //Usar true devuelve los datos como array
+
+            // var_dump($datosDecode);
+
+            foreach ($datosDecode as $juego) {
+                $titulo = $juego['titulo'];
+                $desarrollador = $juego['desarrollador'];
+                $distribuidor = $juego['distribuidor'];
+                $anio = $juego['año'];
+                $portada =$juego['portada'];
+                $ruta = $juego['ruta'];
+
+                // Recorremos el array 'relacionados'
+                $relacionados = [];
+                foreach ($juego['relacionados'] as $relacionado) {
+                    $relacionados[] = $relacionado;
+                }
+
+                // Recorremos el array 'sistemas'
+                $sistemas = [];
+                foreach ($juego['sistemas'] as $sistema) {
+                    $sistemas[] = $sistema;
+                }
+
+                // Recorremos el array 'generos'
+                $generos = [];
+                foreach ($juego['generos'] as $genero) {
+                    $generos[] = $genero;
+                }
+
+                // Ejemplo: mostrar los datos
+                echo "Título: $titulo<br>";
+                echo "Desarrollador: $desarrollador<br>";
+                echo "Distribuidor: $distribuidor<br>";
+                echo "Año: $anio<br>";
+                echo "Relacionados: " . implode(", ", $relacionados) . "<br>";
+                echo "Sistemas: " . implode(", ", $sistemas) . "<br>";
+                echo "Géneros: " . implode(", ", $generos) . "<br>";
+                echo "-----------------------------<br>";
+
+                /* Aui hay que comprobar si el titulo se repite  con una query 
+                 select titulo form juegos
+                 */
+
+                /* Si el titulo ya esta en l abbdd no lo añadimos
+                 
+                 
+                 si el titulo NO esta en ls bbdd entonces hacemos un insert into*/
+            }
+        }
+
+        $this->irAlAdministrador();
+    }
 }
+
+
+
+
 // El programa en sí comienza aquí
 $programa = new Controlador();
 
@@ -798,4 +888,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $programa->handleGet();
 }
- 
