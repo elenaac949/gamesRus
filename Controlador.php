@@ -17,14 +17,7 @@ class Controlador
     public function __construct()
     {
         session_start();
-        /*         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['irInicioSesion'])) {
-                Vista::MuestraLogin($this->data);
-            }
-        } else {
-            Vista::MuestraLanding();exit;
-        } */
-
+    
         // Redirección inicial según el estado de sesión o parámetros iniciales
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['irInicioSesion'])) {
             Vista::MuestraLogin($this->data);
@@ -118,72 +111,6 @@ class Controlador
     }
 
 
-
-    /*    private function procesarAcciones($datos, $acciones)
-    {
-        foreach ($acciones as $key => $metodo) {
-            if (isset($datos[$key]) && method_exists($this, $metodo)) {
-                if ($datos === $_GET) {
-                    $this->$metodo($datos[$key]); // Pasamos el valor en caso de GET
-                } else {
-                    $this->$metodo();
-                }
-                break; 
-            }
-        }
-    } */
-
-
-
-    /*     public function Inicio()
-    {
-        // var_dump($this->action);
-        switch ($this->action) {
-            case 'login':
-                Vista::MuestraLogin($this->data);
-                break;
-            case 'registro':
-                Vista::MuestraRegistro($this->data);
-                break;
-            case 'landing':
-                Vista::MuestraLanding();
-                break;
-            case 'biblioteca':
-                Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
-                break;
-            case 'administracion':
-                $this->mostrarFormulario();
-                Vista::MuestraAdministración($this->data, $this->error);
-                break;
-            case 'perfil':
-                Vista::MuestraPerfil($this->data, $this->data1, $this->error);
-                break;
-            case 'catalogo':
-                Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
-                break;
-            case 'carrito':
-
-                Vista::MuestraCarrito($this->data, $this->error, $this->data1);
-                break;
-            case 'prestar':
-                Vista::MuestraPrestar($this->data, $this->error);
-                break;
-        }
-    } */
-
-
-    //Estamos trabajando en ello (No es requisito de Luis para esta entrega)
-    //quiero gurdar la sesion en el ordenador del  usuario con cookies
-    /*private function recordarUsuario()
-    {
-        if (isset($_POST['recordar_usuario'])) { //si hemos marcado la casilla de recordarme creamos la cookie
-            setcookie('usuario', $_SESSION['idUsuario'], time() + (30 * 24 * 60 * 60), "/");
-        } else {
-            if (isset($_COOKIE['usuario'])) { //si no esta marcada se borra
-                setcookie('usuario', '', time() - 3600, "/");
-            }
-        }
-    }*/
 
     public function irAlRegistro()
     {
@@ -872,68 +799,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $programa->handleGet();
 }
  
-
-
-
-// var_dump($_POST);
-/* if (isset($_POST['loginUsuario'])) {
-    $programa->verificarUsuario();
-} elseif (isset($_POST['irRegistro'])) {
-    $programa->irAlRegistro();
-} elseif (isset($_POST['irAlCatalogo'])) {
-    $programa->irAlCatalogo();
-} elseif (isset($_POST['irAlCarrito'])) {
-    $programa->irAlCarrito();
-} elseif (isset($_POST['irBiblioteca'])) {
-    $programa->irABiblioteca();
-} else if (isset($_POST['registroUsuario'])) {
-    $programa->anadirUsuario();
-} else if (isset($_POST['administrar'])) {
-    //Gracias al parametro administrar (pasado por submit desde biblioteca o por hidden en el mismo panel del administrador) nos muestra la vista de Administrador
-    $programa->irAlAdministrador();
-} else if (isset($_POST['anadir-juego'])) {
-    $programa->anadirNuevoJuego();
-} elseif (isset($_POST['editar-juego'])) {
-    // var_dump('hola');
-    $programa->editarJuego();
-} elseif (isset($_POST['eliminar-juego'])) {
-    $programa->eliminarJuego();
-} elseif (isset($_POST['verPerfil'])) {
-    $programa->irAlPerfil();
-} elseif (isset($_POST['btn_actualizar_datos'])) {
-    $programa->actualizarDatosUsuario();
-} elseif (isset($_POST['btn_eliminar_cuenta'])) {
-    $programa->eliminarCuentaUsuario();
-} elseif (isset($_POST['btn_anadir_tarjeta'])) {
-    $programa->anadirNuevaTarjeta();
-} elseif (isset($_POST['btn_eliminar_tarjeta'])) {
-    $programa->eliminarTarjeta();
-} elseif (isset($_POST['btn_editar_tarjeta'])) {
-    $programa->editarTarjeta();
-} elseif (isset($_POST['btn_anadir_carrito'])) {
-    $programa->anadirAlCarrito();
-} elseif (isset($_POST['btn_eliminar_del_carrito'])) {
-    $programa->quitarDelCarrito();
-} elseif (isset($_POST['btn_pagar'])) {
-    $programa->pagarCompra();
-} elseif (isset($_POST['cerrar_sesion'])) {
-    $programa->cerrarSesion();
-} elseif (isset($_GET['mobyGames'])) {
-    $programa->mobyGames($_GET['mobyGames']);
-
-
-} elseif (isset($_POST['prestar'])) {
-    $programa->irAPrestar();
-} elseif (isset($_POST['prestar-juego'])) {
-    $programa->prestarJuego();
-} elseif (isset($_POST['btn_confirmar_regalo'])) {
-    $programa->regalarJuego();
-} elseif (isset($_POST['btn_subir_archivo'])) {
-    $programa->importarJuegos();
-} */
-// } elseif (isset($_POST['a'])) {
-//     echo "hola";
-// }
-
-
-/* $programa->Inicio(); */
