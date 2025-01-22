@@ -34,7 +34,28 @@ CREATE TABLE juego(
     portada VARCHAR(255)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE juegoGenero(
+CREATE TABLE juego_sistema (
+    idJuego INT(11) NOT NULL,
+    sistema VARCHAR(255) NOT NULL,
+    CONSTRAINT pk_js PRIMARY KEY (idJuego, sistema),
+    CONSTRAINT fk_js_idj_jue_idj FOREIGN KEY (idJuego) REFERENCES juego(idJuego)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE relaciona(
+    idJuego1 INT(11) NOT NULL,
+    idJuego2 INT(11) NOT NULL,
+    CONSTRAINT pk_rel PRIMARY KEY (idJuego1, idJuego2),
+    CONSTRAINT fk_rel_id1_jue_idj FOREIGN KEY (idJuego1) REFERENCES juego (idJuego) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_rel_id2_jue_idj FOREIGN KEY (idJuego2) REFERENCES juego (idJuego) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE generoJuego(
     idGenero INT(11) NOT NULL,
     idJuego INT(11) NOT NULL,
     CONSTRAINT pk_jug PRIMARY KEY (idGenero, idJuego),
@@ -159,8 +180,7 @@ CREATE TABLE regalado(
     idUsuRegala INT(11) NOT NULL,
     idUsuRecibe INT(11) NOT NULL,
     idJuego INT(11) NOT NULL,
-    fechaRegalo DATETIME NOT NULL,
-    
+    fechaRegalo DATETIME NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

@@ -37,7 +37,23 @@ include __DIR__ . '/../common/controlSesion.php';
         </aside>
         <section>
 
-            <p class="errores"><?=$error;?></p>
+            <p class="errores">
+                <?php 
+                
+                if (isset($_SESSION['detalles'])) {
+                    $detalles = $_SESSION['detalles'];
+                
+                    // Concatenar los detalles dentro de la variable $error
+                    $error .= "<h3>Detalles:</h3>"; // Si quieres incluir un título
+                    foreach ($detalles as $detalle) {
+                        $error .= "$detalle<br>"; // Concatenar cada detalle
+                    }
+                }
+
+                echo $error;
+                
+                ?>
+            </p>
             <!-- si damos al boton de añadir juego se muestra el formulario correspondiente-->
             <?php if (isset($_POST['mostrar_anadir_juego'])) : ?>
 
@@ -66,14 +82,14 @@ include __DIR__ . '/../common/controlSesion.php';
                             </label>
                         <?php endforeach; ?>
                     </div>
-
-
+                    
                     <input type="text" name="desarrollador_juego" placeholder="Desarrollador" id="desarrollador_juego">
                     <input type="text" name="distribuidor_juego" placeholder="Distribuidor" id="distribuidor_juego">
                     <input type="date" name="anio_lanzamiento" placeholder="Año" id="anio_lanzamiento">
-                    <!-- <input type="text" name="ruta_juego" placeholder="Ruta" id="ruta_juego"> -->
+                    <input type="text" name="ruta_juego" placeholder="Ruta" id="ruta_juego">
                     <textarea name="descripcion_juego" placeholder="Descripción" id="descripcion_juego"></textarea>
                     <input type="text" name="portada_juego" placeholder="Portada" id="portada_juego">
+                    <input type="text" name="sistemas_juego" placeholder="Sistemas" id="sistema_juego">
                     <input type="submit" name="anadir-juego" value="Añadir Juego">
                     <input type="submit" name="btn_subir_archivo" value="Subir Juegos">
 

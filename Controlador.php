@@ -180,7 +180,6 @@ class Controlador
     // Función que te lleva al panel de administración
     public function irAlAdministrador()
     {
-        //$this->action = 'administracion';
         $this->mostrarFormulario();
         Vista::MuestraAdministración($this->data, $this->error);
     }
@@ -192,7 +191,6 @@ class Controlador
         $this->data1 = $baseDatos->mostrarTarjetas($_SESSION['idUsuario']);
 
         Vista::MuestraPerfil($this->data, $this->data1, $this->error);
-        //$this->action = 'perfil';
     }
 
     // Funciones para manejar el préstamos de juegos
@@ -574,75 +572,9 @@ class Controlador
 
     /* JUEGOS */
 
-    /* Funcion para gestionar la importacion de los jegos a partir de un fichero */
-
-    public function importarJuegos() {}
-
-
-
-
-    function importarJson()
-    {
-        // Verificar si el archivo existe
-        $dirJson = ".\gamesRus\archivos\JSON\juegos.json";
-        if (!file_exists($dirJson)) {
-            echo "Error: El archivo JSON no existe en la ruta especificada.";
-            return null;
-        }
-
-        // Intentar leer el contenido del archivo
-        $contenidoJson = file_get_contents($dirJson);
-        if ($contenidoJson === false) {
-            echo "Error: No se pudo leer el archivo JSON.";
-            return null;
-        }
-
-        // Eliminar espacios en blanco y saltos de línea al principio y al final
-        $contenidoJson = trim($contenidoJson);
-
-        // Verificar si el contenido parece ser JSON válido
-        if (empty($contenidoJson) || $contenidoJson[0] != '{' || $contenidoJson[strlen($contenidoJson) - 1] != '}') {
-            echo "Error: El archivo JSON tiene un formato inválido.";
-            return null;
-        }
-
-        // Convertir el JSON en un arreglo asociativo manualmente
-        // El contenido del archivo JSON está en formato texto, así que tenemos que hacerlo a mano
-        $data = [];
-        $contenidoJson = substr($contenidoJson, 1, strlen($contenidoJson) - 2); // Eliminar las llaves inicial y final
-
-
-        $entradas = explode(',', $contenidoJson);
-
-
-        foreach ($entradas as $entrada) {
-            $entrada = trim($entrada);
-
-            // Dividir la entrada por los dos puntos para separar la clave y el valor
-            $keyValue = explode(':', $entrada, 2);
-            if (count($keyValue) != 2) {
-                continue; // Si no tiene el formato clave:valor, ignorar esta entrada
-            }
-
-            // Limpiar las claves y los valores
-            $key = trim($keyValue[0], '"');
-            $value = trim($keyValue[1]);
-
-            // Si el valor es una cadena, eliminar las comillas
-            if ($value[0] == '"' && $value[strlen($value) - 1] == '"') {
-                $value = trim($value, '"');
-            }
-
-            // Agregar al arreglo de datos
-            $data[$key] = $value;
-        }
-
-        return $data;
-    }
-
-
     public function anadirNuevoJuego()
     {
+        
         global $baseDatos;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validar campos obligatorios
@@ -657,17 +589,17 @@ class Controlador
                 $desarrollador = $_POST['desarrollador_juego'];
                 $distribuidor = $_POST['distribuidor_juego'];
                 $lanzamiento = $_POST['anio_lanzamiento'];
-
                 $descripcion = $_POST['descripcion_juego'];
                 $portada = $_POST['portada_juego'];
+                $ruta = $_POST['ruta_juego'];
+                $sistemas = $_POST['sistemas_juego'];
+
                 //falta una funcion para verificar si el juego existe ya
                 //falta que se añada la descripcion y la portada
-                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $generos, $descripcion, $portada);
+                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $generos, $sistemas, $ruta, $descripcion, $portada);
                 $this->error = 'Juego añadido correctamente';
-                //$this->action = 'administracion';
             } else {
                 $this->error = 'Datos incompletos.';
-                //$this->action = 'administracion';
             }
             $this->mostrarFormulario();
             Vista::MuestraAdministración($this->data, $this->error);
@@ -792,13 +724,14 @@ class Controlador
 
     public function subirArchivos()
     {
-        //$this->subirArchivosJSON();
-        $this->subirArchivosXML();
+        $this->subirArchivosJSON();
+        //$this->subirArchivosXML();
     }
 
 
-    public function subirArchivosXML(){
-        $xmlFile='.\archivos\XML\juegos.xml';
+    public function subirArchivosXML()
+    {
+        $xmlFile = '.\archivos\XML\juegos.xml';
         if (file_exists($xmlFile)) {
             $xml = simplexml_load_file($xmlFile);
             var_dump($xml);
@@ -806,16 +739,16 @@ class Controlador
             exit('Failed to open test.xml.');
         }
         $this->irAlAdministrador();
-
     }
 
 
     public function subirArchivosJSON()
     {
+        global $baseDatos;
         // Ruta al archivo JSON
         $archivoJSON = '.\archivos\JSON\juegos.json';
 
-        $rutaRelativa='.\archivos\JSON';
+        $rutaRelativa = '.\archivos\JSON';
         // Leer el contenido del archivo JSON
         $datos = file_get_contents($archivoJSON);
 
@@ -824,58 +757,59 @@ class Controlador
         } else {
             $datosDecode = json_decode($datos, true); //Usar true devuelve los datos como array
 
-            // var_dump($datosDecode);
-
+            /* En detalles guardamos la informacion sobre los juegos, los que se han añadido y los que no porque ya estan */
+            $detalles = [];
             foreach ($datosDecode as $juego) {
                 $titulo = $juego['titulo'];
                 $desarrollador = $juego['desarrollador'];
                 $distribuidor = $juego['distribuidor'];
                 $anio = $juego['año'];
-                $portada =$juego['portada'];
-                $ruta = $juego['ruta'];
-
-                // Recorremos el array 'relacionados'
+                $portada = $rutaRelativa . DIRECTORY_SEPARATOR . $juego['portada'];
+                $ruta = $rutaRelativa . DIRECTORY_SEPARATOR . $juego['ruta'];
+                $descripcion = !empty($juego['descripcion']) ? $juego['descripcion'] : " ";
                 $relacionados = [];
                 foreach ($juego['relacionados'] as $relacionado) {
                     $relacionados[] = $relacionado;
                 }
-
-                // Recorremos el array 'sistemas'
                 $sistemas = [];
                 foreach ($juego['sistemas'] as $sistema) {
                     $sistemas[] = $sistema;
                 }
-
-                // Recorremos el array 'generos'
                 $generos = [];
                 foreach ($juego['generos'] as $genero) {
                     $generos[] = $genero;
                 }
 
-                // Ejemplo: mostrar los datos
-                echo "Título: $titulo<br>";
-                echo "Desarrollador: $desarrollador<br>";
-                echo "Distribuidor: $distribuidor<br>";
-                echo "Año: $anio<br>";
-                echo "Relacionados: " . implode(", ", $relacionados) . "<br>";
-                echo "Sistemas: " . implode(", ", $sistemas) . "<br>";
-                echo "Géneros: " . implode(", ", $generos) . "<br>";
-                echo "-----------------------------<br>";
+                $titulosBase = $baseDatos->obtenerTituloJuego();
+                $existe = $this->compararTitulos($titulosBase, $titulo);
 
-                /* Aui hay que comprobar si el titulo se repite  con una query 
-                 select titulo form juegos
-                 */
-
-                /* Si el titulo ya esta en l abbdd no lo añadimos
-                 
-                 
-                 si el titulo NO esta en ls bbdd entonces hacemos un insert into*/
+                if ($existe == true) {
+                    $detalles[] = "El juego '$titulo' ya existe.";
+                } else {
+                    $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada);
+                    $idJuego = $baseDatos->obtenerIdJuegoPorTitulo($titulo);
+                    $baseDatos->cargarGeneroJuego($idJuego, $generos);
+                    $baseDatos->cargarSistemasJuego($idJuego, $sistemas);
+                    $detalles[] = "El juego '$titulo' ha sido añadido.";
+                }
             }
+            $_SESSION['detalles'] = $detalles;
         }
 
         $this->irAlAdministrador();
     }
+
+    public function compararTitulos($arrayTitulos, $titulo)
+    {
+        foreach ($arrayTitulos as $t1) {
+            if (strcmp($t1, $titulo) === 0) {
+                return true;
+            }
+        }
+    }
 }
+
+
 
 
 
