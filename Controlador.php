@@ -574,7 +574,7 @@ class Controlador
 
     public function anadirNuevoJuego()
     {
-        
+
         global $baseDatos;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validar campos obligatorios
@@ -725,21 +725,69 @@ class Controlador
     public function subirArchivos()
     {
         $this->subirArchivosJSON();
-        //$this->subirArchivosXML();
+        $this->subirArchivosXML();
     }
 
 
     public function subirArchivosXML()
     {
+        global $baseDatos;
+        // Ruta al archivo XML
         $xmlFile = '.\archivos\XML\juegos.xml';
+        $rutaRelativa = '.\archivos\XML';
+        // Verificar si el archivo XML existe
         if (file_exists($xmlFile)) {
+            // Cargar el archivo XML
             $xml = simplexml_load_file($xmlFile);
-            var_dump($xml);
+
+            // Verificar si se ha cargado correctamente
+            if ($xml === false) {
+                $this->error = "No existen datos en el archivo";
+            } else {
+
+                // Mostrar el contenido del XML 
+                //var_dump($xml);
+
+                foreach ($xml->juego as $juego) {
+                    $titulo = $juego->titulo;
+                    $desarrollador =  $juego->desarrollador;
+                    $distribuidor = $juego->distribuidor;
+                    $anio = (int) $juego->anio;
+                    $portada = $rutaRelativa . DIRECTORY_SEPARATOR . $juego->portada;
+                    $ruta = $rutaRelativa . DIRECTORY_SEPARATOR . $juego->ruta;
+                    $descripcion = !empty($juego->descripcion) ? $juego->descripcion : " ";
+                    $sistemas = [];
+                    foreach ($juego->sistemas->sistema as $sistema) {
+                        $sistemas[] = (string) $sistema;
+                    }
+
+                    $generos = [];
+                    foreach ($juego->generos->genero as $genero) {
+                        $generos[] = (string) $genero;
+                    }
+
+
+                    $titulosBase = $baseDatos->obtenerTituloJuego();
+                    $existe = $this->compararTitulos($titulosBase, $titulo);
+
+                    if ($existe == true) {
+                        $detalles[] = "El juego '$titulo' ya existe.";
+                    } else {
+                        $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada);
+                        $idJuego = $baseDatos->obtenerIdJuegoPorTitulo($titulo);
+                        $baseDatos->cargarGeneroJuego($idJuego, $generos);
+                        $baseDatos->cargarSistemasJuego($idJuego, $sistemas);
+                        $detalles[] = "El juego '$titulo' ha sido añadido.";
+                    }
+                }
+                $_SESSION['detalles1'] = $detalles;
+            }
         } else {
-            exit('Failed to open test.xml.');
+            exit('No se pudo abrir el archivo XML.');
         }
         $this->irAlAdministrador();
     }
+
 
 
     public function subirArchivosJSON()
@@ -796,7 +844,6 @@ class Controlador
             $_SESSION['detalles'] = $detalles;
         }
 
-        $this->irAlAdministrador();
     }
 
     public function compararTitulos($arrayTitulos, $titulo)
