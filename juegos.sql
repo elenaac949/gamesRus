@@ -40,7 +40,7 @@ CREATE TABLE juego_sistema (
     CONSTRAINT pk_js PRIMARY KEY (idJuego, sistema),
     CONSTRAINT fk_js_idj_jue_idj FOREIGN KEY (idJuego) REFERENCES juego(idJuego)
         ON DELETE CASCADE
-        ON UPDATE CASCADE,
+        ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE relaciona(
