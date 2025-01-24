@@ -40,14 +40,19 @@ include __DIR__ . '/../common/controlSesion.php';
             <p class="errores">
                 <?php 
                 
-                if (isset($_SESSION['detalles'])) {
+                if (isset($_SESSION['detalles']) && isset($_SESSION['detalles1'])) {
                     $detalles = $_SESSION['detalles'];
-                
-                    // Concatenar los detalles dentro de la variable $error
+                    $detalles1=$_SESSION['detalles1'];
                     $error .= "<h3>Detalles:</h3>"; // Si quieres incluir un título
                     foreach ($detalles as $detalle) {
                         $error .= "$detalle<br>"; // Concatenar cada detalle
                     }
+                    foreach ($detalles1 as $detalle) {
+                        $error .= "$detalle<br>"; // Concatenar cada detalle
+                    }
+
+                    unset($_SESSION['detalles']);
+                    unset($_SESSION['detalles1']);
                 }
 
                 echo $error;

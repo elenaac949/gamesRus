@@ -21,13 +21,10 @@ include __DIR__ . '/../common/controlSesion.php';
 
    
     <main class="contenido_principal">
-        <aside class="filtros">
-            <p>aqui van los filtros</p>
-        </aside>
         <section class="vista-formulario">
             <h2>Préstamo de juegos</h2>
-            <?php /*var_dump($data)*/ ?>
-            <?php var_dump($_POST) ?>
+            <?php //var_dump($data) ?>
+            <?php /*var_dump($_POST)*/ ?>
             <form action="#" method="post" name="formulario_prestar_juego">
                 <input type="hidden" name="idJuego" id="" value="<?= $_POST['idJuegoCatalogo'] ?>">
                 <!-- HACER UNA QUERY QUE ACCEDA AL NOMBRE DEL JUEGO POR EL ID -->
