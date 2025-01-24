@@ -574,7 +574,7 @@ class Controlador
 
     public function anadirNuevoJuego()
     {
-        
+
         global $baseDatos;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validar campos obligatorios
