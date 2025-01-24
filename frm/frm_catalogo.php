@@ -22,7 +22,15 @@ include __DIR__ . '/../common/controlSesion.php';
     <?php /*var_dump($data1)*/   ?>
     <main class="contenido_principal">
         <aside class="filtros">
-            <p>aqui van los filtros</p>
+            <h4>Buscar:</h4>
+            <form action="" name="formulario_filtrar" method="post" class="formulario_filtrar">
+                <input type="text" name="genero" id="genero" placeholder="Género">
+                <input type="text" name="sistemaOperativo" id="sistemaOperativo" placeholder="Sistema Operativo">
+                <input type="text" name="anio" id="anio" placeholder="Año">
+                <input type="submit" value="Filtrar">
+
+            </form>
+
         </aside>
         <section class="vista_juegos">
 
