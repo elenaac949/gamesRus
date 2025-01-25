@@ -365,7 +365,10 @@ class Database
     public function mostrarBiblioteca($idUsuario)
     {
         try {
-            $sql = "SELECT * FROM juego j INNER JOIN comprado c ON j.idJuego = c.idJuego WHERE c.idUsuario = :idUsuario;";
+            $sql = "SELECT * FROM `juego` j
+                    INNER JOIN generoJuego gj on gj.idJuego = j.idJuego
+                    INNER JOIN genero g on gj.idGenero = g.idGenero
+                    INNER JOIN comprado c ON j.idJuego = c.idJuego WHERE c.idUsuario = :idUsuario;";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
             $stmt->execute();
@@ -545,7 +548,9 @@ class Database
     {
         try {
             // Establecer la consulta SQL
-            $sql = "SELECT * FROM `juego`";
+            $sql = "SELECT * FROM `juego`
+                    INNER JOIN generoJuego gj on gj.idJuego = juego.idJuego
+                    INNER JOIN genero g on gj.idGenero = g.idGenero";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
