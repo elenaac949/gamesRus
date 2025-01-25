@@ -192,7 +192,7 @@ INSERT INTO rol (idRol, rol) VALUES
 (2, 'admin');
 
 
-INSERT INTO genero (idGenero, genero) VALUES
+/* INSERT INTO genero (idGenero, genero) VALUES
 (1, 'Acción'),
 (2, 'Aventura'),
 (3, 'Rol'),
@@ -256,6 +256,12 @@ INSERT INTO comprado (idCompra, idUsuario, idJuego, fechaCompra) VALUES
 (1, 4, 16, '2024-12-06 15:52:52'),
 (2, 4, 12, '2024-12-07 12:55:06'),
 (3, 5, 4, '2024-12-13 18:24:49'),
-(4, 5, 7, '2024-12-13 18:24:50');
+(4, 5, 7, '2024-12-13 18:24:50'); */
 
+
+INSERT INTO `usuario` (idUsuario, nick,email, nombre, apellidos, contrasenia, tipoVia, nombreVia, numeroVia, numeros, otros, numeroTelefono, idRol) VALUES
+(1, 'dickDestroy', 'disckDestroyer69@gmail.com', 'Escro', 'Tolamo', '$2y$10$lkwk.6NdxTvG7WHBJGl/7O8iurq2RdxW3DiFEnJsnJ1UBDbEREmNC', 'Calle', 'Gran Vía', 123, '12B, 14C', 'Departamento 5B', '+34612345678', 1),
+(3, 'PirateKing', 'mugiwara@gmail.com', 'Monkey D.', 'Luffy', '$2y$10$JpJFZgRXO2KUMnvKhE.TW.hmfILFTQIsydW5m1QxGvE5KO617w3A6', 'Avenida', 'Sunny Road', 456, '4A, 4B', 'Barco Pirata', '+34623456789', 1),
+(4, 'admin', 'admin@admin.es', 'admin', '', '$2y$10$PnVKzoYkiWcoLm/5H.0M0O8HHvbeCdQnHQa6xdbPMY90fynijS8nK', 'Plaza', 'Central', 1, NULL, 'Oficina Principal', '+34634567890', 1),
+(5, 'usuario', 'usuario@gmail.es', 'usuario', 'usuario', '$2y$10$gbKusejZEquUL9RoHKM62OUIQWGRfaZBn.QqECu1VPxUeZesy.hT2', 'Calle', 'Paseo del Río', 789, 'A1, A2', 'Apartamento 8', '+34645678901', 1);
 
