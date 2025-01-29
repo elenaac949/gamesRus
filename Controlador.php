@@ -12,6 +12,8 @@ class Controlador
     // Con data controlamos los mensajes y errores (Crear una para errores?)
     private $data;
     private $data1;
+    private $data2;
+    private $data3;
     private $error;
 
     public function __construct()
@@ -58,7 +60,8 @@ class Controlador
             'prestar-juego' => 'prestarJuego',
             'btn_confirmar_regalo' => 'regalarJuego',
             'mobyGames' => 'mobyGames',
-            'btn_subir_archivo' => 'subirArchivos'
+            'btn_subir_archivo' => 'subirArchivos',
+            'btn_filtrar_juegos' => 'filtrar',
         ];
 
 
@@ -164,8 +167,11 @@ class Controlador
     {
         global $baseDatos;
         $this->data = $baseDatos->mostrarJuegos();
+        $this->data2 = $baseDatos->accederGeneros();
+        $this->data3 = $baseDatos->accederSistemas();
+
         //$this->action = 'catalogo';
-        Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
+        Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
     }
 
     public function irAlCarrito()
@@ -181,7 +187,7 @@ class Controlador
     public function irAlAdministrador()
     {
         $this->mostrarFormulario();
-        Vista::MuestraAdministración($this->data, $this->error);
+        Vista::MuestraAdministración($this->data, $this->data1, $this->error);
     }
 
     public function irAlPerfil()
@@ -310,6 +316,7 @@ class Controlador
     {
         if (isset($_POST['mostrar_anadir_juego'])) {
             $this->mostrarGeneros();
+            $this->mostrarSistemas();
         } elseif (isset($_POST['mostrar_editar_juego'])) {
             $this->mostrarLosJuegos();
         } elseif (isset($_POST['mostrar_eliminar_juego'])) {
@@ -324,6 +331,14 @@ class Controlador
     {
         global $baseDatos;
         $this->data = $baseDatos->accederGeneros();
+    }
+
+    // Función que muestra los sistemas de los juegos
+
+    public function mostrarSistemas()
+    {
+        global $baseDatos;
+        $this->data1 = $baseDatos->accederSistemas();
     }
 
     public function mostrarLosJuegos()
@@ -348,7 +363,7 @@ class Controlador
                 $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego prestado correctamente';
                 //$this->action = 'catalogo';
-                Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
+                Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
                 //$this->action = 'prestar';
@@ -416,10 +431,7 @@ class Controlador
         Vista::MuestraLanding();
     }
 
-
-
     /* Tarjetas de usuario */
-
 
     public function anadirNuevaTarjeta()
     {
@@ -520,9 +532,6 @@ class Controlador
         return false;
     }
 
-
-
-
     public function eliminarTarjeta()
     {
         if (isset($_POST['idTarjeta'])) {
@@ -568,8 +577,6 @@ class Controlador
         $this->irAlPerfil();
     }
 
-
-
     /* JUEGOS */
 
     public function anadirNuevoJuego()
@@ -602,7 +609,7 @@ class Controlador
                 $this->error = 'Datos incompletos.';
             }
             $this->mostrarFormulario();
-            Vista::MuestraAdministración($this->data, $this->error);
+            Vista::MuestraAdministración($this->data, $this->data1, $this->error);
         }
     }
     //otra funcion para mostar titulos a eliminar y otra para modificar que se parezca a la decrear
@@ -636,7 +643,7 @@ class Controlador
                 //$this->action = 'administracion';
             }
             $this->mostrarFormulario();
-            Vista::MuestraAdministración($this->data, $this->error);
+            Vista::MuestraAdministración($this->data, $this->data1, $this->error);
         }
     }
 
@@ -656,13 +663,9 @@ class Controlador
                 //$this->action = 'administracion';
             }
             $this->mostrarFormulario();
-            Vista::MuestraAdministración($this->data, $this->error);
+            Vista::MuestraAdministración($this->data, $this->data1, $this->error);
         }
     }
-
-
-
-
 
     /* Funciones para gestionar el carrito */
     public function anadirAlCarrito()
@@ -788,8 +791,6 @@ class Controlador
         $this->irAlAdministrador();
     }
 
-
-
     public function subirArchivosJSON()
     {
         global $baseDatos;
@@ -843,7 +844,6 @@ class Controlador
             }
             $_SESSION['detalles'] = $detalles;
         }
-
     }
 
     public function compararTitulos($arrayTitulos, $titulo)
@@ -853,6 +853,47 @@ class Controlador
                 return true;
             }
         }
+    }
+
+    /* FILTRAR JUEGOS DEL CATÁLOGO */
+    // public function filtrar()
+    // {
+    //     global $baseDatos;
+    //     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    //         $genero = $_POST['genero'];
+    //         $sistema = $_POST['sistema'];
+    //         $fecha = $_POST['fecha'];
+    //         $this->data = $baseDatos->filtrarJuegos($genero, $sistema, $fecha);
+    //         $this->data2 = $baseDatos->accederGeneros();
+    //         $this->data3 = $baseDatos->accederSistemas();
+    //         Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
+    //     }
+    //     else{
+    //         $this->error = "No se ha podido filtrar";
+    //     }
+    // }
+
+    /* FILTRAR JUEGOS DEL CATÁLOGO */
+    public function filtrar()
+    {
+        global $baseDatos;
+
+        $this->data2 = $baseDatos->accederGeneros();
+        $this->data3 = $baseDatos->accederSistemas();
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $genero = $_POST['genero'] ?? "0"; // Si no existe, usar "0"
+            $sistema = $_POST['sistema'] ?? "0";
+            $fecha = $_POST['fecha'] ?? "";
+
+            $this->data = $baseDatos->filtrarJuegos($genero, $sistema, $fecha);
+        } else {
+            $this->data = []; // Evita errores si la vista espera este array
+            $this->error = "No se ha podido filtrar";
+        }
+
+        Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
     }
 }
 

@@ -38,7 +38,8 @@ main {
     gap: 10px;
 }
 
-.formulario_filtrar input[type="text"] {
+.formulario_filtrar input[type="number"],
+.formulario_filtrar select{
     font-size: 1em;
     padding: 10px;
     border: 1px solid #ddd;
@@ -49,6 +50,11 @@ main {
     transition: border 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* .formulario_filtrar  select {
+   border-color: #4cc9f0;
+   box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+} */
 
 .formulario_filtrar input[type="submit"] {
     background-color: #4361ee;

@@ -12,7 +12,7 @@ class Vista
   {
     include "./frm/frm_login.php";
   }
-  public static function MuestraCatalogo($data,$data1, $error)
+  public static function MuestraCatalogo($data,$data1,$data2,$data3, $error)
   {
     include "./frm/frm_catalogo.php";
   }
@@ -33,7 +33,7 @@ class Vista
   }
 
 
-  public static function MuestraAdministración($data, $error) //Necesario para que la vista tenga los datos a mostrar 
+  public static function MuestraAdministración($data, $data1, $error) //Necesario para que la vista tenga los datos a mostrar 
   {
     include "./frm/frm_administracion.php";
   }
