@@ -65,17 +65,6 @@ class Controlador
         $this->procesarAcciones($_POST, $accionesPost);
     }
 
-
-
-    /*     private function procesarAcciones($datos, $acciones)
-    {
-        foreach ($acciones as $key => $metodo) {
-            if (isset($datos[$key]) && method_exists($this, $metodo)) {
-                $this->$metodo($datos[$key]);
-                return; // Terminamos después de la acción.
-            }
-        }
-    } */
     private function procesarAcciones($datos, $acciones)
     {
         foreach ($acciones as $key => $metodo) {
@@ -345,13 +334,12 @@ class Controlador
             // var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
                 $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
+                /* Aqui hay que añadir el juego a la biblioteca del usuario 2 y quitarla de la biblioteca del 1 */
                 $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego prestado correctamente';
-                //$this->action = 'catalogo';
                 Vista::MuestraCatalogo($this->data, $this->data1, $this->error);
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
-                //$this->action = 'prestar';
                 Vista::MuestraPrestar($this->data, $this->error);
             }
         }
@@ -710,10 +698,13 @@ class Controlador
     public function pagarCompra()
     {
         global $baseDatos;
+        
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
         $juegos = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
 
         if (!empty($juegos)) {
+            $baseDatos->comprarJuego($_SESSION['idUsuario'],$idCarrito);
+            $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'],$idCarrito);
             $this->error = $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
         } else {
             $this->error = "No hay nada que pagar";

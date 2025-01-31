@@ -524,7 +524,6 @@ class Database
     public function eliminarTodosLosJuegosCarrito($idCarrito)
     {
         try {
-
             $sql = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito";
             $stmt = $this->conexion->prepare($sql);
 
@@ -540,11 +539,61 @@ class Database
     }
 
 
+    public function comprarJuego($idUsuario, $idJuego)
+    {
+        try {
+            // Consulta SQL para insertar la compra en la tabla
+            $sql = "INSERT INTO comprado (idUsuario, idJuego, fechaCompra)
+                    VALUES (:idUsuario, :idJuego, NOW())";
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
 
+            // Vincular parámetros para evitar inyección SQL
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Retornar un mensaje de éxito
+            return "Compra realizada con éxito";
+        } catch (Exception $e) {
+            // Registrar el error en el log
+            error_log("Error en comprarJuego: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
+    public function agnadirJuegoAUsuario($idUsuario, $idJuego)
+    {
+        try {
+            // Consulta SQL para insertar el juego en la tabla poseejuego
+            $sql = "INSERT INTO poseejuego (idUsuario, idJuego)
+                    VALUES (:idUsuario, :idJuego)"; // Cierre del paréntesis corregido
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Vincular parámetros para evitar inyección SQL
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Retornar éxito
+            return "Juego añadido a la biblioteca del usuario con éxito";
+        } catch (Exception $e) {
+            // Registrar el error en el log
+            error_log("Error en añadir Juego comprado a Usuario: " . $e->getMessage());
+            return false;
+        }
+    }
 
 
     // Función que muestra todos los juegos
-    public function mostrarJuegos()
+    /*     public function mostrarJuegos()
     {
         try {
             // Establecer la consulta SQL
@@ -567,8 +616,47 @@ class Database
             // Si hay un error, mostrar el mensaje
             echo "Error: " . $e->getMessage();
         }
-    }
+    } */
 
+    public function mostrarJuegos()
+    {
+        try {
+            // Establecer la consulta SQL
+            $sql = "SELECT  j.idJuego,
+                    j.titulo, 
+                    j.desarrollador, 
+                    j.distribuidor, 
+                    j.anio, 
+                    j.ruta, 
+                    j.descripcion, 
+                    j.portada, 
+                    GROUP_CONCAT(g.genero SEPARATOR ', ') AS generos,
+                    GROUP_CONCAT(s.nombre SEPARATOR ', ') AS sistemas
+                    
+            
+             FROM juego j
+                    INNER JOIN generoJuego gj on gj.idJuego = j.idJuego
+                    INNER JOIN genero g on gj.idGenero = g.idGenero
+                    INNER JOIN juegoSistema js on js.idJuego = j.idJuego
+                    INNER JOIN sistema s on s.idSistema = js.idSistema
+                   ";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Obtener los resultados (como un array asociativo)
+            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Retornar los resultados
+            return $resultados;
+        } catch (Exception $e) {
+            // Si hay un error, mostrar el mensaje
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     //Agregar un juego nuevo - HEMOS QUITADO LA RUTA PARA QUE FUNCIONE 
     public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $generos, $sistemas, $ruta, $descripcion, $portada)
@@ -1084,6 +1172,24 @@ class Database
     }
 
 
+    /* Control de los prestamos */
+
+    public function obtenerPrestamosActivos()
+    {
+        $sql = "SELECT * FROM prestado";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Eliminar préstamo vencido
+    public function eliminarPrestamo($id)
+    {
+        $sql = "DELETE FROM prestado WHERE id = :id";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 
 
 
