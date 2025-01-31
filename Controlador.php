@@ -333,8 +333,12 @@ class Controlador
             $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
             // var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
-                $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
                 /* Aqui hay que añadir el juego a la biblioteca del usuario 2 y quitarla de la biblioteca del 1 */
+                $prestado=$baseDatos->agnadirJuegoPrestado($idUsuarioRecibe,$idJuego);//esta funcion devuelve true si se añade correctamente el juego al usuario que lo recibe
+                $eliminado=$baseDatos->eliminarJuegoPrestado($idUsuarioPresta,$idJuego);
+                if($prestado && $eliminado){
+                    $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
+                }
                 $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego prestado correctamente';
                 Vista::MuestraCatalogo($this->data, $this->data1, $this->error);

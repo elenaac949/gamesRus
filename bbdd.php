@@ -622,7 +622,7 @@ class Database
     {
         try {
             // Establecer la consulta SQL
-            $sql = "SELECT  j.idJuego,
+            $sql = "SELECT j.idJuego,
                     j.titulo, 
                     j.desarrollador, 
                     j.distribuidor, 
@@ -630,16 +630,15 @@ class Database
                     j.ruta, 
                     j.descripcion, 
                     j.portada, 
-                    GROUP_CONCAT(g.genero SEPARATOR ', ') AS generos,
-                    GROUP_CONCAT(s.nombre SEPARATOR ', ') AS sistemas
-                    
-            
-             FROM juego j
-                    INNER JOIN generoJuego gj on gj.idJuego = j.idJuego
-                    INNER JOIN genero g on gj.idGenero = g.idGenero
-                    INNER JOIN juegoSistema js on js.idJuego = j.idJuego
-                    INNER JOIN sistema s on s.idSistema = js.idSistema
-                   ";
+                    GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
+                    GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas
+                FROM juego j
+                INNER JOIN generoJuego gj ON gj.idJuego = j.idJuego
+                INNER JOIN genero g ON gj.idGenero = g.idGenero
+                INNER JOIN juegoSistema js ON js.idJuego = j.idJuego
+                INNER JOIN sistema s ON s.idSistema = js.idSistema
+                GROUP BY j.idJuego, j.titulo, j.desarrollador, j.distribuidor, j.anio, 
+                        j.ruta, j.descripcion, j.portada;";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
@@ -1004,7 +1003,7 @@ class Database
         }
     }
 
-    // Función para prestar juego 
+    /* FUNCIONES QUE INVOLUCRAN EL PRESTADO DE JUEGOS */
     public function agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego)
     {
         try {
@@ -1033,7 +1032,6 @@ class Database
             $stmt->bindParam(':fechaHoy', $fechaInicioFormateada, PDO::PARAM_STR);
             $stmt->bindParam(':fechaDevolver', $fechaFinFormateada, PDO::PARAM_STR);
 
-
             // Ejecutar el INSERT
             return $stmt->execute();
         } catch (\Throwable $e) {
@@ -1041,6 +1039,44 @@ class Database
             return false;
         }
     }
+    //funcion para añadir el juego a la tabla posee del que recibe el juego prestado
+    public function agnadirJuegoPrestado($idUsuarioRecibe, $idJuego) {
+        try {
+            // Preparar el SQL de inserción
+            $sql = "INSERT INTO poseeJuego (idUsuario, idJuego) VALUES (:idUsuarioRecibe, :idJuego)";
+            $stmt = $this->conexion->prepare($sql);
+    
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            $stmt->execute();
+            return true; 
+        } catch (PDOException $e) {
+            error_log("Error al añadir juego prestado: " . $e->getMessage()); 
+            return false; // Fallo
+        }
+    }
+
+    //funcion para eliminar el juego de la tabla posee del usuario original
+    public function eliminarJuegoPrestado($idUsuarioPresta, $idJuego) {
+        try {
+            // Preparar la consulta de eliminación
+            $sql = "DELETE FROM poseeJuego WHERE idUsuario = :idUsuarioPresta AND idJuego = :idJuego";
+            $stmt = $this->conexion->prepare($sql);
+    
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            $stmt->execute();
+    
+            return true; // Éxito
+        } catch (PDOException $e) {
+            error_log("Error al eliminar juego prestado: " . $e->getMessage()); // Registrar el error en logs
+            return false; // Fallo
+        }
+    }
+    
+    
 
     // Función para regalar juego 
     public function agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego)
