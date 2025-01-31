@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div id="contenido_detalles"></div>
         <?php
-        var_dump($_POST);
+        // var_dump($_POST);
         //var_dump($data);
         // var_dump($error);
         //var_dump($data[0]);
@@ -116,10 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <img src="${juegoSeleccionado.portada}" alt="${juegoSeleccionado.titulo}">
                     <p>Descripción: ${juegoSeleccionado.descripcion}</p>                    
                     <p>Fecha de Lanzamiento: ${juegoSeleccionado.anio}</p>
-                    <p>Género: ${juegoSeleccionado.genero}</p>
+                    <p>Género: ${juegoSeleccionado.generos}</p>
                     <p>Desarrollador: ${juegoSeleccionado.desarrollador}</p>
                     
-                    <p>Distribuidor: ${juegoSeleccionado.distribuidor}</p>
+                    <p>Sistemas: ${juegoSeleccionado.sistemas}</p>
                     
                 `;
                 } else {
