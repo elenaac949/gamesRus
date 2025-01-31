@@ -19,15 +19,26 @@ include __DIR__ . '/../common/controlSesion.php';
     <p class="errores"><?= !$error  ? $data1 : $error ?></p>
 
 
-    <?php //var_dump($data);   ?>
+    <?php var_dump($data); ?>
     <main class="contenido_principal">
         <aside class="filtros">
             <h4>Buscar:</h4>
             <form action="" name="formulario_filtrar" method="post" class="formulario_filtrar">
-                <input type="text" name="genero" id="genero" placeholder="Género">
-                <input type="text" name="sistemaOperativo" id="sistemaOperativo" placeholder="Sistema Operativo">
-                <input type="text" name="anio" id="anio" placeholder="Año">
-                <input type="submit" value="Filtrar">
+                <label for="genero">Géneros</label>
+                <select name="genero" id="genero">
+                    <option value="0">Todos</option>
+                    <?php foreach ($data2 as $genero) : ?>
+                        <option <?php echo isset($_POST['genero'])&& $_POST['genero']==$genero['idGenero']? "selected": "" ?> value="<?php echo $genero['idGenero']; ?>"><?php echo $genero['genero']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <label for="sistema">Sistemas</label>
+                <select name="sistema" id="sistema">
+                    <option value="0">Todos</option>
+                    <?php foreach ($data3 as $sistema) : ?>
+                        <option <?php echo isset($_POST['sistema'])&& $_POST['sistema']==$sistema['idSistema']? "selected": "" ?> value="<?php echo $sistema['idSistema']; ?>"><?php echo $sistema['nombre']; ?></option>
+                    <?php endforeach; ?>
+                <input type="number" name="fecha" id="fecha" placeholder="Año" value="<?php echo isset($_POST['fecha'])? $_POST['fecha']: "" ?>">
+                <input type="submit" name="btn_filtrar_juegos" value="Filtrar">
 
             </form>
 

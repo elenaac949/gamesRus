@@ -38,11 +38,11 @@ include __DIR__ . '/../common/controlSesion.php';
         <section>
 
             <p class="errores">
-                <?php 
-                
+                <?php
+
                 if (isset($_SESSION['detalles']) && isset($_SESSION['detalles1'])) {
                     $detalles = $_SESSION['detalles'];
-                    $detalles1=$_SESSION['detalles1'];
+                    $detalles1 = $_SESSION['detalles1'];
                     $error .= "<h3>Detalles:</h3>"; // Si quieres incluir un título
                     foreach ($detalles as $detalle) {
                         $error .= "$detalle<br>"; // Concatenar cada detalle
@@ -56,11 +56,12 @@ include __DIR__ . '/../common/controlSesion.php';
                 }
 
                 echo $error;
-                
+
                 ?>
             </p>
             <!-- si damos al boton de añadir juego se muestra el formulario correspondiente-->
             <?php if (isset($_POST['mostrar_anadir_juego'])) : ?>
+
 
                 <h2>Datos Juego Nuevo</h2>
 
@@ -77,7 +78,9 @@ include __DIR__ . '/../common/controlSesion.php';
                     <hr>
                 </form>
                 <form action="#" method="post" name="formulario_anadir_juego">
+                    <!-- Título  -->
                     <input type="text" name="titulo_juego" placeholder="Título" id="titulo_juego">
+                    <!-- Géneros -->
                     <span>Géneros:</span>
                     <div id="genero_juego" class="genero_lista">
                         <?php foreach ($data as $genero) : ?>
@@ -87,19 +90,35 @@ include __DIR__ . '/../common/controlSesion.php';
                             </label>
                         <?php endforeach; ?>
                     </div>
-                    
+
                     <input type="text" name="desarrollador_juego" placeholder="Desarrollador" id="desarrollador_juego">
-                    <input type="text" name="distribuidor_juego" placeholder="Distribuidor" id="distribuidor_juego">
+
+
+
+                    <!-- <input type="text" name="distribuidor_juego" placeholder="Sistema" id="distribuidor_juego"> -->
+
+                    <span>Sistemas:</span>
+                    <div id="sistema_juego" class="sistema_lista">
+                        <?php foreach ($data1 as $sistema) : ?>
+                            <label class="sistema_item">
+
+                                <input type="checkbox" name="sistema_juego[]" value="<?= $sistema['idSistemaApi']; ?>" value="<?= $sistema['idSistema']; ?>">
+                                <?= $sistema['nombre']; ?>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+
+
                     <input type="date" name="anio_lanzamiento" placeholder="Año" id="anio_lanzamiento">
                     <input type="text" name="ruta_juego" placeholder="Ruta" id="ruta_juego">
                     <textarea name="descripcion_juego" placeholder="Descripción" id="descripcion_juego"></textarea>
                     <input type="text" name="portada_juego" placeholder="Portada" id="portada_juego">
-                    <input type="text" name="sistemas_juego" placeholder="Sistemas" id="sistema_juego">
+
                     <input type="submit" name="anadir-juego" value="Añadir Juego">
                     <input type="submit" name="btn_subir_archivo" value="Subir Juegos">
 
                 </form>
-                
+
             <?php endif ?>
 
             <!-- ELIMINAR LOS JUEGOS -->
@@ -166,7 +185,7 @@ include __DIR__ . '/../common/controlSesion.php';
                 });
 
                 const data = await response.json();
-                // console.log(data.games);
+                console.log(data.games);
                 // var_dum(data.games);
                 document.querySelector("#total-resultados").innerHTML = data.games.length;
                 data.games.forEach((juego) => {
@@ -181,7 +200,8 @@ include __DIR__ . '/../common/controlSesion.php';
                         // document.querySelector("#genero_juego").value = juego.genres[0].genre_name
                         // document.querySelector("#desarrollador_juego").value = juego.developers[0].name;
                         document.querySelector("#anio_lanzamiento").value = juego.platforms[0].first_release_date;
-                        document.querySelector("#distribuidor_juego").value = juego.platforms[0].platform_name;;
+                        //SISTEMA ES ESTO
+                        //document.querySelector("#distribuidor_juego").value = juego.platforms[0].platform_name;
                         // document.querySelector("#ruta_juego").value = juego.url;
                         document.querySelector("#descripcion_juego").value = removeHTMLTags(juego.description);
                         document.querySelector("#portada_juego").value = juego.sample_cover.image;
