@@ -362,7 +362,7 @@ class Database
 
 
     //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
-    public function mostrarBiblioteca($idUsuario)
+    /* public function mostrarBiblioteca($idUsuario)
     {
         try {
             $sql = "SELECT * FROM `juego` j
@@ -377,7 +377,29 @@ class Database
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
         }
+    } */
+
+    //misma funcion pero usando la tabla posee juego
+    public function mostrarBiblioteca($idUsuario) {
+        try {
+            $sql = "SELECT * FROM `juego` j
+                    INNER JOIN generoJuego gj ON gj.idJuego = j.idJuego
+                    INNER JOIN genero g ON gj.idGenero = g.idGenero
+                    INNER JOIN poseeJuego p ON j.idJuego = p.idJuego
+                    WHERE p.idUsuario = :idUsuario;";
+                    
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $biblioteca = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+            
+            return $biblioteca;
+        } catch (PDOException $e) {
+            error_log("Error al obtener la biblioteca: " . $e->getMessage());
+            return false;
+        }
     }
+    
 
     /* ----CARRITO---- */
 
@@ -1104,6 +1126,7 @@ class Database
         }
     }
 
+    
     /* Funcion para seleccionar los detalles de los juegos */
 
 

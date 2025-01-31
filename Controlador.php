@@ -123,12 +123,22 @@ class Controlador
     private function datosBiblioteca()
     {
         global $baseDatos;
+
+        $this->comprobarPrestamosVencidos();
         if ($_SESSION['nickUsuario'] === 'admin') {
             $this->data = $baseDatos->mostrarJuegos();
         } else {
             $idUsuario = $_SESSION['idUsuario'];
             $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
         }
+    }
+
+
+    public function comprobarPrestamosVencidos()
+    {
+        /* Aqui comprobamos los prestamos vencidos */
+
+        
     }
 
     public function mostrarDetalles()
@@ -334,9 +344,9 @@ class Controlador
             // var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
                 /* Aqui hay que añadir el juego a la biblioteca del usuario 2 y quitarla de la biblioteca del 1 */
-                $prestado=$baseDatos->agnadirJuegoPrestado($idUsuarioRecibe,$idJuego);//esta funcion devuelve true si se añade correctamente el juego al usuario que lo recibe
-                $eliminado=$baseDatos->eliminarJuegoPrestado($idUsuarioPresta,$idJuego);
-                if($prestado && $eliminado){
+                $prestado = $baseDatos->agnadirJuegoPrestado($idUsuarioRecibe, $idJuego); //esta funcion devuelve true si se añade correctamente el juego al usuario que lo recibe
+                $eliminado = $baseDatos->eliminarJuegoPrestado($idUsuarioPresta, $idJuego);
+                if ($prestado && $eliminado) {
                     $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
                 }
                 $this->data = $baseDatos->mostrarJuegos();
@@ -702,13 +712,13 @@ class Controlador
     public function pagarCompra()
     {
         global $baseDatos;
-        
+
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
         $juegos = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
 
         if (!empty($juegos)) {
-            $baseDatos->comprarJuego($_SESSION['idUsuario'],$idCarrito);
-            $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'],$idCarrito);
+            $baseDatos->comprarJuego($_SESSION['idUsuario'], $idCarrito);
+            $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idCarrito);
             $this->error = $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
         } else {
             $this->error = "No hay nada que pagar";
@@ -838,7 +848,6 @@ class Controlador
             }
             $_SESSION['detalles'] = $detalles;
         }
-
     }
 
     public function compararTitulos($arrayTitulos, $titulo)
