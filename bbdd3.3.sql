@@ -36,8 +36,8 @@ CREATE TABLE `carrito` (
 -- Volcado de datos para la tabla `carrito`
 --
 
-/* INSERT INTO `carrito` (`idCarrito`, `idUsuario`) VALUES
-(1, 4); */
+INSERT INTO `carrito` (`idCarrito`, `idUsuario`) VALUES
+(1, 4);
 
 -- --------------------------------------------------------
 
@@ -54,8 +54,8 @@ CREATE TABLE `carritojuego` (
 -- Volcado de datos para la tabla `carritojuego`
 --
 
-/* INSERT INTO `carritojuego` (`idCarrito`, `idJuego`) VALUES
-(1, 23); */
+INSERT INTO `carritojuego` (`idCarrito`, `idJuego`) VALUES
+(1, 23);
 
 -- --------------------------------------------------------
 
@@ -73,12 +73,12 @@ CREATE TABLE `comprado` (
 --
 -- Volcado de datos para la tabla `comprado`
 --
-/* 
+
 INSERT INTO `comprado` (`idCompra`, `idUsuario`, `idJuego`, `fechaCompra`) VALUES
 (1, 4, 16, '2024-12-06 15:52:52'),
 (2, 4, 12, '2024-12-07 12:55:06'),
 (3, 5, 4, '2024-12-13 18:24:49'),
-(4, 5, 7, '2024-12-13 18:24:50'); */
+(4, 5, 7, '2024-12-13 18:24:50');
 
 -- --------------------------------------------------------
 
@@ -128,10 +128,10 @@ CREATE TABLE `generojuego` (
 -- Volcado de datos para la tabla `generojuego`
 --
 
-/* INSERT INTO `generojuego` (`idGeneroJuego`, `idJuego`, `idGenero`) VALUES
+INSERT INTO `generojuego` (`idGeneroJuego`, `idJuego`, `idGenero`) VALUES
 (3, 25, 20),
 (4, 25, 25),
-(5, 25, 26); */
+(5, 25, 26);
 
 -- --------------------------------------------------------
 
@@ -284,7 +284,16 @@ INSERT INTO `usuario` (`idUsuario`, `nick`, `email`, `nombre`, `apellidos`, `con
 (4, 'admin', 'admin@admin.es', 'admin', '', '$2y$10$PnVKzoYkiWcoLm/5H.0M0O8HHvbeCdQnHQa6xdbPMY90fynijS8nK', 'Plaza', 'Central', 1, NULL, 'Oficina Principal', '+34634567890', 1),
 (5, 'usuario', 'usuario@gmail.es', 'usuario', 'usuario', '$2y$10$gbKusejZEquUL9RoHKM62OUIQWGRfaZBn.QqECu1VPxUeZesy.hT2', 'Calle', 'Paseo del Río', 789, 'A1, A2', 'Apartamento 8', '+34645678901', 1),
 (9, 'melocoton', 'eva@gmail.com', 'Eva', 'Alonso', '$2y$10$h5LJkF9qAa.kWaFnxzIAN.5rdzOWuaBRlAZsiS26NbOei3RpeToyW', 'Avenida', 'Los Pinos', 101, '3A, 3B', 'Condominio Cerrado', '+34656789012', 1),
-(10, 'iceWolf', 'axel@gmail.com', 'Axel', 'José', '$2y$10$RwBDep4hmQSjRGxVRvnbQO.LJL4ha2w6CqPx.jL3F4evSYnG5UzMS', 'Callejón', 'Roca Seca', 205, 'D1, D2', 'Casa de Campo', '+34667890123', 1);
+(10, 'iceWolf', 'axel@gmail.com', 'Axel', 'José', '$2y$10$RwBDep4hmQSjRGxVRvnbQO.LJL4ha2w6CqPx.jL3F4evSYnG5UzMS', 'Callejón', 'Roca Seca', 205, 'D1, D2', 'Casa de Campo', '+34667890123', 1),
+(11, 'prueba', 'prueba@es.es', 'prueba', 'prueba', '$2y$10$lD.qv2kmU5XgoABo1ruOveqAH2QlIDekmbbN8l7o9Cgqn2J/pK6j.', 'Boulevard', 'Estrella', 306, NULL, 'Edificio Principal', '+34678901234', 1),
+(12, 'pepito', 'pepe@pepe.es', 'pepe', 'pepe', '$2y$10$nsQjIVPn/3ptBqTGgegUIOhIRGXJ8/5Wqpjt2L6AcSje9r9ttWUPq', 'Pasaje', 'Primavera', 405, '5B, 5C', 'Villa Residencial', '+34689012345', 1),
+(14, '', '', '', '', '$2y$10$rEw4W6qRC09wvjcGdqXDdOmHc0fLtacC/xrd0wmSjw9iJvtWTGiXG', NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(16, 'luisito', 'luis@gmail.com', 'luis', 'luis', '$2y$10$PzIZ0Uzgnpc/ATZq.FzOle8JPSvd71RPKNiQkS8Gpn9oOyE9MO5Gy', 'Camino', 'El Prado', 501, '1A, 2B', 'Finca Los Rosales', '+34690123456', 1),
+(17, 'alumnito', 'alumno@gmail.com', 'alumno', 'alumno', '$2y$10$fS3DkDKR9R51ks9ChizMEuP8eLnrMV2xmgWEryTdFDHZ8z1mcG4DW', 'Autopista', 'Del Sol', 600, NULL, 'Local Comercial', '+34601234567', 1),
+(20, 'profe', 'profe@es.es', 'profe', 'profe', '$2y$10$uYLAafcWG.g20IOzC4q8luR3ZOIMWFvbm7r31qtnU9oRT9WvNt4M.', 'Travesía', 'La Fuente', 705, '1C, 2D', 'Complejo Industrial', '+34612345678', 1),
+(21, 'pruebita1', 'prueba1@es.es', 'prueba1', 'preuba', '$2y$10$f/6waIpKwh3Ri3jbxr0SLODjSkZoBzSTjRIm0Q.SlPIWPKLLMT0h2', 'Calle', 'Jardines', 802, 'A2, B3', 'Casa de Playa', '+34623456789', 1),
+(30, 'anita90', 'ana@gmail.com', 'Ana', 'Alvarez', '$2y$10$HOGE/jkQZxWCrpx/YPu6XebUZ1ZufqXqtJelXPZeQiAmOONXfH3Q6', 'Camino', 'Las Lomas', 905, '1F, 2G', 'Zona Rural', '+34634567890', 1),
+(31, 'qwerty', 'qwerty@qwerty.com', 'qwerty', 'qwerty', '$2y$10$t3eUlMMVgfYQ2EJ4.BmkquHqEMf.oYbEuenn/wMK6uJ2D7Kk7u6y.', 'Paseo', 'Los Álamos', 1001, 'A4, B5', 'Zona Residencial', '+34645678901', 1);
 
 --
 -- Índices para tablas volcadas

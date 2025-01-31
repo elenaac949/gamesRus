@@ -19,7 +19,7 @@ include __DIR__ . '/../common/controlSesion.php';
     <p class="errores"><?= !$error  ? $data1 : $error ?></p>
 
 
-    <?php /*var_dump($data1)*/   ?>
+    <?php var_dump($data); ?>
     <main class="contenido_principal">
         <aside class="filtros">
             <h4>Buscar:</h4>
