@@ -17,28 +17,26 @@ include __DIR__ . '/../common/controlSesion.php';
     include './common/cabecera.php';
     ?>
     <p class="errores"><?= $error ?></p>
-    <?php /*var_dump($_POST['idJuegoCatalogo'])*/ ?>
+    <?php $data;  ?>
+
+
     <main class="contenido_principal">
-        <aside class="filtros">
-            <p>aqui van los filtros</p>
-        </aside>
         <section class="vista-formulario">
-            <h2>Regalar juegos</h2>
-            <?php /*var_dump($data)*/ ?>
+            <h2>Regala un juego</h2>
+            <?php var_dump($data) ?>
+            <?php /*var_dump($_POST)*/ ?>
             <form action="#" method="post" name="formulario_regalar_juego">
-                <input type="hidden" name="idJuego" id="" value="<?= $data ?>">
+                <input type="hidden" name="idJuego" id="" value="<?= $_POST['idJuegoCatalogo'] ?>">
                 <!-- HACER UNA QUERY QUE ACCEDA AL NOMBRE DEL JUEGO POR EL ID -->
-                <input type="text" readonly id="" value="Nombre del juego">
-                <input type="text" name="nombre-usuario" id="" placeholder="Usuario a quien prestas" required>
-                <input type="submit" name="regalar-juego" value="Regalar">
+                <input type="text" readonly id="" value="<?php echo $data['titulo']; ?>">
+                <input type="text" name="nombre-usuario" id="" placeholder="Usuario a quien regalas" required>
+                <input type="submit" name="btn_confirmar_regalo" value="Regalar">
             </form>
         </section>
     </main>
     <?php
     include './common/footer.php';
     ?>
-
-    
 </body>
 
 </html>

@@ -48,5 +48,9 @@ class Vista
     include "./frm/frm_prestar.php";
   }
 
+  public static function MuestraRegalar($data, $error)
+  {
+    include "./frm/frm_regalar.php";
+  }
 
 }

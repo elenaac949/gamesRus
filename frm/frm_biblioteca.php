@@ -54,6 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="button" value="Jugar">
                             <input type="submit" value="Prestar" name="prestar">
                         </form>
+                        <form method="post">
+                        <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
+                            <input type="submit" value="Regalar" name="regalar">
+                        </form>
                     </div>
                 </div>
             <?php endforeach; ?>

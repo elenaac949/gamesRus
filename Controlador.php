@@ -58,6 +58,7 @@ class Controlador
             'cerrar_sesion' => 'cerrarSesion',
             'prestar' => 'irAPrestar',
             'prestar-juego' => 'prestarJuego',
+            'regalar' => 'irARegalar',
             'btn_confirmar_regalo' => 'regalarJuego',
             'mobyGames' => 'mobyGames',
             'btn_subir_archivo' => 'subirArchivos',
@@ -211,6 +212,16 @@ class Controlador
         Vista::MuestraPrestar($this->data, $this->error);
     }
 
+    public function irARegalar()
+    {
+        if (isset($_POST['idJuegoCatalogo'])) {
+            $idJuego =  intval($_POST['idJuegoCatalogo']);
+            global $baseDatos;
+            $this->data = $baseDatos->obtenerDatosJuegoConGenero($idJuego);
+        }
+        //$this->action = 'prestar';
+        Vista::MuestraRegalar($this->data, $this->error);
+    }
 
     // Función que verifica si el usuario se ha logeado bien
     public function verificarUsuario()
@@ -393,7 +404,7 @@ class Controlador
 
             $this->error = 'No entra en el if';
         }
-        $this->irAlCarrito();
+        $this->irABiblioteca();
     }
 
 
