@@ -284,11 +284,11 @@ class Database
     // Función para comprobar si la tarjeta existe
     public function tarjetaExiste($numeroTarjeta, $ccv, $idUsuario)
     {
-        global $baseDatos;
+       
 
         // Comprobar si existe una tarjeta con el mismo número y CCV para el usuario actual
         $sql = "SELECT * FROM `tarjeta` WHERE `numeroTarjeta` = :numeroTarjeta AND `ccv` = :ccv AND `idUsuario` = :idUsuario";
-        $stmt = $baseDatos->conexion->prepare($sql);
+        $stmt = $this->conexion->prepare($sql);
         $stmt->bindParam(':numeroTarjeta', $numeroTarjeta, PDO::PARAM_STR);
         $stmt->bindParam(':ccv', $ccv, PDO::PARAM_STR);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
@@ -363,7 +363,286 @@ class Database
     }
 
 
-    // Función que muestra todos los juegos - Detalles
+
+    //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
+    /* public function mostrarBiblioteca($idUsuario)
+    {
+        try {
+            $sql = "SELECT * FROM `juego` j
+                    INNER JOIN generoJuego gj on gj.idJuego = j.idJuego
+                    INNER JOIN genero g on gj.idGenero = g.idGenero
+                    INNER JOIN comprado c ON j.idJuego = c.idJuego WHERE c.idUsuario = :idUsuario;";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $biblioteca = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+            return $biblioteca;
+        } catch (\Throwable $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    } */
+
+    //misma funcion pero usando la tabla posee juego
+    public function mostrarBiblioteca($idUsuario) {
+        try {
+            $sql = "SELECT * FROM `juego` j
+                    INNER JOIN generoJuego gj ON gj.idJuego = j.idJuego
+                    INNER JOIN genero g ON gj.idGenero = g.idGenero
+                    INNER JOIN poseeJuego p ON j.idJuego = p.idJuego
+                    WHERE p.idUsuario = :idUsuario;";
+                    
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $biblioteca = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+            
+            return $biblioteca;
+        } catch (PDOException $e) {
+            error_log("Error al obtener la biblioteca: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+
+    /* ----CARRITO---- */
+
+    /* Obtenemos el carrito o lo creamos si no existe--CREATE y READ */
+
+    function obtenerCarrito($idUsuario)
+    {
+        try {
+            // SQL para obtener el carrito del usuario
+            $sql = "SELECT idCarrito FROM carrito WHERE idUsuario = :idUsuario";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $carrito = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Creamos el carrito si no existe
+            if (!$carrito) {
+                // Insertar el nuevo carrito
+                $sqlInsert = "INSERT INTO carrito (idUsuario) VALUES (:idUsuario)";
+                $stmt = $this->conexion->prepare($sqlInsert);
+                $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+                $stmt->execute();
+
+                // Obtenemos el id del carrito insertado 
+                $sqlSelect = "SELECT idCarrito FROM carrito WHERE idUsuario = :idUsuario ORDER BY idCarrito DESC LIMIT 1";
+                $stmt = $this->conexion->prepare($sqlSelect);
+                $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+                $stmt->execute();
+                $carrito = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
+
+            // Devolver el ID del carrito
+            return $carrito['idCarrito'];
+        } catch (PDOException $e) {
+            // Manejar errores de la base de datos
+            throw new Exception("Error al obtener el carrito: " . $e->getMessage());
+        }
+    }
+
+
+
+    /* Funcion para verificar si el juego ya esta en el carrito.
+    No podemos repetir el mismo juego en el carrito debido a la estructura de la BBDD */
+    function verificarJuegoEnCarrito($idCarrito, $idJuego)
+    {
+        try {
+            // Consulta SQL para verificar si el juego ya está en el carrito
+            $sql = "SELECT COUNT(*) AS total FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Vincular los parámetros
+            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+            // Obtener el resultado
+            $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $fila['total'] > 0; // Devuelve true si el juego ya está en el carrito
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+    /* MODIFY Carrito */
+    function anadirJuegoAlCarrito($idCarrito, $idJuego)
+    {
+
+        $idUsuario = $_SESSION['idUsuario'];
+
+        try {
+            // Añadir el juego al carrito
+            $sql = "INSERT INTO carritoJuego (idCarrito, idJuego) VALUES (:idCarrito, :idJuego)";
+            $stmt = $this->conexion->prepare($sql);
+            if ($stmt === false) {
+                throw new Exception("Error al preparar la consulta.");
+            }
+
+            // Vincular los parámetros
+            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            return "Juego añadido al carrito correctamente.";
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
+
+
+
+    function obtenerJuegosDelCarrito($idCarrito)
+    {
+        try {
+            // Asegúrate de incluir idUsuario en la consulta si es necesario
+            $sql = "SELECT j.idJuego, j.titulo, j.desarrollador, j.distribuidor, j.anio, j.ruta, j.descripcion, j.portada
+                    FROM juego j
+                    JOIN carritoJuego cj ON j.idJuego = cj.idJuego
+                    WHERE cj.idCarrito = :idCarrito";
+
+            $stmt = $this->conexion->prepare($sql);
+
+            // Vincula los parámetros correctamente
+            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            // Devuelve los juegos en un array asociativo
+            $juegos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $juegos;
+        } catch (Exception $e) {
+            echo "Error en la base de datos: " . $e->getMessage();
+            return [];
+        }
+    }
+
+    /* Eliminar 1 juego del carrito */
+
+    public function eliminarJuegoCarrito($idCarrito, $idJuego)
+    {
+        try {
+            // Preparamos la consulta para eliminar el juego del carrito
+            $sql = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
+            $stmt = $this->conexion->prepare($sql);
+
+            // Vinculamos los parámetros 
+            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutamos la consulta
+            $stmt->execute();
+
+
+
+            return "Eliminado con exito";
+        } catch (Exception $e) {
+            return  "Error en la base de datos: " . $e->getMessage();
+        }
+    }
+
+    public function eliminarTodosLosJuegosCarrito($idCarrito)
+    {
+        try {
+            $sql = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito";
+            $stmt = $this->conexion->prepare($sql);
+
+            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+
+            $stmt->execute();
+            return "Pago realizado con éxito";
+        } catch (Exception $e) {
+            // Si ocurre un error, lo registramos en el log
+            error_log("Error en eliminarTodosLosJuegosCarrito: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
+    public function comprarJuego($idUsuario, $idJuego)
+    {
+        try {
+            // Consulta SQL para insertar la compra en la tabla
+            $sql = "INSERT INTO comprado (idUsuario, idJuego, fechaCompra)
+                    VALUES (:idUsuario, :idJuego, NOW())";
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Vincular parámetros para evitar inyección SQL
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Retornar un mensaje de éxito
+            return "Compra realizada con éxito";
+        } catch (Exception $e) {
+            // Registrar el error en el log
+            error_log("Error en comprarJuego: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
+    public function agnadirJuegoAUsuario($idUsuario, $idJuego)
+    {
+        try {
+            // Consulta SQL para insertar el juego en la tabla poseejuego
+            $sql = "INSERT INTO poseejuego (idUsuario, idJuego)
+                    VALUES (:idUsuario, :idJuego)"; // Cierre del paréntesis corregido
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
+
+            // Vincular parámetros para evitar inyección SQL
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Retornar éxito
+            return "Juego añadido a la biblioteca del usuario con éxito";
+        } catch (Exception $e) {
+            // Registrar el error en el log
+            error_log("Error en añadir Juego comprado a Usuario: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
+    // Función que muestra todos los juegos
+    /*     public function mostrarJuegos()
+    {
+        try {
+            // Establecer la consulta SQL
+            $sql = "SELECT * FROM `juego`
+                    INNER JOIN generoJuego gj on gj.idJuego = juego.idJuego
+                    INNER JOIN genero g on gj.idGenero = g.idGenero";
+
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);  // Asumiendo que $this->pdo es tu conexión PDO
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Obtener los resultados (como un array asociativo)
+            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Retornar los resultados
+            return $resultados;
+        } catch (Exception $e) {
+            // Si hay un error, mostrar el mensaje
+            echo "Error: " . $e->getMessage();
+        }
+    } */
+
     public function mostrarJuegos()
     {
         try {
@@ -406,23 +685,6 @@ class Database
     }
 
 
-    //Función para mostrar los juegos comprados por un usuario en concreto  FALTA REGALADO Y PRESTADO
-    public function mostrarBiblioteca($idUsuario)
-    {
-        try {
-            $sql = "SELECT * FROM `juego` j
-                    INNER JOIN generoJuego gj on gj.idJuego = j.idJuego
-                    INNER JOIN genero g on gj.idGenero = g.idGenero
-                    INNER JOIN comprado c ON j.idJuego = c.idJuego WHERE c.idUsuario = :idUsuario;";
-            $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
-            $stmt->execute();
-            $biblioteca = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
-            return $biblioteca;
-        } catch (\Throwable $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
 
     //Agregar un juego nuevo - HEMOS QUITADO LA RUTA PARA QUE FUNCIONE 
     public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $generos, $sistemas, $ruta, $descripcion, $portada)
@@ -809,6 +1071,8 @@ class Database
         }
     }
 
+    
+    /* Funcion para seleccionar los detalles de los juegos */
 
     /* CARGAR SISTEMAS DE LOS JUEGOS */
     public function cargarSistemasJuego($idJuego, $arraySistemas)
@@ -929,160 +1193,6 @@ class Database
     }
 
 
-    /* ----CARRITO---- */
-
-    /* Obtenemos el carrito o lo creamos si no existe--CREATE y READ */
-
-    function obtenerCarrito($idUsuario)
-    {
-        try {
-            // SQL para obtener el carrito del usuario
-            $sql = "SELECT idCarrito FROM carrito WHERE idUsuario = :idUsuario";
-            $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
-            $stmt->execute();
-            $carrito = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // Creamos el carrito si no existe
-            if (!$carrito) {
-                // Insertar el nuevo carrito
-                $sqlInsert = "INSERT INTO carrito (idUsuario) VALUES (:idUsuario)";
-                $stmt = $this->conexion->prepare($sqlInsert);
-                $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
-                $stmt->execute();
-
-                // Obtenemos el id del carrito insertado 
-                $sqlSelect = "SELECT idCarrito FROM carrito WHERE idUsuario = :idUsuario ORDER BY idCarrito DESC LIMIT 1";
-                $stmt = $this->conexion->prepare($sqlSelect);
-                $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
-                $stmt->execute();
-                $carrito = $stmt->fetch(PDO::FETCH_ASSOC);
-            }
-
-            // Devolver el ID del carrito
-            return $carrito['idCarrito'];
-        } catch (PDOException $e) {
-            // Manejar errores de la base de datos
-            throw new Exception("Error al obtener el carrito: " . $e->getMessage());
-        }
-    }
-
-    /* Funcion para verificar si el juego ya esta en el carrito.
-    No podemos repetir el mismo juego en el carrito debido a la estructura de la BBDD */
-    function verificarJuegoEnCarrito($idCarrito, $idJuego)
-    {
-        try {
-            // Consulta SQL para verificar si el juego ya está en el carrito
-            $sql = "SELECT COUNT(*) AS total FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
-            // Preparar la consulta
-            $stmt = $this->conexion->prepare($sql);
-
-            // Vincular los parámetros
-            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
-            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
-
-            // Ejecutar la consulta
-            $stmt->execute();
-            // Obtener el resultado
-            $fila = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            return $fila['total'] > 0; // Devuelve true si el juego ya está en el carrito
-        } catch (Exception $e) {
-            return "Error: " . $e->getMessage();
-        }
-    }
-
-    /* Modificar el Carrito */
-    function anadirJuegoAlCarrito($idCarrito, $idJuego)
-    {
-
-        $idUsuario = $_SESSION['idUsuario'];
-
-        try {
-            // Añadir el juego al carrito
-            $sql = "INSERT INTO carritoJuego (idCarrito, idJuego) VALUES (:idCarrito, :idJuego)";
-            $stmt = $this->conexion->prepare($sql);
-            if ($stmt === false) {
-                throw new Exception("Error al preparar la consulta.");
-            }
-
-            // Vincular los parámetros
-            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
-            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
-            // Ejecutar la consulta
-            $stmt->execute();
-
-            return "Juego añadido al carrito correctamente.";
-        } catch (Exception $e) {
-            return "Error: " . $e->getMessage();
-        }
-    }
-
-    // Función para obtener los juegos del carrito
-    function obtenerJuegosDelCarrito($idCarrito)
-    {
-        try {
-            // Asegúrate de incluir idUsuario en la consulta si es necesario
-            $sql = "SELECT j.idJuego, j.titulo, j.desarrollador, j.distribuidor, j.anio, j.ruta, j.descripcion, j.portada
-                    FROM juego j
-                    JOIN carritoJuego cj ON j.idJuego = cj.idJuego
-                    WHERE cj.idCarrito = :idCarrito";
-
-            $stmt = $this->conexion->prepare($sql);
-
-            // Vincula los parámetros correctamente
-            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
-
-            $stmt->execute();
-
-            // Devuelve los juegos en un array asociativo
-            $juegos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $juegos;
-        } catch (Exception $e) {
-            echo "Error en la base de datos: " . $e->getMessage();
-            return [];
-        }
-    }
-
-    /* Eliminar 1 juego del carrito */
-
-    public function eliminarJuegoCarrito($idCarrito, $idJuego)
-    {
-        try {
-            // Preparamos la consulta para eliminar el juego del carrito
-            $sql = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
-            $stmt = $this->conexion->prepare($sql);
-
-            // Vinculamos los parámetros 
-            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
-            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
-
-            // Ejecutamos la consulta
-            $stmt->execute();
-
-            return "Eliminado con exito";
-        } catch (Exception $e) {
-            return  "Error en la base de datos: " . $e->getMessage();
-        }
-    }
-
-    public function eliminarTodosLosJuegosCarrito($idCarrito)
-    {
-        try {
-
-            $sql = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito";
-            $stmt = $this->conexion->prepare($sql);
-
-            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
-
-            $stmt->execute();
-            return "Pago realizado con éxito";
-        } catch (Exception $e) {
-            // Si ocurre un error, lo registramos en el log
-            error_log("Error en eliminarTodosLosJuegosCarrito: " . $e->getMessage());
-            return false;
-        }
-    }
 
     /* FILTRAR JUEGOS DEL CATÁLOGO */
        
