@@ -1119,7 +1119,8 @@ class Database
 
             // Clonar el objeto para fechaFin y añadir 30 días
             $fechaFin = clone $fechaInicio;
-            $fechaFin->modify('+30 days');
+            //$fechaFin->modify('+30 days');
+            $fechaFin->modify('+1 minute');
 
             // Formatear las fechas
             $fechaInicioFormateada = $fechaInicio->format('Y-m-d H:i:s');
@@ -1149,27 +1150,23 @@ class Database
 
 
 
-    public function obtenerPrestamosVencidos($idUsuarioPresta, $fechaActual)
+    public function obtenerPrestamosVencidos()
     {
         try {
-            // Consulta para obtener los ID de los préstamos vencidos
             $sql = "SELECT * 
-                    FROM prestado 
-                    WHERE idUsuPresta = :idUsuarioPresta 
-                    AND fechaFin <= :fechaActual";
+                FROM prestado 
+                WHERE fechaFin <= NOW()";  
 
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
-            $stmt->bindParam(':fechaActual', $fechaActual, PDO::PARAM_STR);
             $stmt->execute();
 
-            // Obtener todos los ID de los préstamos vencidos
-            return $stmt->fetchAll(PDO::FETCH_COLUMN);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Usamos FETCH_ASSOC para obtener los registros completos
         } catch (PDOException $e) {
             error_log("Error al obtener préstamos vencidos: " . $e->getMessage());
             return false;
         }
     }
+
 
     public function eliminarPrestamo($idPrestamo)
     {

@@ -127,11 +127,9 @@ class Controlador
         if (isset($_POST['btn_mostrar_detalles'])) {
             $this->mostrarDetalles();
         } else {
-            $this->error = "Mostrar biblioteca";
             $this->datosBiblioteca();
-            $this->finalizarPrestamo();
         }
-
+        $this->finalizarPrestamo();
         Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
         //$this->action = 'biblioteca';
     }
@@ -402,21 +400,19 @@ class Controlador
 
     public function finalizarPrestamo() {
         global $baseDatos;
-        $fechaActual = date('Y-m-d H:i:s'); 
-        $idUsuarioPresta = $_SESSION['idUsuario'];
+        /* $fechaActual = date('Y-m-d H:i:s'); 
+        $idUsuarioPresta = $_SESSION['idUsuario']; */
     
         // Obtener los préstamos vencidos con todos sus detalles
-        $prestamosVencidos = $baseDatos->obtenerPrestamosVencidos($idUsuarioPresta, $fechaActual);
-    
+        $prestamosVencidos = $baseDatos->obtenerPrestamosVencidos();
+        //var_dump($prestamosVencidos);
+
         if (!empty($prestamosVencidos)) {
             foreach ($prestamosVencidos as $prestamo) {
-                // Guardar los detalles de cada préstamo en variables
                 $idPrestamo = $prestamo['idPrestamo'];
                 $idUsuarioPresta = $prestamo['idUsuarioPresta'];
                 $idUsuarioRecibe = $prestamo['idUsuarioRecibe'];
                 $idJuego = $prestamo['idJuego'];
-                $fechaInicio = $prestamo['fechaInicio'];
-                $fechaFin = $prestamo['fechaFin'];
                 /* elimianr el juego rpestado de poseejuego */
                 $baseDatos->eliminarJuegoPrestado($idUsuarioRecibe, $idJuego);
                 /* eliminar el prestamo en la tabla prestamos */
@@ -424,9 +420,7 @@ class Controlador
                 /* misma funcion que antes pero al reves, ya que el que recibe devuelve el juego */
                 $baseDatos->actualizarJuegosPrestados($idJuego,$idUsuarioRecibe,$idUsuarioPresta);
             }
-
             $this->error="Préstamos finalizados.";
-            
         } 
     }
     
