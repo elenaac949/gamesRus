@@ -764,7 +764,7 @@ class Controlador
             foreach ($juegos as $juego) {
                 if (isset($juego['idJuego'])) {
                     $idJuego = $juego['idJuego'];
-                    $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego);
+                    $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego); /* tabla comprado */
                     $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idJuego);
                 }
             }
