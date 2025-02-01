@@ -2,13 +2,20 @@ main {
     flex: 1;
     
 }
+h2{
+    font-size: 2em;
+    font-weight: bold;
+    color: #7209b7;
+    margin-top: 20px;
+    text-align: center;
+}
 
 .contenido_principal {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 5%;
-    padding: 3%;
+    padding: 1% 2%;
     background-color: #f4f4f9;
 }
 
@@ -92,12 +99,12 @@ main {
     background-color: #4cc9f0;
 }
 
-.boton_administrador {
+/* .boton_administrador {
     margin-top: 10px;
     text-align: center;
-}
+} */
 
-.boton_administrador input {
+/* .boton_administrador input {
     background-color: #f72585;
     color: #ffffff;
     border: none;
@@ -110,7 +117,7 @@ main {
 
 .boton_administrador input:hover {
     background-color: #7209b7;
-}
+} */
 
 
 

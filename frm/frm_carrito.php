@@ -17,6 +17,7 @@ include __DIR__ . '/../common/controlSesion.php';
     include './common/cabecera.php';
     ?>
     <p class="errores"><?= $error ?></p>
+    <h2>Carrito</h2>
     <main>
         <?php /*var_dump($data);*/ ?>
         <section class="juegos_carrito">

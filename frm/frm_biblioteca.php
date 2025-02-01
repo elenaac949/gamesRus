@@ -26,17 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ?>
 
     <?php /*var_dump($data)*/  ?>
-    <main class="contenido_principal">
-        <h2>Tus Juegos</h2>
-        <div class="boton_administrador" style="display: <?php if ($_SESSION['idUsuario'] != 4) {
-                                                                echo 'none';
-                                                            }  ?>;">
-            <form action="" method="post">
-                <!--  -->
-                <input type="submit" name="administrar" value="Administrar">
-            </form>
 
-        </div>
+    <h2>Tus Juegos</h2>
+    <main class="contenido_principal">
+      
         <div class="vista_juegos">
             <?php foreach ($data as $juego): ?>
                 <div class="juego">

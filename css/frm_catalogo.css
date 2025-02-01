@@ -7,30 +7,33 @@ main {
     display: grid;
     grid-template-columns: 1fr 5fr;
     gap: 5%;
-    padding: 3%;
+    padding: 1% 2%;
     background-color: #f4f4f9;
+}
+
+h2{
+    font-size: 2em;
+    font-weight: bold;
+    color: #7209b7;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .filtros {
     position: sticky;
-    /* Elemento se mantiene visible al hacer scroll */
-    top: 10px;
-    /* Se pega desde 10px de la parte superior */
+    top: 20vh; /* Ajusta esto a la altura de tu header */
     background-color: #ffffff;
     padding: 3%;
     border-radius: 10px;
-    height: 40vh;
+    height: fit-content;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Añade un poco de sombra para destacar */
     z-index: 100;
-    /* Asegura que esté por encima de otros elementos */
-
     display: flex;
     flex-direction: column;
     gap: 15px;
     padding: 20px;
-    /* align-self: center; */
 }
+
 
 .formulario_filtrar {
     display: flex;
@@ -39,7 +42,8 @@ main {
 }
 
 .formulario_filtrar input[type="number"],
-.formulario_filtrar select{
+.formulario_filtrar select
+{
     font-size: 1em;
     padding: 10px;
     border: 1px solid #ddd;
@@ -49,6 +53,16 @@ main {
     color: #3a0ca3;
     transition: border 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formulario_filtrar ::placeholder{
+    color: #3a0ca3;
+}
+
+.formulario_filtrar label{
+    font-size: 1em;
+    font-weight: bold;
+    color: #3a0ca3;
 }
 
 /* .formulario_filtrar  select {
@@ -65,6 +79,7 @@ main {
     font-size: 0.9em;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-weight: bolder;
 }
 
 .formulario_filtrar input[type="submit"]:hover {
@@ -82,7 +97,7 @@ h4 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-around;
     background-color: #ffffff;
     padding: 5%;
     border-radius: 10px;
@@ -160,7 +175,7 @@ h4 {
     background-color: #4cc9f0;
 }
 
-.boton_administrador {
+/* .boton_administrador {
     margin-top: 10px;
     text-align: center;
 }
@@ -178,7 +193,7 @@ h4 {
 
 .boton_administrador input:hover {
     background-color: #7209b7;
-}
+} */
 
 
 dialog {
