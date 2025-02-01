@@ -130,7 +130,7 @@ class Controlador
             $this->finalizarPrestamo();
             $this->datosBiblioteca();
         }
-        
+
         Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
         //$this->action = 'biblioteca';
     }
@@ -370,19 +370,26 @@ class Controlador
             $idJuego = $_POST['idJuego'];
             $idUsuarioPresta = $_SESSION['idUsuario'];
             $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
+
             // var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
-                /* Aqui hay que añadir el juego a la biblioteca del usuario 2 y quitarla de la biblioteca del 1 */
-                $prestado = $baseDatos->agnadirJuegoPrestado($idUsuarioRecibe, $idJuego); //esta funcion devuelve true si se añade correctamente el juego al usuario que lo recibe
-                $eliminado = $baseDatos->eliminarJuegoPrestado($idUsuarioPresta, $idJuego);
-                if ($prestado && $eliminado) {
-                    $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);/* tabla prestado */
-                    $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioPresta, $idUsuarioRecibe); /* tabla comprado */
+                if ($idUsuarioPresta != $idUsuarioRecibe) {
+                    /* Aqui hay que añadir el juego a la biblioteca del usuario 2 y quitarla de la biblioteca del 1 */
+                    $prestado = $baseDatos->agnadirJuegoPrestado($idUsuarioRecibe, $idJuego); //esta funcion devuelve true si se añade correctamente el juego al usuario que lo recibe
+                    $eliminado = $baseDatos->eliminarJuegoPrestado($idUsuarioPresta, $idJuego);
+                    if ($prestado && $eliminado) {
+                        $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);/* tabla prestado */
+                        $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioPresta, $idUsuarioRecibe); /* tabla comprado */
+                    }
+                    //$this->data = $baseDatos->mostrarJuegos();
+                    $this->error = 'Juego prestado correctamente';
+                    //$this->action = 'catalogo';
+                    //Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
+                } else {
+                    $this->error = "No te ppuedes prestar a ti mismo subnormal";
+                    
                 }
-                $this->data = $baseDatos->mostrarJuegos();
-                $this->data1 = 'Juego prestado correctamente';
-                //$this->action = 'catalogo';
-                Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
+                $this->irABiblioteca();
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
                 Vista::MuestraPrestar($this->data, $this->error);
@@ -406,7 +413,7 @@ class Controlador
                 /* elimianr el juego rpestado de poseejuego */
                 $baseDatos->agnadirJuegoPrestado($idUsuarioRecibe, $idJuego);
                 $baseDatos->eliminarJuegoPrestado($idUsuarioRecibe, $idJuego);
-                
+
                 /* eliminar el prestamo en la tabla prestamos */
                 $baseDatos->eliminarPrestamo($idPrestamo);
                 /* misma funcion que antes pero al reves, ya que el que recibe devuelve el juego */
@@ -426,13 +433,15 @@ class Controlador
             $idUsuarioRegala = $_SESSION['idUsuario'];
             $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
 
-            //var_dump($baseDatos->existeUsuario($nick, ''));
 
             if ($baseDatos->existeUsuario($nick, '')) {
-                echo "AAAAAAAAAAAAAAAAAAAAAAA";
-                $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
-                $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRegala, $idUsuarioRecibe);
-                $this->data1 = 'Regalo para ' . $nick;
+                if ($idUsuarioRegala != $idUsuarioRecibe) {
+                    $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
+                    $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRegala, $idUsuarioRecibe);
+                    $this->data1 = 'Regalo para ' . $nick;
+                } else {
+                    $this->error="Prueba otra vez";
+                }
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
             }

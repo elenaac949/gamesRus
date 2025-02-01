@@ -29,8 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h2>Tus Juegos</h2>
     <main class="contenido_principal">
-      
+    <p class="errores"><?= $error ?></p>
         <div class="vista_juegos">
+        
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
                     <div class="imagen_juego">
