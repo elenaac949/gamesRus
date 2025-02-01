@@ -127,9 +127,10 @@ class Controlador
         if (isset($_POST['btn_mostrar_detalles'])) {
             $this->mostrarDetalles();
         } else {
+            $this->finalizarPrestamo();
             $this->datosBiblioteca();
         }
-        $this->finalizarPrestamo();
+        
         Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
         //$this->action = 'biblioteca';
     }
@@ -138,8 +139,6 @@ class Controlador
     private function datosBiblioteca()
     {
         global $baseDatos;
-
-        $this->comprobarPrestamosVencidos();
         if ($_SESSION['nickUsuario'] === 'admin') {
             $this->data = $baseDatos->mostrarJuegos();
         } else {
@@ -148,13 +147,6 @@ class Controlador
         }
     }
 
-
-    public function comprobarPrestamosVencidos()
-    {
-        /* Aqui comprobamos los prestamos vencidos */
-
-        
-    }
 
     public function mostrarDetalles()
     {
@@ -384,8 +376,8 @@ class Controlador
                 $prestado = $baseDatos->agnadirJuegoPrestado($idUsuarioRecibe, $idJuego); //esta funcion devuelve true si se añade correctamente el juego al usuario que lo recibe
                 $eliminado = $baseDatos->eliminarJuegoPrestado($idUsuarioPresta, $idJuego);
                 if ($prestado && $eliminado) {
-                    $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
-                    $baseDatos->actualizarJuegosPrestadosRegalados($idJuego,$idUsuarioPresta,$idUsuarioRecibe); /* tabla comprado */
+                    $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);/* tabla prestado */
+                    $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioPresta, $idUsuarioRecibe); /* tabla comprado */
                 }
                 $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego prestado correctamente';
@@ -398,11 +390,9 @@ class Controlador
         }
     }
 
-    public function finalizarPrestamo() {
+    public function finalizarPrestamo()
+    {
         global $baseDatos;
-        /* $fechaActual = date('Y-m-d H:i:s'); 
-        $idUsuarioPresta = $_SESSION['idUsuario']; */
-    
         // Obtener los préstamos vencidos con todos sus detalles
         $prestamosVencidos = $baseDatos->obtenerPrestamosVencidos();
         //var_dump($prestamosVencidos);
@@ -414,21 +404,23 @@ class Controlador
                 $idUsuarioRecibe = $prestamo['idUsuarioRecibe'];
                 $idJuego = $prestamo['idJuego'];
                 /* elimianr el juego rpestado de poseejuego */
+                $baseDatos->agnadirJuegoPrestado($idUsuarioRecibe, $idJuego);
                 $baseDatos->eliminarJuegoPrestado($idUsuarioRecibe, $idJuego);
+                
                 /* eliminar el prestamo en la tabla prestamos */
                 $baseDatos->eliminarPrestamo($idPrestamo);
                 /* misma funcion que antes pero al reves, ya que el que recibe devuelve el juego */
-                $baseDatos->actualizarJuegosPrestadosRegalados($idJuego,$idUsuarioRecibe,$idUsuarioPresta);
+                $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRecibe, $idUsuarioPresta);
             }
-            $this->error="Préstamos finalizados.";
-        } 
+            $this->error = "Préstamos finalizados.";
+        }
     }
-    
+
     public function regalarJuegoBiblioteca()
     {
         global $baseDatos;
         if (!empty($_POST['idJuego']) && !empty($_POST['nombre-usuario'])) {
-            
+
             $nick = $_POST['nombre-usuario'];
             $idJuego = $_POST['idJuego'];
             $idUsuarioRegala = $_SESSION['idUsuario'];
@@ -439,12 +431,12 @@ class Controlador
             if ($baseDatos->existeUsuario($nick, '')) {
                 echo "AAAAAAAAAAAAAAAAAAAAAAA";
                 $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
-                $baseDatos->actualizarJuegosPrestadosRegalados($idJuego,$idUsuarioRegala,$idUsuarioRecibe);
+                $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRegala, $idUsuarioRecibe);
                 $this->data1 = 'Regalo para ' . $nick;
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
             }
-        } 
+        }
         $this->irABiblioteca();
     }
 
@@ -640,18 +632,15 @@ class Controlador
             // Validar campos obligatorios
             if (
                 !empty($_POST['titulo_juego']) && !empty($_POST['genero_juego']) &&
-                !empty($_POST['desarrollador_juego']) && !empty($_POST['sistema_juego']) &&
-                !empty($_POST['anio_lanzamiento']) &&
-                !empty($_POST['descripcion_juego'] && !empty($_POST['portada_juego']))
+                !empty($_POST['sistema_juego'])  && !empty($_POST['portada_juego'])
             ) {
                 $titulo = $_POST['titulo_juego'];
                 $generos = $_POST['genero_juego'];
-                $desarrollador = $_POST['desarrollador_juego'];
-               
-                $lanzamiento = $_POST['anio_lanzamiento'];
-                $descripcion = $_POST['descripcion_juego'];
+                $desarrollador = $_POST['desarrollador_juego'] ?? "Sin desarrollador";
+                $lanzamiento = $_POST['anio_lanzamiento'] ?? "2024";
+                $descripcion = $_POST['descripcion_juego'] ?? "Sin descripción";
                 $portada = $_POST['portada_juego'];
-                $ruta = $_POST['ruta_juego'] ?? "";
+                $ruta = $_POST['ruta_juego'] ?? "Sin ruta";
                 $sistemas = $_POST['sistema_juego'];
 
                 //falta una funcion para verificar si el juego existe ya
@@ -726,7 +715,6 @@ class Controlador
         global $baseDatos;
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = $_POST['idJuegoCatalogo'];
-
             $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
             $existeJuego = $baseDatos->verificarJuegoEnCarrito($idCarrito, $idJuego);
             if ($existeJuego != true) {
@@ -769,16 +757,28 @@ class Controlador
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
         $juegos = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
 
+        echo $idCarrito . "<br>";
+        var_dump($juegos);
+
         if (!empty($juegos)) {
-            $baseDatos->comprarJuego($_SESSION['idUsuario'], $idCarrito);
-            $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idCarrito);
+            foreach ($juegos as $juego) {
+                if (isset($juego['idJuego'])) {
+                    $idJuego = $juego['idJuego'];
+                    $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego);
+                    $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idJuego);
+                }
+            }
+
+            // Eliminar todos los juegos del carrito
             $this->error = $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
         } else {
             $this->error = "No hay nada que pagar";
         }
 
+        // Redirigir o mostrar el carrito
         $this->irAlCarrito();
     }
+
 
     public function subirArchivos()
     {

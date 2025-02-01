@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include './common/cabecera.php';
     ?>
 
-    <?php /*var_dump($data)*/  ?>
+    <?php /* var_dump($data) */  ?>
 
     <h2>Tus Juegos</h2>
     <main class="contenido_principal">

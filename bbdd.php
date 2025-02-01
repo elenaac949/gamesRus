@@ -382,8 +382,8 @@ class Database
             $sql = "SELECT * FROM `juego` j
                     INNER JOIN generoJuego gj ON gj.idJuego = j.idJuego
                     INNER JOIN genero g ON gj.idGenero = g.idGenero
-                    INNER JOIN poseeJuego p ON j.idJuego = p.idJuego
-                    WHERE p.idUsuario = :idUsuario;";
+                    INNER JOIN comprado c ON j.idJuego = c.idJuego
+                    WHERE c.idUsuario = :idUsuario;";
 
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
@@ -466,12 +466,9 @@ class Database
     /* MODIFY Carrito */
     function anadirJuegoAlCarrito($idCarrito, $idJuego)
     {
-
-        $idUsuario = $_SESSION['idUsuario'];
-
         try {
             // Añadir el juego al carrito
-            $sql = "INSERT INTO carritoJuego (idCarrito, idJuego) VALUES (:idCarrito, :idJuego)";
+            $sql = "INSERT INTO carritojuego (idCarrito, idJuego) VALUES (:idCarrito, :idJuego)";
             $stmt = $this->conexion->prepare($sql);
             if ($stmt === false) {
                 throw new Exception("Error al preparar la consulta.");
@@ -573,8 +570,6 @@ class Database
 
             // Ejecutar la consulta
             $stmt->execute();
-
-            // Retornar un mensaje de éxito
             return "Compra realizada con éxito";
         } catch (Exception $e) {
             // Registrar el error en el log
