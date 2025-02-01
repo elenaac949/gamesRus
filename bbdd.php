@@ -186,6 +186,18 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
+    public function todosLosUsuarios()
+    {
+        try {
+            $sql = "SELECT * FROM `usuario`";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute();
+            $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $usuarios;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     /* ----TARJETAS--- */
 

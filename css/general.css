@@ -23,6 +23,7 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #f4f4f9;
+    padding-top: 20vh; /* Ajusta según la altura del header */
 }
 
 header {
@@ -34,6 +35,13 @@ header {
     color: #f4f4f9;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
 }
 
 header .titulo {
@@ -73,7 +81,8 @@ nav form {
 
 
 
-nav form input[type="submit"], nav form input[type="button"]{
+nav form input[type="submit"],
+nav form input[type="button"] {
     font-size: 1.1em;
     cursor: pointer;
     color: #f4f4f9;
@@ -84,7 +93,7 @@ nav form input[type="submit"], nav form input[type="button"]{
     text-transform: capitalize;
 }
 
-nav form input[type="text"]{
+nav form input[type="text"] {
     font-size: 1em;
     padding: 10px;
     border: 1px solid #ddd;
@@ -102,10 +111,11 @@ nav form input[type="submit"]:hover {
     transition: color 0.3s ease;
 }
 
-nav form input[type="button"]:hover{
+nav form input[type="button"]:hover {
     color: #4cc9f0;
     transition: color 0.3s ease;
 }
+
 nav form input[type="submit"]::after {
     content: "";
     position: absolute;
@@ -136,7 +146,7 @@ nav form input[type="submit"]:hover::after {
     z-index: 10;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-   
+
 
 }
 
@@ -147,7 +157,7 @@ nav form input[type="submit"]:hover::after {
 /* Estilo del botón */
 .perfil,
 .salir {
-   
+
     color: white;
     border: none;
     padding: 8px 16px;
