@@ -1082,35 +1082,35 @@ class Database
     }
 
     /* Funcion para actualizar los datos de las bibliotecas de los usuarios */
-    public function actualizarJuegosPrestados($idJuego, $idUsuarioPresta, $idUsuarioRecibe) {
+    public function actualizarJuegosPrestados($idJuego, $idUsuarioPresta, $idUsuarioRecibe)
+    {
         try {
             // Preparar la consulta de actualización
             $sql = "UPDATE comprado SET idUsuario = :idUsuarioRecibe 
                     WHERE idJuego = :idJuego AND idUsuario = :idUsuarioPresta";
-    
+
             $stmt = $this->conexion->prepare($sql);
-    
+
             // Asociar parámetros con bindParam
             $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
             $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
             $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
-    
+
             // Ejecutar la consulta
             $stmt->execute();
-    
+
             // Verificar si se actualizó al menos una fila
             if ($stmt->rowCount() > 0) {
                 return true; // Éxito
             } else {
                 return false; // No se encontró el juego o el usuario que presta no lo tenía
             }
-    
         } catch (PDOException $e) {
             error_log("Error al actualizar juego prestado: " . $e->getMessage()); // Registrar el error en logs
             return false; // Fallo
         }
     }
-    
+
     public function agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego)
     {
         try {
@@ -1147,31 +1147,32 @@ class Database
         }
     }
 
-    
 
-    public function obtenerPrestamosVencidos($idUsuarioPresta, $fechaActual) {
+
+    public function obtenerPrestamosVencidos($idUsuarioPresta, $fechaActual)
+    {
         try {
             // Consulta para obtener los ID de los préstamos vencidos
             $sql = "SELECT * 
                     FROM prestado 
                     WHERE idUsuPresta = :idUsuarioPresta 
                     AND fechaFin <= :fechaActual";
-    
+
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
             $stmt->bindParam(':fechaActual', $fechaActual, PDO::PARAM_STR);
             $stmt->execute();
-    
+
             // Obtener todos los ID de los préstamos vencidos
             return $stmt->fetchAll(PDO::FETCH_COLUMN);
-    
         } catch (PDOException $e) {
             error_log("Error al obtener préstamos vencidos: " . $e->getMessage());
             return false;
         }
     }
 
-    public function eliminarPrestamo($idPrestamo) {
+    public function eliminarPrestamo($idPrestamo)
+    {
         try {
             // Consulta de eliminación para un préstamo específico
             $sqlDelete = "DELETE FROM prestado WHERE idPrestamo = :idPrestamo";
@@ -1179,15 +1180,15 @@ class Database
             $stmtDelete->bindParam(':idPrestamo', $idPrestamo, PDO::PARAM_INT);
             $stmtDelete->execute();
             return true; // Éxito al eliminar el préstamo
-    
+
         } catch (PDOException $e) {
             error_log("Error al eliminar préstamo (ID: $idPrestamo): " . $e->getMessage());
             return false; // Error al eliminar el préstamo
         }
     }
-    
-    
-    
+
+
+
 
     // REGALAR
     // Función para regalar juego 
@@ -1220,57 +1221,76 @@ class Database
     /* Funcion para seleccionar los detalles de los juegos */
 
     /* CARGAR SISTEMAS DE LOS JUEGOS */
+
     public function cargarSistemasJuego($idJuego, $arraySistemas)
     {
         try {
             foreach ($arraySistemas as $sistema) {
                 // Verificar si el sistema ya existe en la tabla juego_sistema
-                $sistemaExistente = $this->verificarSistemaExiste($idJuego, $sistema);
+                $idSistema = $this->verificarSistemaExiste($sistema);
 
-                // Si el sistema no existe, insertarlo
-                if (!$sistemaExistente) {
-                    // Relacionar el idJuego con el sistema en la tabla juego_sistema
-                    $this->insertarRelacionJuegoSistema($idJuego, $sistema);
+                if ($idSistema === null) {
+                    $idSistema = $this->insertarSistema($sistema);
                 }
+
+                $this->insertarRelacionJuegoSistema($idJuego, $idSistema);
             }
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
 
-    // Función para verificar si el sistema ya está asociado al juego
-    public function verificarSistemaExiste($idJuego, $sistema)
+    public function insertarSistema($nombreSistema)
     {
         try {
-            // Consulta para verificar si el sistema ya está asociado al juego
-            $sql = "SELECT idJuego FROM `juego_sistema` WHERE idJuego = :idJuego AND sistema = :sistema";
+            $sql = "INSERT INTO `sistema` (nombre) VALUES (:nombreSistema)";
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
-            $stmt->bindParam(':sistema', $sistema, PDO::PARAM_STR);
+            $stmt->bindParam(':nombreSistema', $nombreSistema, PDO::PARAM_STR);
             $stmt->execute();
 
-            // Retorna true si ya existe la relación, de lo contrario false
-            return $stmt->rowCount() > 0;
+            // Devolvemos el idSistema del nuevo sistema insertado
+            return $this->conexion->lastInsertId();
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
-            return false;
         }
     }
+
+
+    // Función para verificar si el sistema ya está asociado al juego
+    public function verificarSistemaExiste($nombreSistema)
+    {
+        try {
+            $sql = "SELECT idSistema FROM `sistema` WHERE nombre = :nombreSistema";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':nombreSistema', $nombreSistema, PDO::PARAM_STR);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row['idSistema'];  // Retorna el idSistema si existe
+            }
+            return null;  // Retorna null si no existe
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
 
     // Función para insertar la relación entre idJuego y sistema en juegoSistema
     public function insertarRelacionJuegoSistema($idJuego, $sistema)
     {
         try {
             // Consulta para insertar la relación entre idJuego y sistema en juegoSistema
-            $sql = "INSERT INTO `juegoSistema` (idJuego, sistema) VALUES (:idJuego, :sistema)";
+            $sql = "INSERT INTO `juegosistema` (idJuego, idsistema) VALUES (:idJuego, :idsistema)";
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
-            $stmt->bindParam(':sistema', $sistema, PDO::PARAM_STR);
+            $stmt->bindParam(':idsistema', $sistema, PDO::PARAM_INT);  // Cambiado a PARAM_INT
             $stmt->execute();
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+
 
 
     public function obtenerGenero($idJuego)
