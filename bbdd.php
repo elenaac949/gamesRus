@@ -1082,34 +1082,36 @@ class Database
     }
 
     /* Funcion para actualizar los datos de las bibliotecas de los usuarios */
-    public function actualizarJuegosPrestados($idJuego, $idUsuarioPresta, $idUsuarioRecibe)
+    public function actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioDa, $idUsuarioRecibe)
     {
         try {
-            // Preparar la consulta de actualización
+            // Consulta SQL para actualizar el juego de un usuario a otro
             $sql = "UPDATE comprado SET idUsuario = :idUsuarioRecibe 
-                    WHERE idJuego = :idJuego AND idUsuario = :idUsuarioPresta";
+                WHERE idJuego = :idJuego AND idUsuario = :idUsuarioDa";
 
             $stmt = $this->conexion->prepare($sql);
 
-            // Asociar parámetros con bindParam
-            $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
+            // Vinculamos los parámetros con los valores correspondientes
+            $stmt->bindParam(':idUsuarioDa', $idUsuarioDa, PDO::PARAM_INT);
             $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
             $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
 
-            // Ejecutar la consulta
+            // Ejecutamos la consulta
             $stmt->execute();
 
-            // Verificar si se actualizó al menos una fila
+            // Verificamos si se actualizó al menos una fila
             if ($stmt->rowCount() > 0) {
-                return true; // Éxito
+                return true;  // La actualización fue exitosa
             } else {
-                return false; // No se encontró el juego o el usuario que presta no lo tenía
+                return false; // No se encontró el juego o el usuario que da no lo tenía
             }
         } catch (PDOException $e) {
-            error_log("Error al actualizar juego prestado: " . $e->getMessage()); // Registrar el error en logs
-            return false; // Fallo
+            // Si ocurre algún error, lo registramos en los logs
+            error_log("Error al actualizar juego prestado/regalado: " . $e->getMessage());
+            return false;  // Fallo al ejecutar la actualización
         }
     }
+
 
     public function agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego)
     {
@@ -1155,7 +1157,7 @@ class Database
         try {
             $sql = "SELECT * 
                 FROM prestado 
-                WHERE fechaFin <= NOW()";  
+                WHERE fechaFin <= NOW()";
 
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();

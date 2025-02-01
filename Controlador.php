@@ -59,7 +59,7 @@ class Controlador
             'prestar' => 'irAPrestar',
             'prestar-juego' => 'prestarJuego',
             'regalar' => 'irARegalar',
-            'btn_confirmar_regalo' => 'regalarJuego',
+            'btn_confirmar_regalo' => 'regalarJuegoBiblioteca',
             'mobyGames' => 'mobyGames',
             'btn_subir_archivo' => 'subirArchivos',
             'btn_filtrar_juegos' => 'filtrar',
@@ -385,7 +385,7 @@ class Controlador
                 $eliminado = $baseDatos->eliminarJuegoPrestado($idUsuarioPresta, $idJuego);
                 if ($prestado && $eliminado) {
                     $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
-                    $baseDatos->actualizarJuegosPrestados($idJuego,$idUsuarioPresta,$idUsuarioRecibe); /* tabla comprado */
+                    $baseDatos->actualizarJuegosPrestadosRegalados($idJuego,$idUsuarioPresta,$idUsuarioRecibe); /* tabla comprado */
                 }
                 $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego prestado correctamente';
@@ -418,33 +418,33 @@ class Controlador
                 /* eliminar el prestamo en la tabla prestamos */
                 $baseDatos->eliminarPrestamo($idPrestamo);
                 /* misma funcion que antes pero al reves, ya que el que recibe devuelve el juego */
-                $baseDatos->actualizarJuegosPrestados($idJuego,$idUsuarioRecibe,$idUsuarioPresta);
+                $baseDatos->actualizarJuegosPrestadosRegalados($idJuego,$idUsuarioRecibe,$idUsuarioPresta);
             }
             $this->error="Préstamos finalizados.";
         } 
     }
     
-    public function regalarJuego()
+    public function regalarJuegoBiblioteca()
     {
+        global $baseDatos;
         if (!empty($_POST['idJuego']) && !empty($_POST['nombre-usuario'])) {
-            global $baseDatos;
+            
             $nick = $_POST['nombre-usuario'];
             $idJuego = $_POST['idJuego'];
             $idUsuarioRegala = $_SESSION['idUsuario'];
             $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
 
-            var_dump($baseDatos->existeUsuario($nick, ''));
+            //var_dump($baseDatos->existeUsuario($nick, ''));
+
             if ($baseDatos->existeUsuario($nick, '')) {
+                echo "AAAAAAAAAAAAAAAAAAAAAAA";
                 $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
-                // $this->data = $baseDatos->mostrarJuegos();
+                $baseDatos->actualizarJuegosPrestadosRegalados($idJuego,$idUsuarioRegala,$idUsuarioRecibe);
                 $this->data1 = 'Regalo para ' . $nick;
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
             }
-        } else {
-
-            $this->error = 'No entra en el if';
-        }
+        } 
         $this->irABiblioteca();
     }
 
