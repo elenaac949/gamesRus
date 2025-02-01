@@ -102,7 +102,7 @@ include __DIR__ . '/../common/controlSesion.php';
                         <?php foreach ($data1 as $sistema) : ?>
                             <label class="sistema_item">
 
-                                <input type="checkbox" name="sistema_juego[]" value="<?= $sistema['idSistemaApi']; ?>" value="<?= $sistema['idSistema']; ?>">
+                                <input type="checkbox" name="sistema_juego[]" data-api-id="<?= $sistema['idSistemaApi']; ?>" value="<?= $sistema['idSistema']; ?>">
                                 <?= $sistema['nombre']; ?>
                             </label>
                         <?php endforeach; ?>
@@ -195,12 +195,15 @@ include __DIR__ . '/../common/controlSesion.php';
                     li.addEventListener("click", () => {
                         document.querySelector("#titulo_juego").value = juego.title;
                         for (let i = 0; i < Math.min(juego.genres.length, 5); i++) {
-                            markSelectedCheckboxes(juego.genres[i].genre_id);
+                            markSelectedCheckboxes("genero_juego", juego.genres[i].genre_id);
                         }
                         // document.querySelector("#genero_juego").value = juego.genres[0].genre_name
                         // document.querySelector("#desarrollador_juego").value = juego.developers[0].name;
                         document.querySelector("#anio_lanzamiento").value = juego.platforms[0].first_release_date;
                         //SISTEMA ES ESTO
+                        for (let i = 0; i < Math.min(juego.platforms.length, 5); i++) {
+                            markSelectedCheckboxes("sistema_juego", juego.platforms[i].platform_id);
+                        }
                         //document.querySelector("#distribuidor_juego").value = juego.platforms[0].platform_name;
                         // document.querySelector("#ruta_juego").value = juego.url;
                         document.querySelector("#descripcion_juego").value = removeHTMLTags(juego.description);
@@ -217,13 +220,13 @@ include __DIR__ . '/../common/controlSesion.php';
             return tempDiv.textContent || tempDiv.innerText || ""; // Retorna el texto limpio
         }
 
-        function markSelectedCheckboxes(selectedGenre) {
-            const checkboxes = document.querySelectorAll('#genero_juego input[type="checkbox"]'); // Obtener todos los checkboxes
+        function markSelectedCheckboxes(idField, selectedValues) {
+            const checkboxes = document.querySelectorAll(`#${idField} input[type="checkbox"]`); // Obtener todos los checkboxes
 
             checkboxes.forEach(checkbox => {
                 if (!checkbox.checked) {
                     // Comparar el atributo data-api-id con el género seleccionado
-                    checkbox.checked = Number(checkbox.dataset.apiId) === selectedGenre;
+                    checkbox.checked = Number(checkbox.dataset.apiId) === selectedValues;
                 }
             });
         }

@@ -608,28 +608,29 @@ class Controlador
     public function anadirNuevoJuego()
     {
 
+        var_dump($_POST);
         global $baseDatos;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validar campos obligatorios
             if (
                 !empty($_POST['titulo_juego']) && !empty($_POST['genero_juego']) &&
-                !empty($_POST['desarrollador_juego']) && !empty($_POST['distribuidor_juego']) &&
+                !empty($_POST['desarrollador_juego']) && !empty($_POST['sistema_juego']) &&
                 !empty($_POST['anio_lanzamiento']) &&
                 !empty($_POST['descripcion_juego'] && !empty($_POST['portada_juego']))
             ) {
                 $titulo = $_POST['titulo_juego'];
                 $generos = $_POST['genero_juego'];
                 $desarrollador = $_POST['desarrollador_juego'];
-                $distribuidor = $_POST['distribuidor_juego'];
+               
                 $lanzamiento = $_POST['anio_lanzamiento'];
                 $descripcion = $_POST['descripcion_juego'];
                 $portada = $_POST['portada_juego'];
-                $ruta = $_POST['ruta_juego'];
-                $sistemas = $_POST['sistemas_juego'];
+                $ruta = $_POST['ruta_juego'] ?? "";
+                $sistemas = $_POST['sistema_juego'];
 
                 //falta una funcion para verificar si el juego existe ya
                 //falta que se añada la descripcion y la portada
-                $baseDatos->agregarJuego($titulo, $desarrollador, $distribuidor, $lanzamiento, $generos, $sistemas, $ruta, $descripcion, $portada);
+                $baseDatos->agregarJuego($titulo, $desarrollador, $lanzamiento, $generos, $sistemas, $ruta, $descripcion, $portada);
                 $this->error = 'Juego añadido correctamente';
             } else {
                 $this->error = 'Datos incompletos.';
