@@ -129,7 +129,9 @@ class Controlador
         } else {
             $this->error = "Mostrar biblioteca";
             $this->datosBiblioteca();
+            $this->finalizarPrestamo();
         }
+
         Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
         //$this->action = 'biblioteca';
     }
@@ -381,23 +383,53 @@ class Controlador
             // var_dump($baseDatos->existeUsuario($nick, ''));
             if ($baseDatos->existeUsuario($nick, '')) {
                 /* Aqui hay que añadir el juego a la biblioteca del usuario 2 y quitarla de la biblioteca del 1 */
-                //$prestado = $baseDatos->agnadirJuegoPrestado($idUsuarioRecibe, $idJuego); //esta funcion devuelve true si se añade correctamente el juego al usuario que lo recibe
-                //$eliminado = $baseDatos->eliminarJuegoPrestado($idUsuarioPresta, $idJuego);
-                /* if ($prestado && $eliminado) {
+                $prestado = $baseDatos->agnadirJuegoPrestado($idUsuarioRecibe, $idJuego); //esta funcion devuelve true si se añade correctamente el juego al usuario que lo recibe
+                $eliminado = $baseDatos->eliminarJuegoPrestado($idUsuarioPresta, $idJuego);
+                if ($prestado && $eliminado) {
                     $baseDatos->agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego);
-                } */
+                    $baseDatos->actualizarJuegosPrestados($idJuego,$idUsuarioPresta,$idUsuarioRecibe); /* tabla comprado */
+                }
                 $this->data = $baseDatos->mostrarJuegos();
                 $this->data1 = 'Juego prestado correctamente';
                 //$this->action = 'catalogo';
                 Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
-                //$this->action = 'prestar';
                 Vista::MuestraPrestar($this->data, $this->error);
             }
         }
     }
 
+    public function finalizarPrestamo() {
+        global $baseDatos;
+        $fechaActual = date('Y-m-d H:i:s'); 
+        $idUsuarioPresta = $_SESSION['idUsuario'];
+    
+        // Obtener los préstamos vencidos con todos sus detalles
+        $prestamosVencidos = $baseDatos->obtenerPrestamosVencidos($idUsuarioPresta, $fechaActual);
+    
+        if (!empty($prestamosVencidos)) {
+            foreach ($prestamosVencidos as $prestamo) {
+                // Guardar los detalles de cada préstamo en variables
+                $idPrestamo = $prestamo['idPrestamo'];
+                $idUsuarioPresta = $prestamo['idUsuarioPresta'];
+                $idUsuarioRecibe = $prestamo['idUsuarioRecibe'];
+                $idJuego = $prestamo['idJuego'];
+                $fechaInicio = $prestamo['fechaInicio'];
+                $fechaFin = $prestamo['fechaFin'];
+                /* elimianr el juego rpestado de poseejuego */
+                $baseDatos->eliminarJuegoPrestado($idUsuarioRecibe, $idJuego);
+                /* eliminar el prestamo en la tabla prestamos */
+                $baseDatos->eliminarPrestamo($idPrestamo);
+                /* misma funcion que antes pero al reves, ya que el que recibe devuelve el juego */
+                $baseDatos->actualizarJuegosPrestados($idJuego,$idUsuarioRecibe,$idUsuarioPresta);
+            }
+
+            $this->error="Préstamos finalizados.";
+            
+        } 
+    }
+    
     public function regalarJuego()
     {
         if (!empty($_POST['idJuego']) && !empty($_POST['nombre-usuario'])) {

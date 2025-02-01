@@ -1042,6 +1042,75 @@ class Database
 
     // PRESTAR
     // Función para prestar juego 
+    //funcion para añadir el juego a la tabla posee del que recibe el juego prestado
+    public function agnadirJuegoPrestado($idUsuarioRecibe, $idJuego)
+    {
+        try {
+            // Preparar el SQL de inserción
+            $sql = "INSERT INTO poseeJuego (idUsuario, idJuego) VALUES (:idUsuarioRecibe, :idJuego)";
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error al añadir juego prestado: " . $e->getMessage());
+            return false; // Fallo
+        }
+    }
+
+    //funcion para eliminar el juego de la tabla posee del usuario original
+    public function eliminarJuegoPrestado($idUsuarioPresta, $idJuego)
+    {
+        try {
+            // Preparar la consulta de eliminación
+            $sql = "DELETE FROM poseeJuego WHERE idUsuario = :idUsuarioPresta AND idJuego = :idJuego";
+            $stmt = $this->conexion->prepare($sql);
+
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return true; // Éxito
+        } catch (PDOException $e) {
+            error_log("Error al eliminar juego prestado: " . $e->getMessage()); // Registrar el error en logs
+            return false; // Fallo
+        }
+    }
+
+    /* Funcion para actualizar los datos de las bibliotecas de los usuarios */
+    public function actualizarJuegosPrestados($idJuego, $idUsuarioPresta, $idUsuarioRecibe) {
+        try {
+            // Preparar la consulta de actualización
+            $sql = "UPDATE comprado SET idUsuario = :idUsuarioRecibe 
+                    WHERE idJuego = :idJuego AND idUsuario = :idUsuarioPresta";
+    
+            $stmt = $this->conexion->prepare($sql);
+    
+            // Asociar parámetros con bindParam
+            $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
+            $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+    
+            // Ejecutar la consulta
+            $stmt->execute();
+    
+            // Verificar si se actualizó al menos una fila
+            if ($stmt->rowCount() > 0) {
+                return true; // Éxito
+            } else {
+                return false; // No se encontró el juego o el usuario que presta no lo tenía
+            }
+    
+        } catch (PDOException $e) {
+            error_log("Error al actualizar juego prestado: " . $e->getMessage()); // Registrar el error en logs
+            return false; // Fallo
+        }
+    }
+    
     public function agnadirPrestamos($idUsuarioPresta, $idUsuarioRecibe, $idJuego)
     {
         try {
@@ -1064,7 +1133,6 @@ class Database
 
             // Asociar parámetros con bindParam
             $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
-
             $stmt->bindParam(':idUsuarioRecibe', $idUsuarioRecibe, PDO::PARAM_INT);
             $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
             $stmt->bindParam(':fechaHoy', $fechaInicioFormateada, PDO::PARAM_STR);
@@ -1078,6 +1146,48 @@ class Database
             return false;
         }
     }
+
+    
+
+    public function obtenerPrestamosVencidos($idUsuarioPresta, $fechaActual) {
+        try {
+            // Consulta para obtener los ID de los préstamos vencidos
+            $sql = "SELECT * 
+                    FROM prestado 
+                    WHERE idUsuPresta = :idUsuarioPresta 
+                    AND fechaFin <= :fechaActual";
+    
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuarioPresta', $idUsuarioPresta, PDO::PARAM_INT);
+            $stmt->bindParam(':fechaActual', $fechaActual, PDO::PARAM_STR);
+            $stmt->execute();
+    
+            // Obtener todos los ID de los préstamos vencidos
+            return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    
+        } catch (PDOException $e) {
+            error_log("Error al obtener préstamos vencidos: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function eliminarPrestamo($idPrestamo) {
+        try {
+            // Consulta de eliminación para un préstamo específico
+            $sqlDelete = "DELETE FROM prestado WHERE idPrestamo = :idPrestamo";
+            $stmtDelete = $this->conexion->prepare($sqlDelete);
+            $stmtDelete->bindParam(':idPrestamo', $idPrestamo, PDO::PARAM_INT);
+            $stmtDelete->execute();
+            return true; // Éxito al eliminar el préstamo
+    
+        } catch (PDOException $e) {
+            error_log("Error al eliminar préstamo (ID: $idPrestamo): " . $e->getMessage());
+            return false; // Error al eliminar el préstamo
+        }
+    }
+    
+    
+    
 
     // REGALAR
     // Función para regalar juego 
