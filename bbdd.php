@@ -381,7 +381,7 @@ class Database
         $comprado = $this->mostrarComprados($idUsuario);
         $prestado = $this->mostrarPrestados($idUsuario);
         $regalado = $this->mostrarRegalados($idUsuario);
-        
+
         return array_merge($comprado, $prestado, $regalado);
     }
 
@@ -651,14 +651,31 @@ class Database
             $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
 
             $stmt->execute();
-            return "Pago realizado con éxito";
         } catch (Exception $e) {
             // Si ocurre un error, lo registramos en el log
             error_log("Error en eliminarTodosLosJuegosCarrito: " . $e->getMessage());
             return false;
         }
     }
+    /* Devuelve true/false dependiendo de si encuentra el juego en posesion de un usuario en concreto */
+    public function esJuegoComprado($idUsuario, $idJuego)
+    {
+        try {
+            $sql = "SELECT COUNT(*) as conteo FROM comprado WHERE idUsuario = :idUsuario AND idJuego = :idJuego";
+            $stmt = $this->conexion->prepare($sql);
 
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return ($result && $result['conteo'] > 0) ? true : false;
+        } catch (Exception $e) {
+            error_log("Error al comprobar si el juego ha sido comprado: " . $e->getMessage());
+            return false;
+        }
+    }
 
     public function comprarJuego($idUsuario, $idJuego)
     {

@@ -766,20 +766,24 @@ class Controlador
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
         $juegos = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
 
-        echo $idCarrito . "<br>";
-        var_dump($juegos);
+        //echo $idCarrito . "<br>";
+        //var_dump($juegos);
 
         if (!empty($juegos)) {
             foreach ($juegos as $juego) {
                 if (isset($juego['idJuego'])) {
                     $idJuego = $juego['idJuego'];
-                    $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego); /* tabla comprado */
-                    $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idJuego);
+                    $titulo=$juego['titulo'];
+                    if (!$baseDatos->esJuegoComprado($_SESSION['idUsuario'], $idJuego)) {
+                        $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego); /* tabla comprado */
+                        $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idJuego);
+                        $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+                        $this->error = "Pago realizado con éxito";
+                    } else {
+                        echo "$titulo ya ha sido comprado. Eliminalo del carrito o tramita el regalo.";
+                    }
                 }
             }
-
-            // Eliminar todos los juegos del carrito
-            $this->error = $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
         } else {
             $this->error = "No hay nada que pagar";
         }
