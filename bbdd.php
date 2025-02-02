@@ -378,12 +378,117 @@ class Database
     //misma funcion pero usando la tabla posee juego
     public function mostrarBiblioteca($idUsuario)
     {
+        $comprado = $this->mostrarComprados($idUsuario);
+        $prestado = $this->mostrarPrestados($idUsuario);
+        $regalado = $this->mostrarRegalados($idUsuario);
+        
+        return array_merge($comprado, $prestado, $regalado);
+    }
+
+    // Juegos que YO he comprado
+    public function mostrarComprados($idUsuario)
+    {
         try {
-            $sql = "SELECT * FROM `juego` j
+            $sql = "SELECT j.idJuego,
+            j.titulo, 
+            j.desarrollador, 
+            j.distribuidor, 
+            j.anio, 
+            j.ruta, 
+            j.descripcion, 
+            j.portada, 
+            GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
+            GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
+            true AS comprado
+        FROM juego j
+        INNER JOIN generoJuego gj ON gj.idJuego = j.idJuego
+        INNER JOIN genero g ON gj.idGenero = g.idGenero
+        INNER JOIN juegoSistema js ON js.idJuego = j.idJuego
+        INNER JOIN sistema s ON s.idSistema = js.idSistema
+        INNER JOIN comprado c ON j.idJuego = c.idJuego
+                    WHERE c.idUsuario = :idUsuario
+        GROUP BY j.idJuego, j.titulo, j.desarrollador, j.distribuidor, j.anio, 
+                j.ruta, j.descripcion, j.portada, comprado;";
+
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $biblioteca = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+
+            return $biblioteca;
+        } catch (PDOException $e) {
+            error_log("Error al obtener la biblioteca: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Juegos que me han PRESTADO
+    public function mostrarPrestados($idUsuario)
+    {
+        try {
+            $sql = "SELECT j.idJuego,
+                    j.titulo, 
+                    j.desarrollador, 
+                    j.distribuidor, 
+                    j.anio, 
+                    j.ruta, 
+                    j.descripcion, 
+                    j.portada, 
+                    GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
+                    GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
+                    true AS prestado
+                    FROM juego j
                     INNER JOIN generoJuego gj ON gj.idJuego = j.idJuego
                     INNER JOIN genero g ON gj.idGenero = g.idGenero
-                    INNER JOIN comprado c ON j.idJuego = c.idJuego
-                    WHERE c.idUsuario = :idUsuario;";
+                    INNER JOIN juegoSistema js ON js.idJuego = j.idJuego
+                    INNER JOIN sistema s ON s.idSistema = js.idSistema
+                    INNER JOIN prestado c ON j.idJuego = c.idJuego
+                            WHERE c.idUsuarioRecibe = :idUsuario
+                    GROUP BY j.idJuego, j.titulo, j.desarrollador, j.distribuidor, j.anio, 
+                        j.ruta, j.descripcion, j.portada, prestado;";
+
+
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+            $biblioteca = $stmt->fetchAll(PDO::FETCH_ASSOC); // fetchAll para obtener todas las filas
+
+            return $biblioteca;
+        } catch (PDOException $e) {
+            error_log("Error al obtener la biblioteca: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    //Juego que me han REGALADO
+
+    public function mostrarRegalados($idUsuario)
+    {
+        try {
+            $sql = "SELECT j.idJuego,
+                    j.titulo, 
+                    j.desarrollador, 
+                    j.distribuidor, 
+                    j.anio, 
+                    j.ruta, 
+                    j.descripcion, 
+                    j.portada, 
+                    GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
+                    GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
+                    true AS regalado
+                    FROM juego j
+                    INNER JOIN generoJuego gj ON gj.idJuego = j.idJuego
+                    INNER JOIN genero g ON gj.idGenero = g.idGenero
+                    INNER JOIN juegoSistema js ON js.idJuego = j.idJuego
+                    INNER JOIN sistema s ON s.idSistema = js.idSistema
+                    INNER JOIN regalado c ON j.idJuego = c.idJuego
+                            WHERE c.idUsuarioRecibe = :idUsuario
+                    GROUP BY j.idJuego, j.titulo, j.desarrollador, j.distribuidor, j.anio, 
+                        j.ruta, j.descripcion, j.portada, regalado;";
+
+
 
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);

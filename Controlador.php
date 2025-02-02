@@ -139,12 +139,12 @@ class Controlador
     private function datosBiblioteca()
     {
         global $baseDatos;
-        if ($_SESSION['nickUsuario'] === 'admin') {
-            $this->data = $baseDatos->mostrarJuegos();
-        } else {
-            $idUsuario = $_SESSION['idUsuario'];
+        // if ($_SESSION['nickUsuario'] === 'admin') {
+        //     $this->data = $baseDatos->mostrarJuegos();
+        // } else {
+             $idUsuario = $_SESSION['idUsuario'];
             $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
-        }
+        // }
     }
 
 

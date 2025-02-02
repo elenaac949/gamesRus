@@ -46,11 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
                             <input type="button" data-id="<?php echo $juego['idJuego']; ?>" value="Detalles" id="btn_mostrar_detalles" name="btn_mostrar_detalles">
                             <input type="button" value="Jugar">
-                            <input type="submit" value="Prestar" name="prestar">
+                            <?php if(isset($juego['comprado'])):  ?>
+                            <input type="submit" value="Prestar" name="prestar" >
+                            <?php endif; ?>
                         </form>
                         <form method="post">
                         <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
+                        <?php if(isset($juego['prestado'])):  ?>
                             <input type="submit" value="Regalar" name="regalar">
+                        <?php endif; ?>
                         </form>
                     </div>
                 </div>
