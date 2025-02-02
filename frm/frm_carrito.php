@@ -58,7 +58,7 @@ include __DIR__ . '/../common/controlSesion.php';
                 <p>Aqui va el total</p>
             </div>
 
-            <form action="" method="post">
+            <form action="" method="post" id="formularioPago">
                 <input type="submit" value="Pagar" name="btn_pagar">
             </form>
         </aside>
@@ -92,35 +92,13 @@ include __DIR__ . '/../common/controlSesion.php';
         const btnConfirmarRegalo = document.querySelector("#btn_confirmar_regalo");
         const nombreUsuario = document.querySelector('#nombre_usuario');
 
+        // Seleccionamos el formulario de pago
+        const formularioPago = document.querySelector("#formularioPago"); 
 
-        btnConfirmarRegalo.addEventListener('click', (e) => {
-            const idJuego = inputIdJuego.value;
-            const boton = Array.from(botonesRegalar).filter((boton) => {
-                // if(boton.getAttribute("data-id") == idJuego){
-                //     return true;
-                // }
-                // return false;
-
-                return boton.getAttribute("data-id") == idJuego;
-
-            })[0];
-
-            const parent = boton.parentElement;
-            boton.remove();
-            const child = document.createElement('p');
-            child.innerText = 'Este juego se regalará a ' + nombreUsuario.value;
-            parent.appendChild(child);
-            nombreUsuario.value = '';
-            dialogo.close();
-
-
-        })
         // Añadimos el evento a cada botón "Regalar"
         botonesRegalar.forEach(boton => {
             boton.addEventListener("click", (e) => {
-
                 const idJuego = boton.getAttribute("data-id");
-
                 const tituloJuego = boton.getAttribute("data-titulo");
 
                 // Rellenamos el diálogo con los datos del juego
@@ -134,6 +112,53 @@ include __DIR__ . '/../common/controlSesion.php';
 
         // Evento para cerrar el diálogo al pulsar "Cancelar"
         btnCancelar.addEventListener("click", () => {
+            dialogo.close();
+        });
+
+        // Evento para confirmar el regalo
+        btnConfirmarRegalo.addEventListener('click', (e) => {
+            const idJuego = inputIdJuego.value;
+            const nombre = nombreUsuario.value.trim();
+
+            if (nombre === '') {
+                alert('Por favor, ingresa un nombre de usuario.');
+                return;
+            }
+
+            // Encuentra el botón "Regalar" correspondiente al juego
+            const boton = Array.from(botonesRegalar).find((boton) => boton.getAttribute("data-id") == idJuego);
+            if (!boton) return;
+
+            const parent = boton.parentElement;
+
+            // Ocultar el botón "Regalar" cuando se ha introducido un nombre
+            boton.style.display = "none";
+
+            // Crear el mensaje de confirmación
+            const mensaje = document.createElement('p');
+            mensaje.innerText = 'Este juego se regalará a ' + nombre;
+
+            // Añadir el mensaje al contenedor del juego
+            parent.appendChild(mensaje);
+
+            // Crear el campo hidden para el id del juego regalado
+            const inputJuegoRegalado = document.createElement('input');
+            inputJuegoRegalado.type = "hidden";
+            inputJuegoRegalado.name = "juegosRegalados[]"; // Usamos un array para enviar múltiples juegos
+            inputJuegoRegalado.value = idJuego;
+
+            // Crear el campo hidden para el nombre del usuario destinatario
+            const inputUsuarioRegalado = document.createElement('input');
+            inputUsuarioRegalado.type = "hidden";
+            inputUsuarioRegalado.name = "usuariosRegalados[]"; // Usamos un array para enviar múltiples usuarios
+            inputUsuarioRegalado.value = nombre;
+
+            // Añadir los campos hidden al formulario de pago
+            formularioPago.appendChild(inputJuegoRegalado);
+            formularioPago.appendChild(inputUsuarioRegalado);
+
+            // Reiniciar el campo de nombre de usuario y cerrar el diálogo
+            nombreUsuario.value = '';
             dialogo.close();
         });
     </script>

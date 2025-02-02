@@ -142,8 +142,8 @@ class Controlador
         // if ($_SESSION['nickUsuario'] === 'admin') {
         //     $this->data = $baseDatos->mostrarJuegos();
         // } else {
-             $idUsuario = $_SESSION['idUsuario'];
-            $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
+        $idUsuario = $_SESSION['idUsuario'];
+        $this->data = $baseDatos->mostrarBiblioteca($idUsuario);
         // }
     }
 
@@ -387,7 +387,6 @@ class Controlador
                     //Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
                 } else {
                     $this->error = "No te ppuedes prestar a ti mismo subnormal";
-                    
                 }
                 $this->irABiblioteca();
             } else {
@@ -440,7 +439,7 @@ class Controlador
                     $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRegala, $idUsuarioRecibe);
                     $this->data1 = 'Regalo para ' . $nick;
                 } else {
-                    $this->error="Prueba otra vez";
+                    $this->error = "Prueba otra vez";
                 }
             } else {
                 $this->error = 'Error: El usuario ' . $nick . ' no existe';
@@ -759,9 +758,54 @@ class Controlador
         $this->irAlCarrito();
     }
 
+
+    public function reegalarJuegoBiblioteca()
+    {
+        global $baseDatos;
+        if (!empty($_POST['idJuego']) && !empty($_POST['nombre-usuario'])) {
+
+            $nick = $_POST['nombre-usuario'];
+            $idJuego = $_POST['idJuego'];
+            $idUsuarioRegala = $_SESSION['idUsuario'];
+            $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nick);
+
+
+            if ($baseDatos->existeUsuario($nick, '')) {
+                if ($idUsuarioRegala != $idUsuarioRecibe) {
+                    $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
+                    $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRegala, $idUsuarioRecibe);
+                    $this->data1 = 'Regalo para ' . $nick;
+                } else {
+                    $this->error = "Prueba otra vez";
+                }
+            } else {
+                $this->error = 'Error: El usuario ' . $nick . ' no existe';
+            }
+        }
+        $this->irABiblioteca();
+    }
+
+
     /* Esta funcion está a medias todavia */
     public function pagarCompra()
     {
+
+        if (isset($_POST['juegosRegalados']) && is_array($_POST['juegosRegalados'])) {
+            $juegosRegalados = $_POST['juegosRegalados'];
+            //var_dump($juegosRegalados);
+        } else {
+            $juegosRegalados = []; // Si no hay juegos regalados, inicializamos el array vacío
+        }
+
+        // Recoger los usuarios a los que se regaló los juegos (array de nombres)
+        if (isset($_POST['usuariosRegalados']) && is_array($_POST['usuariosRegalados'])) {
+            $usuariosRegalados = $_POST['usuariosRegalados'];
+            //var_dump($usuariosRegalados);
+        } else {
+            $usuariosRegalados = []; // Si no hay usuarios, inicializamos el array vacío
+        }
+
+
         global $baseDatos;
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
         $juegos = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
@@ -773,14 +817,41 @@ class Controlador
             foreach ($juegos as $juego) {
                 if (isset($juego['idJuego'])) {
                     $idJuego = $juego['idJuego'];
-                    $titulo=$juego['titulo'];
-                    if (!$baseDatos->esJuegoComprado($_SESSION['idUsuario'], $idJuego)) {
-                        $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego); /* tabla comprado */
-                        $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idJuego);
-                        $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
-                        $this->error = "Pago realizado con éxito";
+                    $titulo = $juego['titulo'];
+                    /* comprobar que juegos van a regalarse comparandolos con el array de juegos*/
+                    if (in_array($idJuego, $juegosRegalados)) {
+                        // Si el juego está en la lista de juegos regalados, obtenemos el índice y el usuario
+                        $posicion = array_search($idJuego, $juegosRegalados);  // Encuentra el índice del juego en el array
+                        // Obtenemos el nombre del usuario destinatario usando el mismo índice
+                        $nombreUsuarioRegalado = isset($usuariosRegalados[$posicion]) ? $usuariosRegalados[$posicion] : 'Desconocido';
+                        $idUsuarioRegala = $_SESSION['idUsuario'];
+                        $idUsuarioRecibe=$baseDatos->obtenerIdUsuario($nombreUsuarioRegalado);
+                        
+                        if ($baseDatos->existeUsuario($nombreUsuarioRegalado, '')) {
+                            if ($idUsuarioRegala != $idUsuarioRecibe) {
+                                /* comprobar que el usuario que recibe no tenga ese juego ya */
+                                if (!$baseDatos->esJuegoComprado($idUsuarioRecibe, $idJuego)) {//comprobar que el usuario que recibe el juego lo tiene en la biblioteca
+                                    //si no lo tiene se lo podemos regalar
+                                    //$baseDatos->comprarJuego($idUsuarioRecibe, $idJuego);
+                                    $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
+                                    $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+                                }else{
+                                    $this->error .= "<br>$titulo ya ha existe en la biblioteca del usuario.<br>";
+                                }
+                            }else{
+                                $this->error="No te puedes regalar a ti mismo";
+                            }
+                        }
+
                     } else {
-                        echo "$titulo ya ha sido comprado. Eliminalo del carrito o tramita el regalo.";
+                        if (!$baseDatos->esJuegoComprado($_SESSION['idUsuario'], $idJuego) && !$baseDatos->esJuegoRegalado($_SESSION['idUsuario'], $idJuego)) {
+                            $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego);
+                            $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idJuego);
+                            $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+                            $this->error = "Pago realizado con éxito";
+                        } else {
+                            $this->error .= "<br>$titulo ya ha los tienes. Eliminalo del carrito o tramitalo como regalo.<br>";
+                        }
                     }
                 }
             }

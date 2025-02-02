@@ -676,6 +676,33 @@ class Database
             return false;
         }
     }
+    /* devuelve true/false dependiendo de si el ususario tinee el juego o no  */
+    public function esJuegoRegalado($idUsuario, $idJuego)
+    {
+        try {
+            // Consulta SQL para verificar si el usuario ha recibido el juego
+            $sql = "SELECT COUNT(*) as conteo FROM regalado WHERE idUsuarioRecibe = :idUsuario AND idJuego = :idJuego";
+            $stmt = $this->conexion->prepare($sql);
+
+            // Vinculamos los parámetros
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+
+            // Ejecutamos la consulta
+            $stmt->execute();
+
+            // Obtenemos el resultado
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Si el conteo es mayor que 0, significa que el juego ha sido regalado a este usuario
+            return ($result && $result['conteo'] > 0) ? true : false;
+        } catch (Exception $e) {
+            // Capturamos cualquier excepción y la registramos en los logs de error
+            error_log("Error al comprobar si el juego ha sido regalado: " . $e->getMessage());
+            return false;
+        }
+    }
+
 
     public function comprarJuego($idUsuario, $idJuego)
     {
