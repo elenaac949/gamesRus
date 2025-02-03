@@ -825,24 +825,27 @@ class Controlador
                         // Obtenemos el nombre del usuario destinatario usando el mismo índice
                         $nombreUsuarioRegalado = isset($usuariosRegalados[$posicion]) ? $usuariosRegalados[$posicion] : 'Desconocido';
                         $idUsuarioRegala = $_SESSION['idUsuario'];
-                        $idUsuarioRecibe=$baseDatos->obtenerIdUsuario($nombreUsuarioRegalado);
-                        
-                        if ($baseDatos->existeUsuario($nombreUsuarioRegalado, '')) {
-                            if ($idUsuarioRegala != $idUsuarioRecibe) {
-                                /* comprobar que el usuario que recibe no tenga ese juego ya */
-                                if (!$baseDatos->esJuegoComprado($idUsuarioRecibe, $idJuego)) {//comprobar que el usuario que recibe el juego lo tiene en la biblioteca
-                                    //si no lo tiene se lo podemos regalar
-                                    //$baseDatos->comprarJuego($idUsuarioRecibe, $idJuego);
-                                    $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
-                                    $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
-                                }else{
-                                    $this->error .= "<br>$titulo ya ha existe en la biblioteca del usuario.<br>";
+
+                        $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nombreUsuarioRegalado);
+                        if ($idUsuarioRecibe == null) {
+                            $this->error = "Ese usuario no existe.";
+                        } else {
+                            if ($baseDatos->existeUsuario($nombreUsuarioRegalado, '')) {
+                                if ($idUsuarioRegala != $idUsuarioRecibe) {
+                                    /* comprobar que el usuario que recibe no tenga ese juego ya */
+                                    if (!$baseDatos->esJuegoComprado($idUsuarioRecibe, $idJuego)) { //comprobar que el usuario que recibe el juego lo tiene en la biblioteca
+                                        //si no lo tiene se lo podemos regalar
+                                        //$baseDatos->comprarJuego($idUsuarioRecibe, $idJuego);
+                                        $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
+                                        $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+                                    } else {
+                                        $this->error .= "<br>$titulo ya ha existe en la biblioteca del usuario.<br>";
+                                    }
+                                } else {
+                                    $this->error = "No te puedes regalar a ti mismo";
                                 }
-                            }else{
-                                $this->error="No te puedes regalar a ti mismo";
                             }
                         }
-
                     } else {
                         if (!$baseDatos->esJuegoComprado($_SESSION['idUsuario'], $idJuego) && !$baseDatos->esJuegoRegalado($_SESSION['idUsuario'], $idJuego)) {
                             $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego);
