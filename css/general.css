@@ -221,3 +221,21 @@ footer .mas_informacion a {
 footer .mas_informacion a:hover {
     color: #f72585;
 }
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+    width: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f4f4f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #3a0ca3, #4361ee);
+    
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #3a0ca3, #4361ee
+}
