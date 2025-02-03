@@ -270,13 +270,14 @@ class Controlador
             $tipoDeVia = $_POST["tipo_via"];
             $nombreDeVia = $_POST['nombre_via'];
             $numero = $_POST['numero_via'];
+            $numeros=$_POST['numeros'];
+            $otros=$_POST['otros'];
             $numeroTelefono = $_POST['telefono'];
 
             $patron = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
             //Hacer una consulta a la bbdd que verifiqeu si ese email o nick existen
             if ($baseDatos->existeUsuario($nick, $correo)) {
                 $this->data = 'Correo o nick ya existentes';
-                //$this->action = 'registro';
                 Vista::MuestraRegistro($this->data);
             } else {
                 if (preg_match($patron, $correo)) {
@@ -286,7 +287,7 @@ class Controlador
                         $hashedPassword = password_hash($contrasenia1, PASSWORD_DEFAULT);
 
                         // Registrar al usuario
-                        $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword, $tipoDeVia, $nombreDeVia, $numero, $numeroTelefono);
+                        $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword, $tipoDeVia, $nombreDeVia, $numero,$numeros,$otros, $numeroTelefono);
                         //Guardamos en cookie el nombre nick para pasarlo a l login (contraseña no por seguridad) - la cookie dura 5 mins
                         // setcookie('nick', $_POST['nick'], time() + (5 * 60), "/");
                         $usuario = $baseDatos->controlLogin($correo);
