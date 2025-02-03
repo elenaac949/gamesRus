@@ -68,13 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div id="contenido_detalles"></div>
         <?php
-        // var_dump($_POST);
-        //var_dump($data);
-        // var_dump($error);
-        //var_dump($data[0]);
-        // echo "<br>";
+      
         ?>
-        <!-- <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p> -->
+       
 
 
         <button id="cerrar_detalles">Salir</button>
@@ -110,15 +106,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (juegoSeleccionado) {
                     // Mostramos los datos del juego en el contenedor dinámico
                     contenidoDetalles.innerHTML = `
-                    <h3>${juegoSeleccionado.titulo}</h3>
+                    <div class="imagen">
                     <img src="${juegoSeleccionado.portada}" alt="${juegoSeleccionado.titulo}">
-                    <p>Descripción: ${juegoSeleccionado.descripcion}</p>                    
-                    <p>Fecha de Lanzamiento: ${juegoSeleccionado.anio}</p>
-                    <p>Género: ${juegoSeleccionado.generos}</p>
-                    <p>Desarrollador: ${juegoSeleccionado.desarrollador}</p>
+                    </div>
+                    <div class="detalles">
+                    <h3>${juegoSeleccionado.titulo}</h3>
+                    <p><span>Fecha de Lanzamiento</span>: ${juegoSeleccionado.anio}</p>
+                    <p><span>Género</span>: ${juegoSeleccionado.generos}</p>
+                    <p><span>Desarrollador</span>: ${juegoSeleccionado.desarrollador}</p>
                     
-                    <p>Sistemas: ${juegoSeleccionado.sistemas}</p>
-                    
+                    <p><span>Sistemas</span>: ${juegoSeleccionado.sistemas}</p>
+                    </div>
+                    <div class="descripcion">
+                    <p><span>Descripción</span>: ${juegoSeleccionado.descripcion}</p>
+                    </div>                    
                 `;
                 } else {
                     contenidoDetalles.innerHTML = "<p>Juego no encontrado.</p>";
