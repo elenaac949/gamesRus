@@ -80,14 +80,14 @@ class Database
     }
 
     //Registrar usuario - Create
-    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero, $numeroTelefono)
+    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero,$numeros,$otros, $numeroTelefono)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "INSERT INTO `usuario` 
-                    (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `tipoDeVia`, `nombreDeVia`, `numeroDeVia`, `numeroTelefono`, `idRol` ) 
+                    (`nick`, `email`, `nombre`, `apellidos`, `contrasenia`, `tipoDeVia`, `nombreDeVia`, `numeroDeVia`,`numeros`,`otros`, `numeroTelefono`, `idRol` ) 
                     VALUES 
-                    (:nick, :correo, :nombre, :apellidos, :contrasenia, :tipoDeVia, :nombreDeVia, :numero, :numeroTelefono,1)";
+                    (:nick, :correo, :nombre, :apellidos, :contrasenia, :tipoDeVia, :nombreDeVia, :numero,:numeros,:otros, :numeroTelefono,1)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -101,6 +101,8 @@ class Database
             $stmt->bindParam(':tipoDeVia', $tipoDeVia);
             $stmt->bindParam(':nombreDeVia', $nombreDeVia);
             $stmt->bindParam(':numero', $numero, PDO::PARAM_INT);
+            $stmt->bindParam(':numeros', $numeros);
+            $stmt->bindParam(':otros', $otros);
             $stmt->bindParam(':numeroTelefono', $numeroTelefono);
 
             // Ejecutar la consulta

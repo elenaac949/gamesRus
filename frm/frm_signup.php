@@ -44,8 +44,14 @@ include __DIR__ . '/../common/controlSesion.php';
             <input type="text" name="nombre_via" placeholder="Nombre de la vía" value="<?php if (isset($_POST['nombre'])) {
                                                                                             echo $_POST['nombre_via'];
                                                                                         } ?>">
-            <input type="text" name="numero_via" placeholder="Número" value="<?php if (isset($_POST['numero_via'])) {
-                                                                                    echo $_POST['numero_via'];
+            <input type="text" name="numero_via" placeholder="Número de la vía" value="<?php if (isset($_POST['numero_via'])) {
+                                                                                            echo $_POST['numero_via'];
+                                                                                        } ?>">
+            <input type="text" name="numeros" placeholder="Número(s)" value="<?php if (isset($_POST['numeros'])) {
+                                                                                            echo $_POST['numeros'];
+                                                                                        } ?>">
+            <input type="text" name="otros" placeholder="Otros" value="<?php if (isset($_POST['otros'])) {
+                                                                                    echo $_POST['otros'];
                                                                                 } ?>">
             <input type="tel" name="telefono" placeholder="Teléfono*" value="<?php if (isset($_POST['telefono'])) {
                                                                                     echo $_POST['telefono'];
