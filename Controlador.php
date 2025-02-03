@@ -69,17 +69,6 @@ class Controlador
         $this->procesarAcciones($_POST, $accionesPost);
     }
 
-
-
-    /*     private function procesarAcciones($datos, $acciones)
-    {
-        foreach ($acciones as $key => $metodo) {
-            if (isset($datos[$key]) && method_exists($this, $metodo)) {
-                $this->$metodo($datos[$key]);
-                return; // Terminamos después de la acción.
-            }
-        }
-    } */
     private function procesarAcciones($datos, $acciones)
     {
         foreach ($acciones as $key => $metodo) {
