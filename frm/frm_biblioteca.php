@@ -113,8 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h3>${juegoSeleccionado.titulo}</h3>
                     <p><span>Fecha de Lanzamiento</span>: ${juegoSeleccionado.anio}</p>
                     <p><span>Género</span>: ${juegoSeleccionado.generos}</p>
-                    <p><span>Desarrollador</span>: ${juegoSeleccionado.desarrollador}</p>
-                    
+                    <p><span>Desarrollador</span>: ${juegoSeleccionado.desarrollador}</p>                    
                     <p><span>Sistemas</span>: ${juegoSeleccionado.sistemas}</p>
                     </div>
                     <div class="descripcion">

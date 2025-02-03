@@ -147,6 +147,7 @@ dialog::backdrop {
 #contenido_detalles {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
 }
 
 .detalles_juego {
@@ -157,10 +158,25 @@ dialog::backdrop {
 
 }
 
+.detalles{
+    width: auto;
+    display: block;   
+    align-content: center;
+    margin: 0 auto;
+    text-align: start;
+    font-size: 1.2em;
+    
+}
+
+.detalles p{
+    margin-bottom: 6px;
+}
+
 .detalles h3{
-    color: #7209b7;
+    color: var(--color-violeta);
     font-weight: bolder;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
 }
 
 .imagen img {
@@ -169,6 +185,7 @@ dialog::backdrop {
 }
 
 .descripcion {
+    margin-top: 10px;
     width: 100%;
 }
 
@@ -177,7 +194,13 @@ span {
     color: #7209b7;
 }
 
+.descripcion p {
+    font-size: 1.2em;
+    text-align: justify;
+}
+
 button {
+    font-size: 1.2em;
     margin-top: 10px;
     padding: 10px 20px;
     background: #4361ee;
