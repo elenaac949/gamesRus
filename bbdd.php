@@ -505,6 +505,61 @@ class Database
     }
 
 
+    /* ------SERIALIZE DEL CARRITO------------ */
+
+    public function obtenerJuegosDelCarrito($idCarrito) {
+        $query = "SELECT j.idJuego, j.titulo, j.anio 
+                  FROM carritoJuego cj
+                  INNER JOIN juego j ON cj.idJuego = j.idJuego
+                  WHERE cj.idCarrito = :idCarrito";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function verificarJuegoEnCarrito($idCarrito, $idJuego) {
+        $query = "SELECT COUNT(*) FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function agregarJuegoAlCarrito($idCarrito, $idJuego) {
+        $query = "INSERT INTO carritoJuego (idCarrito, idJuego) VALUES (:idCarrito, :idJuego)";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function eliminarJuegoDelCarrito($idCarrito, $idJuego) {
+        $query = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function vaciarCarrito($idCarrito) {
+        $query = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+    function obtenerJuegoPorId($idJuego) {
+        $sql = "SELECT idJuego, titulo, desarrollador, distribuidor, anio, ruta, descripcion, portada 
+                FROM juego 
+                WHERE idJuego = :idJuego";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+
     /* ----CARRITO---- */
 
     /* Obtenemos el carrito o lo creamos si no existe--CREATE y READ */
@@ -543,11 +598,10 @@ class Database
         }
     }
 
-
-
     /* Funcion para verificar si el juego ya esta en el carrito.
     No podemos repetir el mismo juego en el carrito debido a la estructura de la BBDD */
-    function verificarJuegoEnCarrito($idCarrito, $idJuego)
+
+    /* function verificarJuegoEnCarrito($idCarrito, $idJuego)
     {
         try {
             // Consulta SQL para verificar si el juego ya está en el carrito
@@ -568,10 +622,10 @@ class Database
         } catch (Exception $e) {
             return "Error: " . $e->getMessage();
         }
-    }
+    } */
 
     /* MODIFY Carrito */
-    function anadirJuegoAlCarrito($idCarrito, $idJuego)
+    /* function anadirJuegoAlCarrito($idCarrito, $idJuego)
     {
         try {
             // Añadir el juego al carrito
@@ -591,11 +645,11 @@ class Database
         } catch (Exception $e) {
             return "Error: " . $e->getMessage();
         }
-    }
+    } */
 
 
 
-    function obtenerJuegosDelCarrito($idCarrito)
+/*     function obtenerJuegosDelCarrito($idCarrito)
     {
         try {
             // Asegúrate de incluir idUsuario en la consulta si es necesario
@@ -618,11 +672,11 @@ class Database
             echo "Error en la base de datos: " . $e->getMessage();
             return [];
         }
-    }
+    } */
 
     /* Eliminar 1 juego del carrito */
 
-    public function eliminarJuegoCarrito($idCarrito, $idJuego)
+    /* public function eliminarJuegoCarrito($idCarrito, $idJuego)
     {
         try {
             // Preparamos la consulta para eliminar el juego del carrito
@@ -642,7 +696,7 @@ class Database
         } catch (Exception $e) {
             return  "Error en la base de datos: " . $e->getMessage();
         }
-    }
+    } */
 
     public function eliminarTodosLosJuegosCarrito($idCarrito)
     {
@@ -659,6 +713,9 @@ class Database
             return false;
         }
     }
+
+
+
     /* Devuelve true/false dependiendo de si encuentra el juego en posesion de un usuario en concreto */
     public function esJuegoComprado($idUsuario, $idJuego)
     {
