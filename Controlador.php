@@ -887,7 +887,7 @@ class Controlador
                     $titulo = $juego->titulo;
                     $desarrollador =  $juego->desarrollador;
                     $distribuidor = $juego->distribuidor;
-                    $anio = (int) $juego->anio;
+                    $anio = (int) $juego->año;
                     $portada = $rutaRelativa . DIRECTORY_SEPARATOR . $juego->portada;
                     $ruta = $rutaRelativa . DIRECTORY_SEPARATOR . $juego->ruta;
                     $descripcion = !empty($juego->descripcion) ? $juego->descripcion : " ";
