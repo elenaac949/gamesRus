@@ -10,6 +10,7 @@ include __DIR__ . '/../common/controlSesion.php';
     <title>Catálogo</title>
     <link rel="stylesheet" href="/gamesRus/css/general.css">
     <link rel="stylesheet" href="/gamesRus/css/frm_catalogo.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -17,6 +18,7 @@ include __DIR__ . '/../common/controlSesion.php';
     include './common/cabecera.php';
     ?>
     <p class="errores"><?= !$error  ? $data1 : $error ?></p>
+    <div id="notificacion"></div>
 
 
     <?php /*var_dump($data);*/ ?>
@@ -124,6 +126,34 @@ include __DIR__ . '/../common/controlSesion.php';
         // Evento para cerrar el diálogo
         cerrar.addEventListener("click", () => {
             dialogo.close();
+        });
+
+
+        // Función para mostrar la notificación con AJAX
+        function obtenerPromocion() {
+            $.ajax({
+                url: 'frm/fichero.php', // El archivo PHP que retorna la promoción
+                method: 'GET',
+                success: function(response) {
+                    if (response && response.mensaje) {
+                        // Mostramos el mensaje de promoción en el contenedor
+                        $('#notificacion').text(response.mensaje).fadeIn();
+
+                        // Hacemos que la notificación desaparezca después de 5 segundos
+                        setTimeout(function() {
+                            $('#notificacion').fadeOut();
+                        }, 5000);
+                    }
+                },
+                error: function() {
+                    console.error('Error al obtener la promoción.');
+                }
+            });
+        }
+
+        // Llamamos a la función para obtener la promoción cuando cargue la página
+        $(document).ready(function() {
+            obtenerPromocion();
         });
     </script>
 </body>

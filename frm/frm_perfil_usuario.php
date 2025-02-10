@@ -18,6 +18,7 @@ include __DIR__ . '/../common/controlSesion.php';
     ?>
     <main>
         <p class="errores"><?= $error ?></p>
+        <div id="notificacion"></div>
         <section class="actualizar_datos">
             <h3>Actualizar Datos de Usuario</h3>
             <form action="" method="post">
@@ -217,13 +218,28 @@ include __DIR__ . '/../common/controlSesion.php';
     ?>
 
     <script>
-        document.getElementById('formEliminarCuenta').addEventListener('submit', function(event) {
-            const isConfirmed = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
-            if (!isConfirmed) {
-                // Si el usuario cancela, se previene el envío del formulario
-                event.preventDefault();
+        // document.getElementById('formEliminarCuenta').addEventListener('submit', function(event) {
+        //     const isConfirmed = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
+        //     if (!isConfirmed) {
+        //         // Si el usuario cancela, se previene el envío del formulario
+        //         event.preventDefault();
+        //     }
+        // });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const formEliminarCuenta = document.getElementById('formEliminarCuenta');
+            if (formEliminarCuenta) {
+                formEliminarCuenta.addEventListener('submit', function(event) {
+                    const isConfirmed = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
+                    if (!isConfirmed) {
+                        // Si el usuario cancela, se previene el envío del formulario
+                        event.preventDefault();
+                    }
+                });
             }
         });
+
+      
     </script>
 </body>
 
