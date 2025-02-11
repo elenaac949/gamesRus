@@ -516,8 +516,7 @@ class Controlador
                 $this->irAlPerfil();
                 return;
             }
-
-
+            
             $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']);
         } else {
             $this->error = "Revisa la informacion";
