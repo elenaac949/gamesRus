@@ -75,7 +75,6 @@ include __DIR__ . '/../common/controlSesion.php';
 
 
         <section class="tarjetas">
-
             <div class="mostrar_tarjetas">
                 <h3>Tus tarjetas</h3>
                 <table>
@@ -183,6 +182,7 @@ include __DIR__ . '/../common/controlSesion.php';
 
                     </div>
                     <div class="boton">
+                    <input type="hidden" name="perfil">
                         <input type="submit" name="btn_anadir_tarjeta" value="Añadir">
                     </div>
 

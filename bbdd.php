@@ -80,7 +80,7 @@ class Database
     }
 
     //Registrar usuario - Create
-    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero,$numeros,$otros, $numeroTelefono)
+    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero, $numeros, $otros, $numeroTelefono)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
@@ -1541,6 +1541,9 @@ class Database
             return "Error: " . $e->getMessage();
         }
     }
+
+
+
 
 
     // Este metodo se ejecuta al finalizar la ejecución de la web,

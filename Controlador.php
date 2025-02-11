@@ -54,7 +54,7 @@ class Controlador
             'btn_editar_tarjeta' => 'editarTarjeta',
             'btn_anadir_carrito' => 'anadirAlCarrito',
             'btn_eliminar_del_carrito' => 'quitarDelCarrito',
-            'btn_pagar' => 'pagarCompra',
+            'btn_pagar' => 'irAlPago',
             'cerrar_sesion' => 'cerrarSesion',
             'prestar' => 'irAPrestar',
             'prestar-juego' => 'prestarJuego',
@@ -475,6 +475,14 @@ class Controlador
 
     /* Tarjetas de usuario */
 
+    public function comprobarDireccion(){
+        if(isset($_POST['perfil'])){
+            $this->irAlPerfil();
+        }elseif(isset($_POST['pago'])){
+            $this->irAlPago();
+        }
+    }
+    
     public function anadirNuevaTarjeta()
     {
         if (!empty($_POST['numero_tarjeta']) && !empty($_POST['ccv_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
@@ -491,14 +499,14 @@ class Controlador
             // Validar el número de tarjeta con el algoritmo de Luhn
             if (!$this->esTarjetaValida($numeroTarjeta)) {
                 $this->error = "El número de tarjeta es inválido.";
-                $this->irAlPerfil();
+                $this->comprobarDireccion();
                 return;
             }
 
             // Validar CCV (debe ser un número de 3 o 4 dígitos)
             if (!preg_match('/^\d{3,4}$/', $ccv)) {
                 $this->error = "El CCV debe contener 3 o 4 dígitos.";
-                $this->irAlPerfil();
+                $this->comprobarDireccion();
                 return;
             }
 
@@ -506,14 +514,14 @@ class Controlador
             // Comprobar si ya existe una tarjeta con el mismo número y el mismo CCV para este usuario
             if ($baseDatos->tarjetaExiste($numeroTarjeta, $ccv, $_SESSION['idUsuario'])) {
                 $this->error = "Ya tienes una tarjeta registrada con ese número y CCV.";
-                $this->irAlPerfil();
+                $this->comprobarDireccion();
                 return;
             }
 
             // Validar que la tarjeta no esté vencida
             if (!$this->esFechaCaducidadValida($diaCad, $mesCad, $anioCad)) {
                 $this->error = "La tarjeta está vencida.";
-                $this->irAlPerfil();
+                $this->comprobarDireccion();
                 return;
             }
             
@@ -521,8 +529,10 @@ class Controlador
         } else {
             $this->error = "Revisa la informacion";
         }
-        $this->irAlPerfil();
+
+        $this->comprobarDireccion();
     }
+
 
     private function esTarjetaValida($numero_tarjeta)
     {
@@ -776,6 +786,16 @@ class Controlador
 
 
     /* Esta funcion está a medias todavia */
+
+    public function irAlPago(){
+        $idUsuario=$_SESSION['idUsuario'];
+        global $baseDatos;
+        $this->data=$baseDatos->mostrarTarjetas($idUsuario);
+        
+        Vista::MuestraPago($this->data,$this->error);
+    }
+
+
     public function pagarCompra()
     {
 
