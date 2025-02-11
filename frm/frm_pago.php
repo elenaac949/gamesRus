@@ -89,7 +89,7 @@
                 <h3>Selecciona una tarjeta</h3>
                 <form action="" method="POST">
                     <label for="tarjeta">Tarjetas disponibles:</label>
-                    <select name="tarjeta" id="tarjeta">
+                    <select name="tarjeta" id="tarjeta" >
                     <option value="0">Selecciona una tarjeta</option>
                         <?php if (!empty($data)): ?>
                             <?php foreach ($data as $tarjeta): ?>
@@ -102,7 +102,7 @@
                         <?php endif; ?>
                     </select>
                     <br><br>
-                    <input type="submit" name="confirmar_tarjeta" value="Confirmar el Pago">
+                    <input type="submit" name="btn_confirmar_pago" value="Confirmar el Pago">
                 </form>
             </div>
         </section>

@@ -55,6 +55,7 @@ class Controlador
             'btn_anadir_carrito' => 'anadirAlCarrito',
             'btn_eliminar_del_carrito' => 'quitarDelCarrito',
             'btn_pagar' => 'irAlPago',
+            'btn_confirmar_pago'=> 'tramitarCompra',
             'cerrar_sesion' => 'cerrarSesion',
             'prestar' => 'irAPrestar',
             'prestar-juego' => 'prestarJuego',
@@ -752,8 +753,6 @@ class Controlador
         } else {
             $this->error = "ID del juego no recibido.";
         }
-
-        // Redirige al carrito pero no redirige AAAAAAAAAAAAAAA
         $this->irAlCarrito();
     }
 
@@ -786,6 +785,30 @@ class Controlador
 
 
     /* Esta funcion está a medias todavia */
+
+    public function tramitarCompra(){
+        if (isset($_POST['btn_confirmar_pago']) && $_POST['tarjeta'] !== "0") {
+            //tengo que recoger los datos de la tarjeta
+            $numeroTarjeta='';
+            $url = 'http://localhost/gamesRus/servidorSOAP.php';
+            $uri = 'http://localhost/gamesRus/';
+
+            try {
+                $cliente = new SoapClient(null, array(
+                    'location' => $url,
+                    'uri'      => $uri
+                ));
+
+                // Llamada al método validarTarjeta del servidor SOAP
+                $resultado = $cliente->validarTarjeta($numeroTarjeta);
+                $this->error= "<p>La tarjeta seleccionada es <strong>$resultado</strong>.</p>";
+            } catch (SoapFault $e) {
+                $this->error= "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
+            }
+        }else{
+            $this->error="No has seleccionado una tarjeta.";
+        }
+    }
 
     public function irAlPago(){
         $idUsuario=$_SESSION['idUsuario'];
