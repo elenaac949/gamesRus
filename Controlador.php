@@ -53,8 +53,8 @@ class Controlador
             'btn_anadir_tarjeta' => 'anadirNuevaTarjeta',
             'btn_eliminar_tarjeta' => 'eliminarTarjeta',
             'btn_editar_tarjeta' => 'editarTarjeta',
-            'btn_anadir_carrito' => 'anadirAlCarrito',
-            'btn_eliminar_del_carrito' => 'quitarDelCarrito',
+            'btn_anadir_carrito' => 'agregarJuegoAlCarrito',
+            'btn_eliminar_del_carrito' => 'eliminarJuegoDelCarrito',
             'btn_pagar' => 'pagarCompra',
             'cerrar_sesion' => 'cerrarSesion',
             'prestar' => 'irAPrestar',
@@ -172,8 +172,10 @@ class Controlador
     public function irAlCarrito()
     {
         global $baseDatos;
-        $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-        $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
+        $this->sincronizarCarrito();
+        /* $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+        $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito); */
+        
         Vista::MuestraCarrito($this->data, $this->error, $this->data1);
     }
 
@@ -716,13 +718,104 @@ class Controlador
     }
 
     /* Funciones para gestionar el carrito */
-    public function anadirAlCarrito()
+
+    public function sincronizarCarrito()
     {
+        global $baseDatos;
+        $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+        // Obtener los juegos del carrito en la base de datos
+        $juegosDB = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
+
+        // Crear una estructura de carrito en la sesión si no existe
+        if (!isset($_SESSION['carrito'])) {
+            $_SESSION['carrito'] = [];
+        }
+
+        // Recorrer los juegos de la base de datos y agregarlos al carrito en la sesión
+        foreach ($juegosDB as $juego) {
+            if (!isset($_SESSION['carrito'][$juego['idJuego']])) {
+                $_SESSION['carrito'][$juego['idJuego']] = [
+                    'titulo' => $juego['titulo'],
+                    'desarrollador' => $juego['desarrollador'],
+                    'distribuidor' => $juego['distribuidor'],
+                    'anio' => $juego['anio'],
+                    'ruta' => $juego['ruta'],
+                    'descripcion' => $juego['descripcion'],
+                    'portada' => $juego['portada']
+                ];
+            }
+        }
+    }
+
+    public function agregarJuegoAlCarrito()
+    {
+        global $baseDatos;
+        // Verificar si el juego ya está en el carrito de la sesión
+        if (isset($_POST['idJuegoCatalogo'])) {
+            $idJuego = $_POST['idJuegoCatalogo'];
+            $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+
+            $existeJuego = $baseDatos->verificarJuegoEnCarrito($idCarrito, $idJuego);
+            if (!$existeJuego) {
+                // Obtener los datos del juego desde la base de datos para agregarlo a la sesión
+                $juego = $baseDatos->obtenerJuegoPorId($idJuego);  // Método que debes añadir al modelo
+
+                // Agregar el juego a la sesión
+                $_SESSION['carrito'][$idJuego] = [
+                    'titulo' => $juego['titulo'],
+                    'desarrollador' => $juego['desarrollador'],
+                    'distribuidor' => $juego['distribuidor'],
+                    'anio' => $juego['anio'],
+                    'ruta' => $juego['ruta'],
+                    'descripcion' => $juego['descripcion'],
+                    'portada' => $juego['portada']
+                ];
+
+                // También lo agregamos a la base de datos
+                $baseDatos->agregarJuegoAlCarrito($idCarrito, $idJuego);
+
+                $this->error = "Juego agregado al carrito.";
+            } else {
+                $this->error = "El juego ya está en el carrito.";
+            }
+            $this->irAlCatalogo();
+        }
+    }
+
+
+    public function eliminarJuegoDelCarrito()
+    {
+
+        global $baseDatos;
+
+        if (isset($_POST['idJuegoCatalogo'])) {
+            $idJuego = $_POST['idJuegoCatalogo'];
+            $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+
+            if (isset($_SESSION['carrito'][$idJuego])) {
+                // Eliminar el juego de la sesión
+                unset($_SESSION['carrito'][$idJuego]);
+
+                //Eliminamos el juego de la bbdd
+                $baseDatos->eliminarJuegoDelCarrito($idCarrito, $idJuego);
+
+                $this->error = "Juego eliminado del carrito.";
+            } else {
+                $this->error = "El juego no está en el carrito.";
+            }
+            $this->irAlCatalogo();
+        }
+    }
+
+    /* public function anadirAlCarrito()
+    {
+
         global $baseDatos;
         if (isset($_POST['idJuegoCatalogo'])) {
             $idJuego = $_POST['idJuegoCatalogo'];
             $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
             $existeJuego = $baseDatos->verificarJuegoEnCarrito($idCarrito, $idJuego);
+
             if ($existeJuego != true) {
                 $this->error = $baseDatos->anadirJuegoAlCarrito($idCarrito, $idJuego);
             } else {
@@ -730,10 +823,10 @@ class Controlador
             }
             $this->irAlCatalogo();
         }
-    }
+    } */
 
 
-    public function quitarDelCarrito()
+    /* public function quitarDelCarrito()
     {
         global $baseDatos;
 
@@ -754,7 +847,8 @@ class Controlador
 
         // Redirige al carrito pero no redirige AAAAAAAAAAAAAAA
         $this->irAlCarrito();
-    }
+    } */
+
 
 
     public function reegalarJuegoBiblioteca()
@@ -849,6 +943,8 @@ class Controlador
                             $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego);
                             $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idJuego);
                             $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+                            // Limpiar el carrito de la sesión
+                            unset($_SESSION['carrito']);
                             $this->error = "Pago realizado con éxito";
                         } else {
                             $this->error .= "<br>$titulo ya ha los tienes. Eliminalo del carrito o tramitalo como regalo.<br>";
