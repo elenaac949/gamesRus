@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h2>Tus Juegos</h2>
     <main class="contenido_principal">
-    <p class="errores"><?= $error ?></p>
+        <p class="errores"><?= $error ?></p>
         <div class="vista_juegos">
-        
+
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
                     <div class="imagen_juego">
@@ -46,15 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
                             <input type="button" data-id="<?php echo $juego['idJuego']; ?>" value="Detalles" id="btn_mostrar_detalles" name="btn_mostrar_detalles">
                             <input type="button" value="Jugar">
-                            <?php if(isset($juego['comprado'])):  ?>
-                            <input type="submit" value="Prestar" name="prestar" >
+                            <?php if (isset($juego['comprado'])):  ?>
+                                <input type="submit" value="Prestar" name="prestar">
                             <?php endif; ?>
                         </form>
                         <form method="post">
-                        <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
-                        <?php if(isset($juego['prestado'])):  ?>
-                            <input type="submit" value="Regalar" name="regalar">
-                        <?php endif; ?>
+                            <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
+                            <?php if (isset($juego['prestado'])):  ?>
+                                <input type="submit" value="Regalar" name="regalar">
+                            <?php endif; ?>
                         </form>
                     </div>
                 </div>
@@ -68,9 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div id="contenido_detalles"></div>
         <?php
-      
+
         ?>
-       
+
 
 
         <button id="cerrar_detalles">Salir</button>
@@ -133,6 +133,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         cerrar.addEventListener("click", () => {
             dialogo.close();
         });
+
+     
     </script>
 
 </body>

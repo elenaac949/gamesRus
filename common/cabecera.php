@@ -4,6 +4,7 @@
         <p>Bienvenido <?php echo $_SESSION['nickUsuario'];  ?></p>
     </div>
     <nav>
+        <div id="notificacion"></div>
         <form action="" method="post">
             <input type="text" class="buscardor" placeholder="Buscar...">
         </form>
@@ -44,3 +45,26 @@
         </div>
     </nav>
 </header>
+
+<script>
+    (async () => {
+
+        const url = new URL(window.location.href);
+        url.searchParams.append('ultimojuegoananido', '1')
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // Acción cuando el documento esté listo:
+
+                const notificacion = document.getElementById('notificacion')
+                notificacion.innerHTML = xhttp.responseText;
+                setTimeout(() => {
+                    notificacion.style.display = 'none';
+                }, 5000);
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+
+    })();
+</script>
