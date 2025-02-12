@@ -129,4 +129,8 @@ class Vista
     {
         include "./frm/frm_regalar.php";
     }
+
+  public static function MuestraPago($data, $error){
+    include "./frm/frm_pago.php";
+  }
 }

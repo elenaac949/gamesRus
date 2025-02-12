@@ -53,9 +53,10 @@ class Controlador
             'btn_anadir_tarjeta' => 'anadirNuevaTarjeta',
             'btn_eliminar_tarjeta' => 'eliminarTarjeta',
             'btn_editar_tarjeta' => 'editarTarjeta',
-            'btn_anadir_carrito' => 'agregarJuegoAlCarrito',
-            'btn_eliminar_del_carrito' => 'eliminarJuegoDelCarrito',
-            'btn_pagar' => 'pagarCompra',
+            'btn_anadir_carrito' => 'anadirAlCarrito',
+            'btn_eliminar_del_carrito' => 'quitarDelCarrito',
+            'btn_pagar' => 'irAlPago',
+            'btn_confirmar_pago' => 'tramitarCompra',
             'cerrar_sesion' => 'cerrarSesion',
             'prestar' => 'irAPrestar',
             'prestar-juego' => 'prestarJuego',
@@ -486,103 +487,81 @@ class Controlador
 
     /* Tarjetas de usuario */
 
+    public function comprobarDireccion()
+    {
+        if (isset($_POST['perfil'])) {
+            $this->irAlPerfil();
+        } elseif (isset($_POST['pago'])) {
+            $this->irAlPago();
+        }
+    }
+
+    /* Tarjetas */
+
     public function anadirNuevaTarjeta()
     {
-        if (!empty($_POST['numero_tarjeta']) && !empty($_POST['ccv_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
+        if (!empty($_POST['numero_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
+
             $numeroTarjeta = $_POST['numero_tarjeta'];
             $ccv = $_POST['ccv_tarjeta'];
-
             $diaCad = 01; //para poder guardarlo en la base de datos
             $mesCad = intval($_POST['mes_cad_tarjeta']);
             $anioCad = intval($_POST['anio_cad_tarjeta']);
-
             $caducidad = $anioCad . "-" . $mesCad . "-" . $diaCad;
+
             global $baseDatos;
 
-            // Validar el número de tarjeta con el algoritmo de Luhn
-            if (!$this->esTarjetaValida($numeroTarjeta)) {
-                $this->error = "El número de tarjeta es inválido.";
-                $this->irAlPerfil();
-                return;
-            }
+            $url = 'http://localhost/gamesRus/servidorSOAP.php';
+            $uri = 'http://localhost/gamesRus/';
 
-            // Validar CCV (debe ser un número de 3 o 4 dígitos)
-            if (!preg_match('/^\d{3,4}$/', $ccv)) {
-                $this->error = "El CCV debe contener 3 o 4 dígitos.";
-                $this->irAlPerfil();
-                return;
-            }
+            try {
+                $cliente = new SoapClient(null, array(
+                    'location' => $url,
+                    'uri'      => $uri
+                ));
 
-
-            // Comprobar si ya existe una tarjeta con el mismo número y el mismo CCV para este usuario
-            if ($baseDatos->tarjetaExiste($numeroTarjeta, $ccv, $_SESSION['idUsuario'])) {
-                $this->error = "Ya tienes una tarjeta registrada con ese número y CCV.";
-                $this->irAlPerfil();
-                return;
-            }
-
-            // Validar que la tarjeta no esté vencida
-            if (!$this->esFechaCaducidadValida($diaCad, $mesCad, $anioCad)) {
-                $this->error = "La tarjeta está vencida.";
-                $this->irAlPerfil();
-                return;
-            }
-            
-            $baseDatos->anadirTarjeta($numeroTarjeta, $ccv, $caducidad, $_SESSION['idUsuario']);
-        } else {
-            $this->error = "Revisa la informacion";
-        }
-        $this->irAlPerfil();
-    }
-
-    private function esTarjetaValida($numero_tarjeta)
-    {
-        $numero_tarjeta = str_replace(' ', '', $numero_tarjeta); // Eliminar espacios
-        if (!preg_match('/^\d{13,19}$/', $numero_tarjeta)) {
-            return false; // La tarjeta debe contener entre 13 y 19 dígitos
-        }
-
-        $suma = 0;
-        $alternar = false;
-        for ($i = strlen($numero_tarjeta) - 1; $i >= 0; $i--) {
-            $digito = intval($numero_tarjeta[$i]);
-            if ($alternar) {
-                $digito *= 2;
-                if ($digito > 9) {
-                    $digito -= 9;
+                // Validación del número de tarjeta
+                $numeroValido = $cliente->esTarjetaValida($numeroTarjeta);
+                if (!$numeroValido) {
+                    $this->error = "El número de tarjeta es inválido.";
+                    $this->comprobarDireccion();
+                    return;
                 }
+
+                // Validación de la fecha de caducidad
+                $fechaValida = $cliente->esFechaCaducidadValida($diaCad, $mesCad, $anioCad);
+                if (!$fechaValida) {
+                    $this->error = "La fecha de caducidad es inválida.";
+                    $this->comprobarDireccion();
+                    return;
+                }
+
+                // Validación del CCV
+                $ccvValido = $cliente->validarCcv($ccv);
+                if (!$ccvValido) {
+                    $this->error = "El CCV es inválido. Debe contener 3 o 4 dígitos.";
+                    $this->comprobarDireccion();
+                    return;
+                }
+
+                // Comprobar si ya existe una tarjeta con el mismo número y el mismo CCV para este usuario
+                if ($baseDatos->tarjetaExiste($numeroTarjeta, $caducidad, $_SESSION['idUsuario'])) {
+                    $this->error = "Ya tienes esta tarjeta registrada.";
+                    $this->comprobarDireccion();
+                    return;
+                }
+                // Si todo es válido
+                $baseDatos->anadirTarjeta($numeroTarjeta, $caducidad, $_SESSION['idUsuario']);
+                $this->error = "Tarjeta añadida correctamente.";
+            } catch (SoapFault $e) {
+                $this->error = "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
             }
-            $suma += $digito;
-            $alternar = !$alternar;
+        } else {
+            $this->error = "Todos los campos son obligatorios.";
         }
-        return ($suma % 10 === 0);
+        $this->comprobarDireccion();
     }
 
-    private function esFechaCaducidadValida($dia, $mes, $anio)
-    {
-
-        if ($anio < 100) {
-            $anio += 2000; // Asumimos siglo actual
-        }
-
-        // Fecha actual
-        $dia_actual = intval(date('d'));
-        $mes_actual = intval(date('m'));
-        $anio_actual = intval(date('Y'));
-
-        // Validar que no esté vencida
-        if ($anio > $anio_actual) {
-            return true;
-        } elseif ($anio === $anio_actual) {
-            if ($mes > $mes_actual) {
-                return true;
-            } elseif ($mes === $mes_actual) {
-                return $dia >= $dia_actual;
-            }
-        }
-
-        return false;
-    }
 
     public function eliminarTarjeta()
     {
@@ -596,36 +575,53 @@ class Controlador
 
     public function editarTarjeta()
     {
-        if (!empty($_POST['ccv_tarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
-            $ccv = $_POST['ccv_tarjeta'];
+        if (!empty($_POST['numeroTarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
+            $numeroTarjeta = $_POST['numeroTarjeta'];
+
             $diaCad = 01; //para poder guardarlo en la base de datos
             $mesCad = intval($_POST['mes_cad_tarjeta']);
             $anioCad = intval($_POST['anio_cad_tarjeta']);
-
-            $caducidad = $anioCad . "-" . $mesCad . "-" . $diaCad;
+            $caducidad = implode("-", [$anioCad, $mesCad, $diaCad]);
             global $baseDatos;
 
-            // Validar CCV (debe ser un número de 3 o 4 dígitos)
-            if (!preg_match('/^\d{3,4}$/', $ccv)) {
-                $this->error = "El CCV debe contener 3 o 4 dígitos.";
-                $this->irAlPerfil();
-                return;
+            $url = 'http://localhost/gamesRus/servidorSOAP.php';
+            $uri = 'http://localhost/gamesRus/';
+
+            try {
+                $cliente = new SoapClient(null, array(
+                    'location' => $url,
+                    'uri'      => $uri
+                ));
+
+                // Validación del número de tarjeta
+                $numeroValido = $cliente->esTarjetaValida($numeroTarjeta);
+                if (!$numeroValido) {
+                    $this->error = "El número de tarjeta es inválido.";
+                    return;
+                }
+
+                // Validación de la fecha de caducidad
+                $fechaValida = $cliente->esFechaCaducidadValida($diaCad, $mesCad, $anioCad);
+                if (!$fechaValida) {
+                    $this->error = "La fecha de caducidad es inválida.";
+                    return;
+                }
+
+                // Comprobar si ya existe una tarjeta con el mismo número y el mismo CCV para este usuario
+                if ($baseDatos->tarjetaExiste($numeroTarjeta, $caducidad, $_SESSION['idUsuario'])) {
+                    $this->error = "Ya tienes una tarjeta registrada con ese número.";
+                    return;
+                }
+
+                // Si todo es válido
+                $baseDatos->editarTarjeta($numeroTarjeta, $caducidad, $_SESSION['idUsuario']);
+                $this->error = "Tarjeta editada correctamente.";
+            } catch (SoapFault $e) {
+                $this->error = "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
             }
-
-
-            // Validar que la tarjeta no esté vencida
-            if (!$this->esFechaCaducidadValida($diaCad, $mesCad, $anioCad)) {
-                $this->error = "La tarjeta está vencida.";
-                $this->irAlPerfil();
-                return;
-            }
-
-            $baseDatos->editarTarjeta($ccv, $caducidad, $_SESSION['idUsuario']);
-            $this->irAlPerfil();
         } else {
             $this->error = "Revisa la informacion";
         }
-
         $this->irAlPerfil();
     }
 
@@ -844,8 +840,6 @@ class Controlador
         } else {
             $this->error = "ID del juego no recibido.";
         }
-
-        // Redirige al carrito pero no redirige AAAAAAAAAAAAAAA
         $this->irAlCarrito();
     } */
 
@@ -879,24 +873,86 @@ class Controlador
 
 
     /* Esta funcion está a medias todavia */
+
+    public function tramitarCompra()
+    {
+        global $baseDatos;
+        if (isset($_POST['btn_confirmar_pago']) && $_POST['tarjeta'] !== "0") {
+            //tengo que recoger los datos de la tarjeta
+            $idTarjeta = $_POST['tarjeta'];
+            $tarjetas = $baseDatos->obtenerTarjeta($idTarjeta);
+            $fechaCaducidad = $tarjetas[0]['fechaCaducidad'];
+            list($anioCad, $mesCad, $diaCad) = explode('-', $fechaCaducidad);
+
+            $url = 'http://localhost/gamesRus/servidorSOAP.php';
+            $uri = 'http://localhost/gamesRus/';
+
+            try {
+                $cliente = new SoapClient(null, array(
+                    'location' => $url,
+                    'uri'      => $uri
+                ));
+
+                $fechaValida = $cliente->esFechaCaducidadValida($diaCad, $mesCad, $anioCad);
+                if (!$fechaValida) {
+                    $this->error = "La fecha de caducidad es inválida.";
+                    $this->irAlPago();
+                    return;
+                }
+            } catch (SoapFault $e) {
+                $this->error = "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
+            }
+            //comprobar si esta caducada solo
+
+
+            //guardar los datos pertineentes en sesion--> nos ahorramos el paso si los guardo en sesion direcramene
+            if (isset($_POST['juegosRegalados']) && is_array($_POST['juegosRegalados'])) {
+                $juegosRegalados = $_POST['juegosRegalados'];
+                //var_dump($juegosRegalados);
+            } else {
+                $juegosRegalados = []; // Si no hay juegos regalados, inicializamos el array vacío
+            }
+
+            // Recoger los usuarios a los que se regaló los juegos (array de nombres)
+            if (isset($_POST['usuariosRegalados']) && is_array($_POST['usuariosRegalados'])) {
+                $usuariosRegalados = $_POST['usuariosRegalados'];
+                //var_dump($usuariosRegalados);
+            } else {
+                $usuariosRegalados = []; // Si no hay usuarios, inicializamos el array vacío
+            }
+
+            $_SESSION['juegosRegalados'] = $juegosRegalados;
+            $_SESSION['usuariosRegalados'] = $usuariosRegalados;
+
+            $this->pagarCompra();
+        } else {
+            $this->error = "No has seleccionado una tarjeta.";
+            $this->irAlPago();
+        }
+    }
+
+    public function irAlPago()
+    {
+        $idUsuario = $_SESSION['idUsuario'];
+        if (isset($_SESSION['carrito'])) {
+            global $baseDatos;
+            $this->data = $baseDatos->mostrarTarjetas($idUsuario);
+            Vista::MuestraPago($this->data, $this->error);
+            var_dump($_SESSION);
+        }else{
+            $this->error="No tienes nada en el carrito.";
+            $this->irAlCarrito();
+        }
+       
+       
+    }
+
+
     public function pagarCompra()
     {
 
-        if (isset($_POST['juegosRegalados']) && is_array($_POST['juegosRegalados'])) {
-            $juegosRegalados = $_POST['juegosRegalados'];
-            //var_dump($juegosRegalados);
-        } else {
-            $juegosRegalados = []; // Si no hay juegos regalados, inicializamos el array vacío
-        }
-
-        // Recoger los usuarios a los que se regaló los juegos (array de nombres)
-        if (isset($_POST['usuariosRegalados']) && is_array($_POST['usuariosRegalados'])) {
-            $usuariosRegalados = $_POST['usuariosRegalados'];
-            //var_dump($usuariosRegalados);
-        } else {
-            $usuariosRegalados = []; // Si no hay usuarios, inicializamos el array vacío
-        }
-
+        $juegosRegalados = $_SESSION['juegosRegalados'];
+        $usuariosRegalados = $_SESSION['usuariosRegalados'];
 
         global $baseDatos;
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
