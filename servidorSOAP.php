@@ -23,15 +23,14 @@ function esTarjetaValida($numeroTarjeta)
     }
 
     if (($suma % 10) === 0) {
-        return "válida";
+        return true;
     } else {
-        "inválida";
+        return false;
     }
 }
 
 function esFechaCaducidadValida($dia, $mes, $anio)
 {
-
     if ($anio < 100) {
         $anio += 2000; // Asumimos siglo actual
     }
@@ -41,25 +40,39 @@ function esFechaCaducidadValida($dia, $mes, $anio)
     $mes_actual = intval(date('m'));
     $anio_actual = intval(date('Y'));
 
-    // Validar que no esté vencida
+    // Comparar fechas
     if ($anio > $anio_actual) {
-        return true;
+        return true;  // Año futuro, fecha válida
     } elseif ($anio === $anio_actual) {
         if ($mes > $mes_actual) {
-            return true;
-        } elseif ($mes === $mes_actual) {
-            return $dia >= $dia_actual;
+            return true;  // Mismo año, mes futuro
+        } elseif ($mes === $mes_actual && $dia >= $dia_actual) {
+            return true;  // Mismo año y mes, día igual o futuro
         }
+    } else {
+        return false;  // Fecha vencida
     }
-
-    return false;
 }
+
+
+function validarCcv($ccv)
+{
+    if (preg_match('/^\d{3,4}$/', $ccv)) {
+        return true;
+    }else{
+        return false;
+    }
+    
+}
+
 
 
 
 try {
     $server = new SoapServer(null, array("uri" => $uri));
     $server->addFunction("esTarjetaValida");
+    $server->addFunction("esFechaCaducidadValida");
+    $server->addFunction("validarCcv");
     $server->handle();
 } catch (SoapFault $e) {
     echo "Error del servidor SOAP: " . $e->getMessage();

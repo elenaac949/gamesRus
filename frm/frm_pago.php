@@ -101,6 +101,8 @@
                             <option>No se encontraron tarjetas</option>
                         <?php endif; ?>
                     </select>
+                    <label for="ccv_tarjeta">CCV: </label>
+                            <input type="text" name="ccv_tarjeta" placeholder="xxx">
                     <br><br>
                     <input type="submit" name="btn_confirmar_pago" value="Confirmar el Pago">
                 </form>

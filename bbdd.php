@@ -205,27 +205,25 @@ class Database
     /* ----TARJETAS--- */
 
     // Añadir tarjeta
-    public function anadirTarjeta($numeroTarjeta, $ccv, $fechaCaducidad, $idUsuario)
+    public function anadirTarjeta($numeroTarjeta, $fechaCaducidad, $idUsuario)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "INSERT INTO `tarjeta` 
-                (`numeroTarjeta`, `ccv`, `fechaCaducidad`, `idUsuario`) 
+                (`numeroTarjeta`, `fechaCaducidad`, `idUsuario`) 
                 VALUES 
-                (:numeroTarjeta, :ccv, :fechaCaducidad, :idUsuario)";
+                (:numeroTarjeta, :fechaCaducidad, :idUsuario)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
 
             // Asignar valores a las etiquetas
             $stmt->bindParam(':numeroTarjeta', $numeroTarjeta);
-            $stmt->bindParam(':ccv', $ccv);
             $stmt->bindParam(':fechaCaducidad', $fechaCaducidad);
             $stmt->bindParam(':idUsuario', $idUsuario);
 
             // Ejecutar la consulta
             $stmt->execute();
-            echo "Tarjeta añadida correctamente.";
         } catch (Exception $e) {
             // Manejar errores
             echo "Error al añadir la tarjeta: " . $e->getMessage();
@@ -233,20 +231,20 @@ class Database
     }
 
     //Editar tarjeta
-    public function editarTarjeta($ccv, $caducidad, $idUsuario)
+    public function editarTarjeta($numero, $caducidad, $idUsuario)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "UPDATE `tarjeta` 
-                    SET `ccv` = :ccv, `fechaCaducidad` = :caducidad 
-                    WHERE `idUsuario` = :idUsuario";
+                SET `numeroTarjeta` = :numeroTarjeta, `fechaCaducidad` = :caducidad 
+                WHERE `idUsuario` = :idUsuario";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
 
-            $stmt->bindParam(':ccv', $ccv);
-            $stmt->bindParam(':caducidad', $caducidad);
-            $stmt->bindParam(':idUsuario', $idUsuario);
+            $stmt->bindParam(':numeroTarjeta', $numero, PDO::PARAM_STR); // Aquí corregido
+            $stmt->bindParam(':caducidad', $caducidad, PDO::PARAM_STR);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
 
             // Ejecutar la consulta
             $stmt->execute();
@@ -254,6 +252,7 @@ class Database
             echo "Error: " . $e->getMessage();
         }
     }
+
 
     //Eliminar tarjeta
     function eliminarTarjeta($idTarjeta)
@@ -296,22 +295,65 @@ class Database
         }
     }
 
-    // Función para comprobar si la tarjeta existe
-    public function tarjetaExiste($numeroTarjeta, $ccv, $idUsuario)
+    /* Obtener la tarjeta con la que se va a procesar el pago en base a su id */
+    public function obtenerTarjeta($idTarjeta)
     {
+        try {
+            $sql = "SELECT * FROM `tarjeta` WHERE `idTarjeta` = :idTarjeta";
 
+            // Preparar la consulta SQL
+            $stmt = $this->conexion->prepare($sql);
 
+            // Vincular el parámetro :idUsuario con el valor proporcionado
+            $stmt->bindParam(':idTarjeta', $idTarjeta, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Obtener todas las filas de resultados
+            $tarjeta = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $tarjeta;
+        } catch (Exception $e) {
+            // Capturar y mostrar el error si ocurre
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Función para comprobar si la tarjeta existe
+    /* public function tarjetaExiste($numeroTarjeta, $caducidad, $idUsuario)
+    {
         // Comprobar si existe una tarjeta con el mismo número y CCV para el usuario actual
-        $sql = "SELECT * FROM `tarjeta` WHERE `numeroTarjeta` = :numeroTarjeta AND `ccv` = :ccv AND `idUsuario` = :idUsuario";
+        $sql = "SELECT * FROM `tarjeta` WHERE `numeroTarjeta` = :numeroTarjeta AND `fechaCaducidad` = :caducidad AND `idUsuario` = :idUsuario";
         $stmt = $this->conexion->prepare($sql);
         $stmt->bindParam(':numeroTarjeta', $numeroTarjeta, PDO::PARAM_STR);
-        $stmt->bindParam(':ccv', $ccv, PDO::PARAM_STR);
+        $stmt->bindParam(':caducidad', $caducidad);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
 
         $stmt->execute();
-
         // Si se encuentra alguna tarjeta, devolvemos true (existe)
         return $stmt->rowCount() > 0;
+    } */
+
+    public function tarjetaExiste($numeroTarjeta, $caducidad, $idUsuario)
+    {
+        try {
+            // Comprobar si existe una tarjeta con el mismo número y fecha de caducidad para el usuario actual
+            $sql = "SELECT 1 FROM `tarjeta` WHERE `numeroTarjeta` = :numeroTarjeta AND `fechaCaducidad` = :caducidad AND `idUsuario` = :idUsuario";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':numeroTarjeta', $numeroTarjeta, PDO::PARAM_STR);
+            $stmt->bindParam(':caducidad', $caducidad, PDO::PARAM_STR);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            // Si se encuentra alguna tarjeta, devolvemos true (existe)
+            return $stmt->fetch() !== false;
+        } catch (PDOException $e) {
+            // Manejo de errores
+            error_log("Error en tarjetaExiste: " . $e->getMessage());
+            return false;
+        }
     }
 
 

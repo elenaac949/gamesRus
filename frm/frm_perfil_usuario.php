@@ -81,8 +81,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Últimos 4 dígitos</th>
-                            <th>CCV</th>
+                            <th>Número de Tarjeta</th>
                             <th>Caducidad</th>
                             <th></th>
                         </tr>
@@ -101,10 +100,7 @@ include __DIR__ . '/../common/controlSesion.php';
                                     <td><?php echo $contador++; ?></td>
 
                                     <!-- Últimos 4 dígitos de la tarjeta -->
-                                    <td><?php echo substr($tarjeta['numeroTarjeta'], -4); ?></td>
-
-                                    <!-- CCV oculto -->
-                                    <td><input type="text" name="ccv_tarjeta" placeholder="xxx" value="<?php echo $tarjeta['ccv']; ?>"></td>
+                                    <td> <input type="text" name="numeroTarjeta" placeholder="Número de Tarjeta" value="<?php echo $tarjeta['numeroTarjeta']; ?>"></td>
 
                                     <!-- Fecha de caducidad -->
                                     <td>
