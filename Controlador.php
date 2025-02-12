@@ -772,12 +772,33 @@ class Controlador
     /* Esta funcion está a medias todavia */
 
     public function tramitarCompra()
-
     {
+        global $baseDatos;
         if (isset($_POST['btn_confirmar_pago']) && $_POST['tarjeta'] !== "0") {
             //tengo que recoger los datos de la tarjeta
             $idTarjeta = $_POST['tarjeta'];
+            $tarjetas = $baseDatos->obtenerTarjeta($idTarjeta);
+            $fechaCaducidad = $tarjetas[0]['fechaCaducidad'];
+            list($anioCad, $mesCad, $diaCad) = explode('-', $fechaCaducidad);
 
+            $url = 'http://localhost/gamesRus/servidorSOAP.php';
+            $uri = 'http://localhost/gamesRus/';
+
+            try {
+                $cliente = new SoapClient(null, array(
+                    'location' => $url,
+                    'uri'      => $uri
+                ));
+
+                $fechaValida = $cliente->esFechaCaducidadValida($diaCad, $mesCad, $anioCad);
+                if (!$fechaValida) {
+                    $this->error = "La fecha de caducidad es inválida.";
+                    $this->irAlPago();
+                    return;
+                }
+            } catch (SoapFault $e) {
+                $this->error = "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
+            }
             //comprobar si esta caducada solo
 
 
@@ -805,25 +826,30 @@ class Controlador
             $this->error = "No has seleccionado una tarjeta.";
             $this->irAlPago();
         }
-
-        
     }
 
     public function irAlPago()
     {
         $idUsuario = $_SESSION['idUsuario'];
-        global $baseDatos;
-        $this->data = $baseDatos->mostrarTarjetas($idUsuario);
-
-        Vista::MuestraPago($this->data, $this->error);
+        if (isset($_SESSION['carrito'])) {
+            global $baseDatos;
+            $this->data = $baseDatos->mostrarTarjetas($idUsuario);
+            Vista::MuestraPago($this->data, $this->error);
+            var_dump($_SESSION);
+        }else{
+            $this->error="No tienes nada en el carrito.";
+            $this->irAlCarrito();
+        }
+       
+       
     }
 
 
     public function pagarCompra()
     {
 
-        $juegosRegalados=$_SESSION['juegosRegalados'];
-        $usuariosRegalados=$_SESSION['usuariosRegalados'];
+        $juegosRegalados = $_SESSION['juegosRegalados'];
+        $usuariosRegalados = $_SESSION['usuariosRegalados'];
 
         global $baseDatos;
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
