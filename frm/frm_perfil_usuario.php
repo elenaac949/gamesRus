@@ -18,7 +18,7 @@ include __DIR__ . '/../common/controlSesion.php';
     ?>
     <main>
         <p class="errores"><?= $error ?></p>
-        <div id="notificacion"></div>
+        <!-- <div id="notificacion"></div> -->
         <section class="actualizar_datos">
             <h3>Actualizar Datos de Usuario</h3>
             <form action="" method="post">
