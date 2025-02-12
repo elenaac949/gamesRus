@@ -14,6 +14,7 @@ class Controlador
     private $data1;
     private $data2;
     private $data3;
+    private $data4;
     private $error;
 
     public function __construct()
@@ -162,9 +163,10 @@ class Controlador
         $this->data = $baseDatos->mostrarJuegos();
         $this->data2 = $baseDatos->accederGeneros();
         $this->data3 = $baseDatos->accederSistemas();
-
+        $this->data4 = $baseDatos->obtenerAnioJuego();
+        var_dump($this->data4);
         //$this->action = 'catalogo';
-        Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
+        Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->data4, $this->error);
     }
 
     public function irAlCarrito()
@@ -321,6 +323,7 @@ class Controlador
         if (isset($_POST['mostrar_anadir_juego'])) {
             $this->mostrarGeneros();
             $this->mostrarSistemas();
+           
         } elseif (isset($_POST['mostrar_editar_juego'])) {
             $this->mostrarLosJuegos();
         } elseif (isset($_POST['mostrar_eliminar_juego'])) {
@@ -343,6 +346,11 @@ class Controlador
     {
         global $baseDatos;
         $this->data1 = $baseDatos->accederSistemas();
+    }
+
+    public function mostrarFechas(){
+        global $baseDatos;
+        $this->data4 = $baseDatos->obtenerAnioJuego();
     }
 
     public function mostrarLosJuegos()
@@ -987,25 +995,7 @@ class Controlador
         }
     }
 
-    /* FILTRAR JUEGOS DEL CATÁLOGO */
-    // public function filtrar()
-    // {
-    //     global $baseDatos;
-    //     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    //         $genero = $_POST['genero'];
-    //         $sistema = $_POST['sistema'];
-    //         $fecha = $_POST['fecha'];
-    //         $this->data = $baseDatos->filtrarJuegos($genero, $sistema, $fecha);
-    //         $this->data2 = $baseDatos->accederGeneros();
-    //         $this->data3 = $baseDatos->accederSistemas();
-    //         Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
-    //     }
-    //     else{
-    //         $this->error = "No se ha podido filtrar";
-    //     }
-    // }
-
+  
     /* FILTRAR JUEGOS DEL CATÁLOGO */
     public function filtrar()
     {
@@ -1013,11 +1003,13 @@ class Controlador
 
         $this->data2 = $baseDatos->accederGeneros();
         $this->data3 = $baseDatos->accederSistemas();
+        $this->data4 = $baseDatos->obtenerAnioJuego();
+        // var_dump($this->data4 );
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $genero = $_POST['genero'] ?? "0"; // Si no existe, usar "0"
             $sistema = $_POST['sistema'] ?? "0";
-            $fecha = $_POST['fecha'] ?? "";
+            $fecha = $_POST['fecha'] ?? "0";
 
             $this->data = $baseDatos->filtrarJuegos($genero, $sistema, $fecha);
         } else {
@@ -1025,7 +1017,7 @@ class Controlador
             $this->error = "No se ha podido filtrar";
         }
 
-        Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
+        Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3,$this->data4, $this->error);
     }
 
     function obtenerUltimoJuego()

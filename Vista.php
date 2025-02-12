@@ -38,7 +38,7 @@ class Vista
      * @param mixed $error Información de errores.
      * @return void
      */
-    public static function MuestraCatalogo($data, $data1, $data2, $data3, $error)
+    public static function MuestraCatalogo($data, $data1, $data2, $data3, $data4,  $error)
     {
         include "./frm/frm_catalogo.php";
     }

@@ -317,7 +317,25 @@ class Database
 
     /* ----JUEGOS--- */
 
-
+    public function obtenerAnioJuego() {
+        try {
+            // Conectar a la base de datos (usando $this->conexion)
+            $sql = "SELECT DISTINCT anio FROM `juego`";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute();
+            
+            // Obtener los resultados
+            $anios = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            
+            return $anios;
+        } catch (PDOException $e) {
+            // Manejo de errores
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+    
+    // Obtener el último juego introducido en la BBDD
     public function obtenerUltimoJuego()
     {
         try {
@@ -629,8 +647,8 @@ class Database
             $juegos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $juegos;
         } catch (Exception $e) {
-            echo "Error en la base de datos: " . $e->getMessage();
-            return [];
+            error_log("Error en la base de datos: " . $e->getMessage());
+            return false;
         }
     }
 

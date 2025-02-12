@@ -18,10 +18,10 @@ include __DIR__ . '/../common/controlSesion.php';
     include './common/cabecera.php';
     ?>
     <p class="errores"><?= !$error  ? $data1 : $error ?></p>
-   
 
 
-    <?php /*var_dump($data);*/ ?>
+
+    <?php var_dump($data3); ?>
     <h2>Catálogo</h2>
     <main class="contenido_principal">
         <aside class="filtros">
@@ -40,8 +40,15 @@ include __DIR__ . '/../common/controlSesion.php';
                         <option <?php echo isset($_POST['sistema']) && $_POST['sistema'] == $sistema['idSistema'] ? "selected" : "" ?> value="<?php echo $sistema['idSistema']; ?>"><?php echo $sistema['nombre']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <label for="fecha">Fecha</label>
-                <input type="number" name="fecha" id="fecha" placeholder="1900" value="<?php echo isset($_POST['fecha']) ? $_POST['fecha'] : "" ?>">
+                <label for="fecha">Fechas</label>
+                <select name="fecha" id="fecha">
+                    <option value="0">Todos</option>
+                    <?php foreach ($data4 as $fecha) : ?>
+                        <option <?php echo isset($_POST['fecha']) && $_POST['fecha'] == $fecha ? "selected" : "" ?> value="<?php echo $fecha; ?>"><?php echo $fecha; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <!-- <label for="fecha">Fecha</label>
+                <input type="number" name="fecha" id="fecha" placeholder="1900" value="<?/*php echo isset($_POST['fecha']) ? $_POST['fecha'] : "" */ ?>"> -->
                 <input type="submit" name="btn_filtrar_juegos" value="Filtrar">
 
             </form>
