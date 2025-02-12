@@ -295,7 +295,7 @@ class Database
         }
     }
 
-    /* Obtener la tarjeta con la que se va a procesar el pago en base a su id */
+    /* Obtener la tarjeta con la que se va a procesar el pago en base a su id POSIBLEMENTE SE PUEDA BORRAR*/
     public function obtenerTarjeta($idTarjeta)
     {
         try {

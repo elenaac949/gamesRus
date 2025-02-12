@@ -534,7 +534,7 @@ class Controlador
                 }
 
                 // Comprobar si ya existe una tarjeta con el mismo número y el mismo CCV para este usuario
-                if ($baseDatos->tarjetaExiste($numeroTarjeta, $caducidad,$_SESSION['idUsuario'])) {
+                if ($baseDatos->tarjetaExiste($numeroTarjeta, $caducidad, $_SESSION['idUsuario'])) {
                     $this->error = "Ya tienes esta tarjeta registrada.";
                     $this->comprobarDireccion();
                     return;
@@ -566,7 +566,7 @@ class Controlador
     {
         if (!empty($_POST['numeroTarjeta']) && !empty($_POST['mes_cad_tarjeta']) && !empty($_POST['anio_cad_tarjeta'])) {
             $numeroTarjeta = $_POST['numeroTarjeta'];
-           
+
             $diaCad = 01; //para poder guardarlo en la base de datos
             $mesCad = intval($_POST['mes_cad_tarjeta']);
             $anioCad = intval($_POST['anio_cad_tarjeta']);
@@ -597,7 +597,7 @@ class Controlador
                 }
 
                 // Comprobar si ya existe una tarjeta con el mismo número y el mismo CCV para este usuario
-                if ($baseDatos->tarjetaExiste($numeroTarjeta,$caducidad, $_SESSION['idUsuario'])) {
+                if ($baseDatos->tarjetaExiste($numeroTarjeta, $caducidad, $_SESSION['idUsuario'])) {
                     $this->error = "Ya tienes una tarjeta registrada con ese número.";
                     return;
                 }
@@ -605,7 +605,6 @@ class Controlador
                 // Si todo es válido
                 $baseDatos->editarTarjeta($numeroTarjeta, $caducidad, $_SESSION['idUsuario']);
                 $this->error = "Tarjeta editada correctamente.";
-
             } catch (SoapFault $e) {
                 $this->error = "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
             }
@@ -773,34 +772,41 @@ class Controlador
     /* Esta funcion está a medias todavia */
 
     public function tramitarCompra()
+
     {
         if (isset($_POST['btn_confirmar_pago']) && $_POST['tarjeta'] !== "0") {
             //tengo que recoger los datos de la tarjeta
             $idTarjeta = $_POST['tarjeta'];
 
-            //query que devuelva los datos de una tarjeta en base a su id
+            //comprobar si esta caducada solo
 
-            global $baseDatos;
 
-            $tarjeta = $baseDatos->obtenerTarjeta($idTarjeta);
+            //guardar los datos pertineentes en sesion--> nos ahorramos el paso si los guardo en sesion direcramene
+            if (isset($_POST['juegosRegalados']) && is_array($_POST['juegosRegalados'])) {
+                $juegosRegalados = $_POST['juegosRegalados'];
+                //var_dump($juegosRegalados);
+            } else {
+                $juegosRegalados = []; // Si no hay juegos regalados, inicializamos el array vacío
+            }
 
-            var_dump($tarjeta);
+            // Recoger los usuarios a los que se regaló los juegos (array de nombres)
+            if (isset($_POST['usuariosRegalados']) && is_array($_POST['usuariosRegalados'])) {
+                $usuariosRegalados = $_POST['usuariosRegalados'];
+                //var_dump($usuariosRegalados);
+            } else {
+                $usuariosRegalados = []; // Si no hay usuarios, inicializamos el array vacío
+            }
 
-            $numeroTarjeta = $tarjeta[0]['numeroTarjeta'];
-            $fechaCaducidad = $tarjeta[0]['fechaCaducidad'];
+            $_SESSION['juegosRegalados'] = $juegosRegalados;
+            $_SESSION['usuariosRegalados'] = $usuariosRegalados;
 
-            list($anio, $mes, $dia) = explode('-', $fechaCaducidad);
-
-            var_dump($dia);
-            var_dump($mes);
-            var_dump($anio);
-
-            $ccv = $tarjeta[0]['ccv'];
+            $this->pagarCompra();
         } else {
             $this->error = "No has seleccionado una tarjeta.";
+            $this->irAlPago();
         }
 
-        $this->irAlPago();
+        
     }
 
     public function irAlPago()
@@ -816,21 +822,8 @@ class Controlador
     public function pagarCompra()
     {
 
-        if (isset($_POST['juegosRegalados']) && is_array($_POST['juegosRegalados'])) {
-            $juegosRegalados = $_POST['juegosRegalados'];
-            //var_dump($juegosRegalados);
-        } else {
-            $juegosRegalados = []; // Si no hay juegos regalados, inicializamos el array vacío
-        }
-
-        // Recoger los usuarios a los que se regaló los juegos (array de nombres)
-        if (isset($_POST['usuariosRegalados']) && is_array($_POST['usuariosRegalados'])) {
-            $usuariosRegalados = $_POST['usuariosRegalados'];
-            //var_dump($usuariosRegalados);
-        } else {
-            $usuariosRegalados = []; // Si no hay usuarios, inicializamos el array vacío
-        }
-
+        $juegosRegalados=$_SESSION['juegosRegalados'];
+        $usuariosRegalados=$_SESSION['usuariosRegalados'];
 
         global $baseDatos;
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
