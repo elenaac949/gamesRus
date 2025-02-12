@@ -80,7 +80,7 @@ class Database
     }
 
     //Registrar usuario - Create
-    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero,$numeros,$otros, $numeroTelefono)
+    public function registrarUsuario($nombre, $apellidos, $correo, $nick, $contrasenia, $tipoDeVia, $nombreDeVia, $numero, $numeros, $otros, $numeroTelefono)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
@@ -316,6 +316,20 @@ class Database
 
 
     /* ----JUEGOS--- */
+
+
+    public function obtenerUltimoJuego()
+    {
+        try {
+
+            $sql = "SELECT titulo FROM juego ORDER BY idJuego DESC LIMIT 1;";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->execute();
+            return   $stmt->fetchAll(PDO::FETCH_COLUMN);
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     //Función para obtener el id del juego por el título
 

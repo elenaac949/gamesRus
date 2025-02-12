@@ -99,6 +99,7 @@ class Controlador
     {
         $accionesGet = [
             'mobyGames' => 'mobyGames',
+            'ultimojuegoananido' => 'obtenerUltimoJuego'
         ];
         $this->procesarAcciones($_GET, $accionesGet);
     }
@@ -259,8 +260,8 @@ class Controlador
             $tipoDeVia = $_POST["tipo_via"];
             $nombreDeVia = $_POST['nombre_via'];
             $numero = $_POST['numero_via'];
-            $numeros=$_POST['numeros'];
-            $otros=$_POST['otros'];
+            $numeros = $_POST['numeros'];
+            $otros = $_POST['otros'];
             $numeroTelefono = $_POST['telefono'];
 
             $patron = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
@@ -276,7 +277,7 @@ class Controlador
                         $hashedPassword = password_hash($contrasenia1, PASSWORD_DEFAULT);
 
                         // Registrar al usuario
-                        $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword, $tipoDeVia, $nombreDeVia, $numero,$numeros,$otros, $numeroTelefono);
+                        $baseDatos->registrarUsuario($nombre, $apellidos, $correo, $nick, $hashedPassword, $tipoDeVia, $nombreDeVia, $numero, $numeros, $otros, $numeroTelefono);
                         //Guardamos en cookie el nombre nick para pasarlo a l login (contraseña no por seguridad) - la cookie dura 5 mins
                         // setcookie('nick', $_POST['nick'], time() + (5 * 60), "/");
                         $usuario = $baseDatos->controlLogin($correo);
@@ -1026,6 +1027,18 @@ class Controlador
         }
 
         Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->error);
+    }
+
+    function obtenerUltimoJuego()
+    {
+        global $baseDatos;
+        $juego = $baseDatos->obtenerUltimoJuego();
+        $texto = 'Último juego añadido: ' . $juego[0];
+        $MAX_LENGTH = 45;
+        if (strlen($texto) > $MAX_LENGTH) {
+            $texto = substr($texto, 0, $MAX_LENGTH) . '…';
+        }
+        echo $texto;
     }
 }
 

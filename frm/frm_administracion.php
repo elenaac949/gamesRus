@@ -230,6 +230,29 @@ include __DIR__ . '/../common/controlSesion.php';
                 }
             });
         }
+
+        
+        // NO sirve para AJAX
+        // $(document).ready(function () {
+        //     $("#formulario").submit(function (event) {
+        //         event.preventDefault();
+
+        //         var nombreJuego = $("#titulo_juego").val();
+
+        //         $.ajax({
+        //             url: ".php",
+        //             type: "POST",
+        //             data: { nombre: nombreJuego },
+        //             success: function (response) {
+        //                 if (response == "ok") {
+        //                     window.location.href = "catalogo.php"; // Redirigir al catálogo
+        //                 } else {
+        //                     alert("Error al agregar el juego.");
+        //                 }
+        //             }
+        //         });
+        //     });
+        // });
     </script>
 </body>
 
