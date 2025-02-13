@@ -21,7 +21,7 @@ include __DIR__ . '/../common/controlSesion.php';
 
 
     <?php /*var_dump($data);*/
-    var_dump($_SESSION['carrito']);
+    //var_dump($_SESSION['carrito']);
     
     ?>
     <h2>Catálogo</h2>

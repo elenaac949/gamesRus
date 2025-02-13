@@ -934,11 +934,11 @@ class Controlador
     public function irAlPago()
     {
         $idUsuario = $_SESSION['idUsuario'];
-        if (isset($_SESSION['carrito'])) {
+        if (isset($_SESSION['carrito']['carrito'])) {
             global $baseDatos;
             $this->data = $baseDatos->mostrarTarjetas($idUsuario);
-            Vista::MuestraPago($this->data, $this->error);
             var_dump($_SESSION);
+            Vista::MuestraPago($this->data, $this->error);
         }else{
             $this->error="No tienes nada en el carrito.";
             $this->irAlCarrito();

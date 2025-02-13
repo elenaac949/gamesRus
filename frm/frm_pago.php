@@ -15,6 +15,9 @@
     ?>
 
     <?php
+    /* if(isset($_SESSION)){
+        var_dump($_SESSION);
+    } */
     $meses = [
         1 => "Enero",
         2 => "Febrero",

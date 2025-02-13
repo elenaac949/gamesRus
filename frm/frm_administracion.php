@@ -25,13 +25,13 @@ include __DIR__ . '/../common/controlSesion.php';
                 <input type="hidden" name="administrar">
                 <div>
 
-                    <input type="submit" name="mostrar_anadir_juego" value="Nuevo Juego">
+                    <input type="submit" name="mostrar_anadir_juego" value="Añadir Juego">
                 </div>
                 <div>
-                    <input type="submit" name="mostrar_eliminar_juego" value="Eliminar">
+                    <input type="submit" name="mostrar_eliminar_juego" value="Eliminar Juego">
                 </div>
                 <div>
-                    <input type="submit" name="mostrar_editar_juego" value="Editar">
+                    <input type="submit" name="mostrar_editar_juego" value="Editar Juego">
                 </div>
             </form>
         </aside>
