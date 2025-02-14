@@ -359,16 +359,17 @@ class Database
 
     /* ----JUEGOS--- */
 
-    public function obtenerAnioJuego() {
+    public function obtenerAnioJuego()
+    {
         try {
             // Conectar a la base de datos (usando $this->conexion)
             $sql = "SELECT DISTINCT anio FROM `juego`";
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
-            
+
             // Obtener los resultados
             $anios = $stmt->fetchAll(PDO::FETCH_COLUMN);
-            
+
             return $anios;
         } catch (PDOException $e) {
             // Manejo de errores
@@ -376,7 +377,7 @@ class Database
             return false;
         }
     }
-    
+
     // Obtener el último juego introducido en la BBDD
     public function obtenerUltimoJuego()
     {
@@ -581,7 +582,8 @@ class Database
 
     /* ------SERIALIZE DEL CARRITO------------ */
 
-    public function obtenerJuegosDelCarrito($idCarrito) {
+    public function obtenerJuegosDelCarrito($idCarrito)
+    {
         $query = "SELECT j.idJuego, j.titulo, j.anio 
                   FROM carritoJuego cj
                   INNER JOIN juego j ON cj.idJuego = j.idJuego
@@ -592,7 +594,8 @@ class Database
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function verificarJuegoEnCarrito($idCarrito, $idJuego) {
+    public function verificarJuegoEnCarrito($idCarrito, $idJuego)
+    {
         $query = "SELECT COUNT(*) FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
         $stmt = $this->conexion->prepare($query);
         $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
@@ -601,7 +604,8 @@ class Database
         return $stmt->fetchColumn() > 0;
     }
 
-    public function agregarJuegoAlCarrito($idCarrito, $idJuego) {
+    public function agregarJuegoAlCarrito($idCarrito, $idJuego)
+    {
         $query = "INSERT INTO carritoJuego (idCarrito, idJuego) VALUES (:idCarrito, :idJuego)";
         $stmt = $this->conexion->prepare($query);
         $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
@@ -609,7 +613,8 @@ class Database
         return $stmt->execute();
     }
 
-    public function eliminarJuegoDelCarrito($idCarrito, $idJuego) {
+    public function eliminarJuegoDelCarrito($idCarrito, $idJuego)
+    {
         $query = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
         $stmt = $this->conexion->prepare($query);
         $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
@@ -617,13 +622,15 @@ class Database
         return $stmt->execute();
     }
 
-    public function vaciarCarrito($idCarrito) {
+    public function vaciarCarrito($idCarrito)
+    {
         $query = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito";
         $stmt = $this->conexion->prepare($query);
         $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
         return $stmt->execute();
     }
-    function obtenerJuegoPorId($idJuego) {
+    function obtenerJuegoPorId($idJuego)
+    {
         $sql = "SELECT idJuego, titulo, desarrollador, distribuidor, anio, ruta, descripcion, portada 
                 FROM juego 
                 WHERE idJuego = :idJuego";
@@ -632,7 +639,7 @@ class Database
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
+
 
     /* ----CARRITO---- */
 
@@ -723,7 +730,7 @@ class Database
 
 
 
-/*     function obtenerJuegosDelCarrito($idCarrito)
+    /*     function obtenerJuegosDelCarrito($idCarrito)
     {
         try {
             // Asegúrate de incluir idUsuario en la consulta si es necesario
@@ -996,14 +1003,14 @@ class Database
     //     }
     // }
 
-    public function agregarJuego($titulo, $desarrollador, $anio, $generos, $sistemas, $ruta, $descripcion, $portada)
+    public function agregarJuego($titulo, $desarrollador, $anio, $generos, $sistemas, $ruta, $descripcion, $portada, $precio)
     {
         try {
-            // Consulta SQL actualizada
+            // Consulta SQL actualizada para incluir la columna `precio`
             $sql = "INSERT INTO `juego` 
-            (`titulo`, `desarrollador`, `anio`, `ruta`, `descripcion`, `portada`) 
-            VALUES 
-            (:titulo, :desarrollador, :anio, :ruta, :descripcion, :portada)";
+                (`titulo`, `desarrollador`, `anio`, `ruta`, `descripcion`, `portada`, `precio`) 
+                VALUES 
+                (:titulo, :desarrollador, :anio, :ruta, :descripcion, :portada, :precio)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -1011,31 +1018,36 @@ class Database
             // Asignar valores a las etiquetas
             $stmt->bindParam(':titulo', $titulo);
             $stmt->bindParam(':desarrollador', $desarrollador);
-
             $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
             $stmt->bindParam(':descripcion', $descripcion);
             $stmt->bindParam(':portada', $portada);
             $stmt->bindParam(':ruta', $ruta);
+            $stmt->bindParam(':precio', $precio, PDO::PARAM_STR);  // Precio como string para manejar decimales correctamente
+
             // Ejecutar la consulta
             echo "a";
             $stmt->execute();
             echo "b";
 
-            /* Antes de meter los generos y los sistemas comprobamos que existan */
-            /* este array es de ids no de generos */
+            // Obtener el último ID insertado
             $lastId = $this->conexion->lastInsertId();
+
+            // Verificar y añadir géneros
             if (is_array($generos) && !empty($generos)) {
                 $this->anadirGeneroJuego($lastId, $generos);
             }
+
+            // Verificar y añadir sistemas
             if (is_array($sistemas) && !empty($sistemas)) {
                 $this->anadirSistemaJuego($lastId, $sistemas);
             }
 
-            /* faltarian los juegos relacionados */
+            /* Faltarían los juegos relacionados, si los hay */
         } catch (Exception $e) {
-            echo "Error: Agregar juego" . $e->getMessage();
+            echo "Error: Agregar juego - " . $e->getMessage();
         }
     }
+
 
     // Cargar juego desde un archivo externo JSON o XML
     public function cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada)
@@ -1066,39 +1078,39 @@ class Database
     }
 
     // Editar juego
-    public function editarJuego($idJuego, $desarrollador, $distribuidor, $anio, $portada, $descripcion)
-    {
-        try {
-
-            // Consulta SQL corregida
-            $sql = "UPDATE `juego`
+    public function editarJuego($idJuego, $desarrollador, $distribuidor, $anio, $portada, $descripcion, $precio)
+{
+    try {
+        // Consulta SQL actualizada para incluir el precio
+        $sql = "UPDATE `juego`
                 SET 
                     `desarrollador` = :desarrollador,
                     `distribuidor` = :distribuidor,
                     `anio` = :anio,
                     `portada` = :portada,
-                    `descripcion` = :descripcion                        
-                WHERE `idJuego` = :idJuego"; // Reemplaza `id` con la clave primaria de la tabla.
+                    `descripcion` = :descripcion,
+                    `precio` = :precio                        
+                WHERE `idJuego` = :idJuego";
 
+        // Preparar la consulta
+        $stmt = $this->conexion->prepare($sql);
 
-            // Preparar la consulta
-            $stmt = $this->conexion->prepare($sql);
+        // Asignar valores a las etiquetas
+        $stmt->bindParam(':desarrollador', $desarrollador);
+        $stmt->bindParam(':distribuidor', $distribuidor);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->bindParam(':portada', $portada);
+        $stmt->bindParam(':descripcion', $descripcion);
+        $stmt->bindParam(':precio', $precio, PDO::PARAM_STR);  // Precio como string para manejar decimales
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
 
-            // Asignar valores a las etiquetas
-
-            $stmt->bindParam(':desarrollador', $desarrollador);
-            $stmt->bindParam(':distribuidor', $distribuidor);
-            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
-            $stmt->bindParam(':portada', $portada);
-            $stmt->bindParam(':descripcion', $descripcion);
-            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
-
-            // Ejecutar la consulta
-            $stmt->execute();
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-        }
+        // Ejecutar la consulta
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
     }
+}
+
 
 
     // Eliminar juego 

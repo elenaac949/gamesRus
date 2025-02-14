@@ -150,6 +150,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="date" name="anio_lanzamiento" placeholder="Año">
                     <input type="text" name="portada_juego" placeholder="Portada" id="portada_juego">
                     <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
+                    <input type="text" name="precio_juego" placeholder="Precio" >
                     <input type="submit" name="editar-juego" value="Editar Juego">
 
 

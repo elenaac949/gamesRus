@@ -646,10 +646,11 @@ class Controlador
                 $portada = $_POST['portada_juego'];
                 $ruta = $_POST['ruta_juego'] ?? "Sin ruta";
                 $sistemas = $_POST['sistema_juego'];
+                $precio = !empty($_POST['precio_juego']) ? floatval($_POST['precio_juego']) : 15.99;//si no se añade un precio se pone el de ejemplo
 
                 //falta una funcion para verificar si el juego existe ya
                 //falta que se añada la descripcion y la portada
-                $baseDatos->agregarJuego($titulo, $desarrollador, $lanzamiento, $generos, $sistemas, $ruta, $descripcion, $portada);
+                $baseDatos->agregarJuego($titulo, $desarrollador, $lanzamiento, $generos, $sistemas, $ruta, $descripcion, $portada,$precio);
                 $this->error = 'Juego añadido correctamente';
             } else {
                 $this->error = 'Datos incompletos.';
@@ -678,9 +679,11 @@ class Controlador
                 $descripcion = $_POST['descripcion_juego'];
                 $portada = $_POST['portada_juego'];
                 $idJuego = $_POST['idJuego'];
+                $precio = !empty($_POST['precio_juego']) ? floatval($_POST['precio_juego']) : 15.99;//si no se añade un precio se pone el de ejemplo
+
                 //falta una funcion para verificar si el juego existe ya
                 //falta que se añada la descripcion y la portada
-                $baseDatos->editarJuego($idJuego, $desarrollador, $distribuidor, $lanzamiento, $portada, $descripcion);
+                $baseDatos->editarJuego($idJuego, $desarrollador, $distribuidor, $lanzamiento, $portada, $descripcion,$precio);
 
                 $this->error = 'Juego añadido correctamente';
                 //$this->action = 'administracion';
