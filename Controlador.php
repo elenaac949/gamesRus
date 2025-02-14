@@ -740,7 +740,8 @@ class Controlador
                     'anio' => $juego['anio'],
                     'ruta' => $juego['ruta'],
                     'descripcion' => $juego['descripcion'],
-                    'portada' => $juego['portada']
+                    'portada' => $juego['portada'],
+                    'precio'=>$juego['precio']
                 ];
             }
         }
@@ -773,11 +774,12 @@ class Controlador
 
                 // También lo agregamos a la base de datos
                 $baseDatos->agregarJuegoAlCarrito($idCarrito, $idJuego);
-
                 $this->error = "Juego agregado al carrito.";
+                
             } else {
                 $this->error = "El juego ya está en el carrito.";
             }
+            var_dump($_SESSION);
             $this->irAlCatalogo();
         }
     }
@@ -938,16 +940,14 @@ class Controlador
     public function irAlPago()
     {
         $idUsuario = $_SESSION['idUsuario'];
-        if (isset($_SESSION['carrito']['carrito'])) {
+        if (isset($_SESSION['carrito'])) {
             global $baseDatos;
             $this->data = $baseDatos->mostrarTarjetas($idUsuario);
-            var_dump($_SESSION);
             Vista::MuestraPago($this->data, $this->error);
         }else{
             $this->error="No tienes nada en el carrito.";
             $this->irAlCarrito();
         }
-       
        
     }
 

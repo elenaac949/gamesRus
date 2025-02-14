@@ -587,15 +587,23 @@ class Database
 
     public function obtenerJuegosDelCarrito($idCarrito)
     {
-        $query = "SELECT j.idJuego, j.titulo, j.anio 
+        try {
+            $query = "SELECT j.idJuego, j.titulo, j.anio, j.precio
                   FROM carritoJuego cj
                   INNER JOIN juego j ON cj.idJuego = j.idJuego
                   WHERE cj.idCarrito = :idCarrito";
-        $stmt = $this->conexion->prepare($query);
-        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $stmt = $this->conexion->prepare($query);
+            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Devuelve todos los resultados en formato asociativo
+        } catch (Exception $e) {
+            echo "Error al obtener juegos del carrito: " . $e->getMessage();
+            return [];
+        }
     }
+
 
     public function verificarJuegoEnCarrito($idCarrito, $idJuego)
     {
@@ -634,7 +642,7 @@ class Database
     }
     function obtenerJuegoPorId($idJuego)
     {
-        $sql = "SELECT idJuego, titulo, desarrollador, distribuidor, anio, ruta, descripcion, portada 
+        $sql = "SELECT *
                 FROM juego 
                 WHERE idJuego = :idJuego";
         $stmt = $this->conexion->prepare($sql);
