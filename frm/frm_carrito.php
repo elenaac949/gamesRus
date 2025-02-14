@@ -56,17 +56,16 @@ include __DIR__ . '/../common/controlSesion.php';
             <?php endif; ?>
         </section>
         <aside class="total_pago">
-            <div>
-                <?php
 
-                $total = 0;
+            <?php
+            /* aqui calculamos el total del precio  */
+            $total = 0;
+            foreach ($_SESSION['carrito'] as $id => $juego) {
+                $total += floatval($juego['precio']);  // Convertir el precio a float y sumarlo
+            }
+            ?>
+            <p id="precio_total">Total: <?php echo $total . " €"; ?></p>
 
-                foreach ($_SESSION['carrito'] as $id => $juego) {
-                    $total += floatval($juego['precio']);  // Convertir el precio a float y sumarlo
-                }
-                ?>
-                <p id="precio_total">Total: <?php echo $total." €";?></p>
-            </div>
 
             <form action="" method="post" id="formularioPago">
                 <input type="submit" value="Pagar" name="btn_pagar">
