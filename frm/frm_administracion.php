@@ -113,7 +113,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="text" name="ruta_juego" placeholder="Ruta" id="ruta_juego">
                     <textarea name="descripcion_juego" placeholder="Descripción" id="descripcion_juego"></textarea>
                     <input type="text" name="portada_juego" placeholder="Portada" id="portada_juego">
-
+                    <input type="text" name="precio_juego" placeholder="Precio" >
                     <input type="submit" name="anadir-juego" value="Añadir Juego">
                     <input type="submit" name="btn_subir_archivo" value="Subir Juegos">
 
