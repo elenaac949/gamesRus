@@ -767,7 +767,8 @@ class Controlador
                     'anio' => $juego['anio'],
                     'ruta' => $juego['ruta'],
                     'descripcion' => $juego['descripcion'],
-                    'portada' => $juego['portada']
+                    'portada' => $juego['portada'],
+                    'precio'=>$juego['precio']
                 ];
 
                 // También lo agregamos a la base de datos
@@ -1054,6 +1055,8 @@ class Controlador
                     $portada = $rutaRelativa . DIRECTORY_SEPARATOR . $juego->portada;
                     $ruta = $rutaRelativa . DIRECTORY_SEPARATOR . $juego->ruta;
                     $descripcion = !empty($juego->descripcion) ? $juego->descripcion : " ";
+                    $precio = !empty($juego->precio) ? $juego->precio : 15.99;
+
                     $sistemas = [];
                     foreach ($juego->sistemas->sistema as $sistema) {
                         $sistemas[] = (string) $sistema;
@@ -1071,7 +1074,7 @@ class Controlador
                     if ($existe == true) {
                         $detalles[] = "El juego '$titulo' ya existe.";
                     } else {
-                        $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada);
+                        $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada,$precio);
                         $idJuego = $baseDatos->obtenerIdJuegoPorTitulo($titulo);
                         $baseDatos->cargarGeneroJuego($idJuego, $generos);
                         $baseDatos->cargarSistemasJuego($idJuego, $sistemas);
@@ -1111,6 +1114,8 @@ class Controlador
                 $portada = $rutaRelativa . DIRECTORY_SEPARATOR . $juego['portada'];
                 $ruta = $rutaRelativa . DIRECTORY_SEPARATOR . $juego['ruta'];
                 $descripcion = !empty($juego['descripcion']) ? $juego['descripcion'] : " ";
+                $precio = !empty($juego->precio) ? $juego->precio : 15.99;
+
                 $relacionados = [];
                 foreach ($juego['relacionados'] as $relacionado) {
                     $relacionados[] = $relacionado;
@@ -1130,7 +1135,7 @@ class Controlador
                 if ($existe == true) {
                     $detalles[] = "El juego '$titulo' ya existe.";
                 } else {
-                    $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada);
+                    $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada,$precio);
                     $idJuego = $baseDatos->obtenerIdJuegoPorTitulo($titulo);
                     $baseDatos->cargarGeneroJuego($idJuego, $generos);
                     $baseDatos->cargarSistemasJuego($idJuego, $sistemas);

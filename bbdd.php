@@ -1050,14 +1050,14 @@ class Database
 
 
     // Cargar juego desde un archivo externo JSON o XML
-    public function cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada)
+    public function cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada, $precio)
     {
         try {
-            // Consulta SQL actualizada
+            // Consulta SQL actualizada para incluir `precio`
             $sql = "INSERT INTO `juego` 
-            (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `descripcion`, `portada`) 
-            VALUES 
-            (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :descripcion, :portada)";
+                (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `descripcion`, `portada`, `precio`) 
+                VALUES 
+                (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :descripcion, :portada, :precio)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -1070,6 +1070,8 @@ class Database
             $stmt->bindParam(':descripcion', $descripcion);
             $stmt->bindParam(':portada', $portada);
             $stmt->bindParam(':ruta', $ruta);
+            $stmt->bindParam(':precio', $precio, PDO::PARAM_STR);  // Precio como string para manejar decimales
+
             // Ejecutar la consulta
             $stmt->execute();
         } catch (Exception $e) {
@@ -1077,12 +1079,13 @@ class Database
         }
     }
 
+
     // Editar juego
     public function editarJuego($idJuego, $desarrollador, $distribuidor, $anio, $portada, $descripcion, $precio)
-{
-    try {
-        // Consulta SQL actualizada para incluir el precio
-        $sql = "UPDATE `juego`
+    {
+        try {
+            // Consulta SQL actualizada para incluir el precio
+            $sql = "UPDATE `juego`
                 SET 
                     `desarrollador` = :desarrollador,
                     `distribuidor` = :distribuidor,
@@ -1092,24 +1095,24 @@ class Database
                     `precio` = :precio                        
                 WHERE `idJuego` = :idJuego";
 
-        // Preparar la consulta
-        $stmt = $this->conexion->prepare($sql);
+            // Preparar la consulta
+            $stmt = $this->conexion->prepare($sql);
 
-        // Asignar valores a las etiquetas
-        $stmt->bindParam(':desarrollador', $desarrollador);
-        $stmt->bindParam(':distribuidor', $distribuidor);
-        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
-        $stmt->bindParam(':portada', $portada);
-        $stmt->bindParam(':descripcion', $descripcion);
-        $stmt->bindParam(':precio', $precio, PDO::PARAM_STR);  // Precio como string para manejar decimales
-        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+            // Asignar valores a las etiquetas
+            $stmt->bindParam(':desarrollador', $desarrollador);
+            $stmt->bindParam(':distribuidor', $distribuidor);
+            $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+            $stmt->bindParam(':portada', $portada);
+            $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':precio', $precio, PDO::PARAM_STR);  // Precio como string para manejar decimales
+            $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
 
-        // Ejecutar la consulta
-        $stmt->execute();
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
+            // Ejecutar la consulta
+            $stmt->execute();
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
-}
 
 
 
