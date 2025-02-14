@@ -119,8 +119,8 @@ include __DIR__ . '/../common/controlSesion.php';
                     <p>Fecha de Lanzamiento: ${juegoSeleccionado.anio}</p>
                     <p>Género: ${juegoSeleccionado.generos}</p>
                     <p>Desarrollador: ${juegoSeleccionado.desarrollador}</p>
-                    
                     <p>Sistemas: ${juegoSeleccionado.sistemas}</p>
+                    <p><span>Precio</span>: ${juegoSeleccionado.precio} €</p>
                     
                 `;
                 } else {

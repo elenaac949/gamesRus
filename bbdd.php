@@ -473,7 +473,8 @@ class Database
             j.anio, 
             j.ruta, 
             j.descripcion, 
-            j.portada, 
+            j.portada,
+            j.precio,
             GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
             GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
             true AS comprado
@@ -511,7 +512,8 @@ class Database
                     j.anio, 
                     j.ruta, 
                     j.descripcion, 
-                    j.portada, 
+                    j.portada,
+                    j.precio,
                     GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
                     GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
                     true AS prestado
@@ -551,7 +553,8 @@ class Database
                     j.anio, 
                     j.ruta, 
                     j.descripcion, 
-                    j.portada, 
+                    j.portada,
+                    j.precio,
                     GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
                     GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
                     true AS regalado
@@ -932,7 +935,8 @@ class Database
                     j.anio, 
                     j.ruta, 
                     j.descripcion, 
-                    j.portada, 
+                    j.portada,
+                    j.precio,
                     GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
                     GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas
                 FROM juego j
@@ -1619,6 +1623,7 @@ class Database
                     j.ruta, 
                     j.descripcion, 
                     j.portada, 
+                    j.precio,
                     GROUP_CONCAT(g.genero SEPARATOR ', ') AS generos
                 FROM 
                     juego j
