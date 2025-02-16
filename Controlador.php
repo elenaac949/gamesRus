@@ -165,7 +165,8 @@ class Controlador
         $this->data2 = $baseDatos->accederGeneros();
         $this->data3 = $baseDatos->accederSistemas();
         $this->data4 = $baseDatos->obtenerAnioJuego();
-        var_dump($this->data4);
+        /* var_dump($this->data4); */
+        /* var_dump($_SESSION); */
         //$this->action = 'catalogo';
         Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->data4, $this->error);
     }
@@ -174,9 +175,9 @@ class Controlador
     {
         global $baseDatos;
         $this->sincronizarCarrito();
-        /* $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
-        $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito); */
-        
+        $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+        $this->data = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
+
         Vista::MuestraCarrito($this->data, $this->error, $this->data1);
     }
 
@@ -245,6 +246,7 @@ class Controlador
             }
         }
         //$this->action = 'login';
+       /*  $this->sincronizarCarrito(); */
         Vista::MuestraLogin($this->data);
         return;
     }
@@ -326,7 +328,6 @@ class Controlador
         if (isset($_POST['mostrar_anadir_juego'])) {
             $this->mostrarGeneros();
             $this->mostrarSistemas();
-           
         } elseif (isset($_POST['mostrar_editar_juego'])) {
             $this->mostrarLosJuegos();
         } elseif (isset($_POST['mostrar_eliminar_juego'])) {
@@ -351,7 +352,8 @@ class Controlador
         $this->data1 = $baseDatos->accederSistemas();
     }
 
-    public function mostrarFechas(){
+    public function mostrarFechas()
+    {
         global $baseDatos;
         $this->data4 = $baseDatos->obtenerAnioJuego();
     }
@@ -646,11 +648,11 @@ class Controlador
                 $portada = $_POST['portada_juego'];
                 $ruta = $_POST['ruta_juego'] ?? "Sin ruta";
                 $sistemas = $_POST['sistema_juego'];
-                $precio = !empty($_POST['precio_juego']) ? floatval($_POST['precio_juego']) : 15.99;//si no se añade un precio se pone el de ejemplo
+                $precio = !empty($_POST['precio_juego']) ? floatval($_POST['precio_juego']) : 15.99; //si no se añade un precio se pone el de ejemplo
 
                 //falta una funcion para verificar si el juego existe ya
                 //falta que se añada la descripcion y la portada
-                $baseDatos->agregarJuego($titulo, $desarrollador, $lanzamiento, $generos, $sistemas, $ruta, $descripcion, $portada,$precio);
+                $baseDatos->agregarJuego($titulo, $desarrollador, $lanzamiento, $generos, $sistemas, $ruta, $descripcion, $portada, $precio);
                 $this->error = 'Juego añadido correctamente';
             } else {
                 $this->error = 'Datos incompletos.';
@@ -679,11 +681,11 @@ class Controlador
                 $descripcion = $_POST['descripcion_juego'];
                 $portada = $_POST['portada_juego'];
                 $idJuego = $_POST['idJuego'];
-                $precio = !empty($_POST['precio_juego']) ? floatval($_POST['precio_juego']) : 15.99;//si no se añade un precio se pone el de ejemplo
+                $precio = !empty($_POST['precio_juego']) ? floatval($_POST['precio_juego']) : 15.99; //si no se añade un precio se pone el de ejemplo
 
                 //falta una funcion para verificar si el juego existe ya
                 //falta que se añada la descripcion y la portada
-                $baseDatos->editarJuego($idJuego, $desarrollador, $distribuidor, $lanzamiento, $portada, $descripcion,$precio);
+                $baseDatos->editarJuego($idJuego, $desarrollador, $distribuidor, $lanzamiento, $portada, $descripcion, $precio);
 
                 $this->error = 'Juego añadido correctamente';
                 //$this->action = 'administracion';
@@ -720,32 +722,36 @@ class Controlador
 
     public function sincronizarCarrito()
     {
+        if (!isset($_SESSION['idUsuario'])) {
+            return; 
+        }
+
         global $baseDatos;
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
+
         // Obtener los juegos del carrito en la base de datos
         $juegosDB = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
 
-        // Crear una estructura de carrito en la sesión si no existe
+        // Inicializar la estructura de carrito si no existe
         if (!isset($_SESSION['carrito'])) {
             $_SESSION['carrito'] = [];
         }
 
-        // Recorrer los juegos de la base de datos y agregarlos al carrito en la sesión
+        // Agregar los juegos de la base de datos al carrito en sesión si no están ya agregados
         foreach ($juegosDB as $juego) {
-            if (!isset($_SESSION['carrito'][$juego['idJuego']])) {
-                $_SESSION['carrito'][$juego['idJuego']] = [
-                    'titulo' => $juego['titulo'],
-                    'desarrollador' => $juego['desarrollador'],
-                    'distribuidor' => $juego['distribuidor'],
-                    'anio' => $juego['anio'],
-                    'ruta' => $juego['ruta'],
-                    'descripcion' => $juego['descripcion'],
-                    'portada' => $juego['portada'],
-                    'precio'=>$juego['precio']
-                ];
-            }
+            $_SESSION['carrito'][$juego['idJuego']] = $_SESSION['carrito'][$juego['idJuego']] ?? [
+                'titulo' => $juego['titulo'],
+                'desarrollador' => $juego['desarrollador'],
+                'distribuidor' => $juego['distribuidor'],
+                'anio' => $juego['anio'],
+                'ruta' => $juego['ruta'],
+                'descripcion' => $juego['descripcion'],
+                'portada' => $juego['portada'],
+                'precio' => $juego['precio']
+            ];
         }
     }
+
 
     public function agregarJuegoAlCarrito()
     {
@@ -769,17 +775,16 @@ class Controlador
                     'ruta' => $juego['ruta'],
                     'descripcion' => $juego['descripcion'],
                     'portada' => $juego['portada'],
-                    'precio'=>$juego['precio']
+                    'precio' => $juego['precio']
                 ];
 
                 // También lo agregamos a la base de datos
                 $baseDatos->agregarJuegoAlCarrito($idCarrito, $idJuego);
                 $this->error = "Juego agregado al carrito.";
-                
             } else {
                 $this->error = "El juego ya está en el carrito.";
             }
-            var_dump($_SESSION);
+            /* var_dump($_SESSION); */
             $this->irAlCatalogo();
         }
     }
@@ -944,11 +949,10 @@ class Controlador
             global $baseDatos;
             $this->data = $baseDatos->mostrarTarjetas($idUsuario);
             Vista::MuestraPago($this->data, $this->error);
-        }else{
-            $this->error="No tienes nada en el carrito.";
+        } else {
+            $this->error = "No tienes nada en el carrito.";
             $this->irAlCarrito();
         }
-       
     }
 
 
@@ -1074,7 +1078,7 @@ class Controlador
                     if ($existe == true) {
                         $detalles[] = "El juego '$titulo' ya existe.";
                     } else {
-                        $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada,$precio);
+                        $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada, $precio);
                         $idJuego = $baseDatos->obtenerIdJuegoPorTitulo($titulo);
                         $baseDatos->cargarGeneroJuego($idJuego, $generos);
                         $baseDatos->cargarSistemasJuego($idJuego, $sistemas);
@@ -1135,7 +1139,7 @@ class Controlador
                 if ($existe == true) {
                     $detalles[] = "El juego '$titulo' ya existe.";
                 } else {
-                    $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada,$precio);
+                    $baseDatos->cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada, $precio);
                     $idJuego = $baseDatos->obtenerIdJuegoPorTitulo($titulo);
                     $baseDatos->cargarGeneroJuego($idJuego, $generos);
                     $baseDatos->cargarSistemasJuego($idJuego, $sistemas);
@@ -1155,7 +1159,7 @@ class Controlador
         }
     }
 
-  
+
     /* FILTRAR JUEGOS DEL CATÁLOGO */
     public function filtrar()
     {
@@ -1177,7 +1181,7 @@ class Controlador
             $this->error = "No se ha podido filtrar";
         }
 
-        Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3,$this->data4, $this->error);
+        Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->data4, $this->error);
     }
 
     function obtenerUltimoJuego()

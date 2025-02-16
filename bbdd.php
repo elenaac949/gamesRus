@@ -588,7 +588,7 @@ class Database
     public function obtenerJuegosDelCarrito($idCarrito)
     {
         try {
-            $query = "SELECT j.idJuego, j.titulo, j.anio, j.precio
+            $query = "SELECT j.idJuego, j.titulo,j.desarrollador,j.distribuidor, j.anio,j.ruta,j.descripcion,j.portada, j.precio
                   FROM carritoJuego cj
                   INNER JOIN juego j ON cj.idJuego = j.idJuego
                   WHERE cj.idCarrito = :idCarrito";
