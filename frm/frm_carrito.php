@@ -21,42 +21,51 @@ include __DIR__ . '/../common/controlSesion.php';
     <main>
         <?php /*var_dump($data);*/ ?>
         <section class="juegos_carrito">
-            <?php foreach ($data as $juego): ?>
-                <div class="juego">
-                    <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo $juego['titulo']; ?>">
-                    <div class="titulo_botones">
-                        <p><?php echo $juego['titulo']; ?></p>
+            <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
+                <?php foreach ($_SESSION['carrito'] as $idJuego => $juego): ?>
+                    <div class="juego">
+                        <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo $juego['titulo']; ?>">
+                        <div class="titulo_botones">
+                            <p><?php echo $juego['titulo']; ?></p>
+                            <p><?php echo $juego['precio'] . " €"; ?></p>
 
-                        <div class="botones_juego">
-                            <form action="" method="post">
-                                <input type="hidden" value="<?php echo $juego['idJuego']; ?>" name="idJuegoCatalogo">
+                            <div class="botones_juego">
+                                <form action="" method="post">
+                                    <input type="hidden" value="<?php echo $idJuego; ?>" name="idJuegoCatalogo">
 
+                                    <input type="submit" value="Eliminar" name="btn_eliminar_del_carrito">
+                                    <!-- Tiene que ser boton porque solo activa una funcionalidad del HTML, no manda datos -->
 
-                                <input type="submit" value="Eliminar" name="btn_eliminar_del_carrito">
-                                <!-- Tiene que ser boton porque solo activa una funcionalidad del HTML, no manda datos -->
-
-                                <!-- Esto esta mal lo tengo que cambiar -->
-                                <!-- MENSAJE DE JUEGO YA REGALADO -->
-                                <?php if (!isset($data1)) {
-
-                                ?>
-                                    <button type="button" class="btn_regalar" data-id="<?php echo $juego['idJuego']; ?>" data-titulo="<?php echo $juego['titulo']; ?>">Regalar</button>
-                                <?php
-                                } else {
-                                ?>
-                                    <p <?= $data1 ?>></p>
-                                <?php
-                                } ?>
-                            </form>
+                                    <!-- Esto esta mal lo tengo que cambiar -->
+                                    <!-- MENSAJE DE JUEGO YA REGALADO -->
+                                    <?php if (!isset($data1)) { ?>
+                                        <button type="button" class="btn_regalar" data-id="<?php echo $idJuego;; ?>" data-titulo="<?php echo $juego['titulo']; ?>">Regalar</button>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <p <?= $data1 ?>></p>
+                                    <?php
+                                    } ?>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No hay juegos en tu carrito.</p>
+            <?php endif; ?>
         </section>
         <aside class="total_pago">
-            <div>
-                <p>Aqui va el total</p>
-            </div>
+
+            <?php
+            /* aqui calculamos el total del precio  */
+            $total = 0;
+            foreach ($_SESSION['carrito'] as $id => $juego) {
+                $total += floatval($juego['precio']);  // Convertir el precio a float y sumarlo
+            }
+            ?>
+            <p id="precio_total">Total: <?php echo $total . " €"; ?></p>
+
 
             <form action="" method="post" id="formularioPago">
                 <input type="submit" value="Pagar" name="btn_pagar">
@@ -93,7 +102,7 @@ include __DIR__ . '/../common/controlSesion.php';
         const nombreUsuario = document.querySelector('#nombre_usuario');
 
         // Seleccionamos el formulario de pago
-        const formularioPago = document.querySelector("#formularioPago"); 
+        const formularioPago = document.querySelector("#formularioPago");
 
         // Añadimos el evento a cada botón "Regalar"
         botonesRegalar.forEach(boton => {

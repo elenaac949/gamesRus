@@ -25,13 +25,13 @@ include __DIR__ . '/../common/controlSesion.php';
                 <input type="hidden" name="administrar">
                 <div>
 
-                    <input type="submit" name="mostrar_anadir_juego" value="Nuevo Juego">
+                    <input type="submit" name="mostrar_anadir_juego" value="Añadir Juego">
                 </div>
                 <div>
-                    <input type="submit" name="mostrar_eliminar_juego" value="Eliminar">
+                    <input type="submit" name="mostrar_eliminar_juego" value="Eliminar Juego">
                 </div>
                 <div>
-                    <input type="submit" name="mostrar_editar_juego" value="Editar">
+                    <input type="submit" name="mostrar_editar_juego" value="Editar Juego">
                 </div>
             </form>
         </aside>
@@ -113,7 +113,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="text" name="ruta_juego" placeholder="Ruta" id="ruta_juego">
                     <textarea name="descripcion_juego" placeholder="Descripción" id="descripcion_juego"></textarea>
                     <input type="text" name="portada_juego" placeholder="Portada" id="portada_juego">
-
+                    <input type="text" name="precio_juego" placeholder="Precio" >
                     <input type="submit" name="anadir-juego" value="Añadir Juego">
                     <input type="submit" name="btn_subir_archivo" value="Subir Juegos">
 
@@ -150,6 +150,7 @@ include __DIR__ . '/../common/controlSesion.php';
                     <input type="date" name="anio_lanzamiento" placeholder="Año">
                     <input type="text" name="portada_juego" placeholder="Portada" id="portada_juego">
                     <textarea name="descripcion_juego" placeholder="Descripción"></textarea>
+                    <input type="text" name="precio_juego" placeholder="Precio" >
                     <input type="submit" name="editar-juego" value="Editar Juego">
 
 

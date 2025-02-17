@@ -70,9 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php
 
         ?>
-
-
-
         <button id="cerrar_detalles">Salir</button>
     </dialog>
 
@@ -115,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p><span>Género</span>: ${juegoSeleccionado.generos}</p>
                     <p><span>Desarrollador</span>: ${juegoSeleccionado.desarrollador}</p>                    
                     <p><span>Sistemas</span>: ${juegoSeleccionado.sistemas}</p>
+                    <p><span>Precio</span>: ${juegoSeleccionado.precio} €</p>
                     </div>
                     <div class="descripcion">
                     <p><span>Descripción</span>: ${juegoSeleccionado.descripcion}</p>

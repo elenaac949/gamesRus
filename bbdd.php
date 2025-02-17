@@ -236,62 +236,47 @@ class Database
 
     /* ----TARJETAS--- */
 
-    /**
-     * Añadir una nueva tarjeta a la base de datos.
-     *
-     * @param string $numeroTarjeta Número de la tarjeta.
-     * @param string $ccv Código de seguridad de la tarjeta.
-     * @param string $fechaCaducidad Fecha de caducidad de la tarjeta (YYYY-MM-DD).
-     * @param int $idUsuario ID del usuario al que pertenece la tarjeta.
-     */
-    public function anadirTarjeta($numeroTarjeta, $ccv, $fechaCaducidad, $idUsuario)
+    // Añadir tarjeta
+    public function anadirTarjeta($numeroTarjeta, $fechaCaducidad, $idUsuario)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "INSERT INTO `tarjeta` 
-                (`numeroTarjeta`, `ccv`, `fechaCaducidad`, `idUsuario`) 
+                (`numeroTarjeta`, `fechaCaducidad`, `idUsuario`) 
                 VALUES 
-                (:numeroTarjeta, :ccv, :fechaCaducidad, :idUsuario)";
+                (:numeroTarjeta, :fechaCaducidad, :idUsuario)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
 
             // Asignar valores a las etiquetas
             $stmt->bindParam(':numeroTarjeta', $numeroTarjeta);
-            $stmt->bindParam(':ccv', $ccv);
             $stmt->bindParam(':fechaCaducidad', $fechaCaducidad);
             $stmt->bindParam(':idUsuario', $idUsuario);
 
             // Ejecutar la consulta
             $stmt->execute();
-            echo "Tarjeta añadida correctamente.";
         } catch (Exception $e) {
             // Manejar errores
             echo "Error al añadir la tarjeta: " . $e->getMessage();
         }
     }
 
-    /**
-     * Editar los datos de una tarjeta existente.
-     *
-     * @param string $ccv Nuevo código de seguridad de la tarjeta.
-     * @param string $caducidad Nueva fecha de caducidad (YYYY-MM-DD).
-     * @param int $idUsuario ID del usuario dueño de la tarjeta.
-     */
-    public function editarTarjeta($ccv, $caducidad, $idUsuario)
+    //Editar tarjeta
+    public function editarTarjeta($numero, $caducidad, $idUsuario)
     {
         try {
             // Consulta SQL con etiquetas para consultas preparadas
             $sql = "UPDATE `tarjeta` 
-                    SET `ccv` = :ccv, `fechaCaducidad` = :caducidad 
-                    WHERE `idUsuario` = :idUsuario";
+                SET `numeroTarjeta` = :numeroTarjeta, `fechaCaducidad` = :caducidad 
+                WHERE `idUsuario` = :idUsuario";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
 
-            $stmt->bindParam(':ccv', $ccv);
-            $stmt->bindParam(':caducidad', $caducidad);
-            $stmt->bindParam(':idUsuario', $idUsuario);
+            $stmt->bindParam(':numeroTarjeta', $numero, PDO::PARAM_STR); // Aquí corregido
+            $stmt->bindParam(':caducidad', $caducidad, PDO::PARAM_STR);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
 
             // Ejecutar la consulta
             $stmt->execute();
@@ -300,11 +285,8 @@ class Database
         }
     }
 
-    /**
-     * Eliminar una tarjeta de la base de datos.
-     *
-     * @param int $idTarjeta ID de la tarjeta a eliminar.
-     */
+
+    //Eliminar tarjeta
     function eliminarTarjeta($idTarjeta)
     {
         try {
@@ -350,29 +332,66 @@ class Database
         }
     }
 
-    /**
-     * Verificar si una tarjeta ya existe en la base de datos.
-     *
-     * @param string $numeroTarjeta Número de la tarjeta a verificar.
-     * @param string $ccv Código de seguridad de la tarjeta.
-     * @param int $idUsuario ID del usuario dueño de la tarjeta.
-     * @return bool True si la tarjeta existe, false en caso contrario.
-     */
-    public function tarjetaExiste($numeroTarjeta, $ccv, $idUsuario)
+    /* Obtener la tarjeta con la que se va a procesar el pago en base a su id POSIBLEMENTE SE PUEDA BORRAR*/
+    public function obtenerTarjeta($idTarjeta)
+    {
+        try {
+            $sql = "SELECT * FROM `tarjeta` WHERE `idTarjeta` = :idTarjeta";
+
+            // Preparar la consulta SQL
+            $stmt = $this->conexion->prepare($sql);
+
+            // Vincular el parámetro :idUsuario con el valor proporcionado
+            $stmt->bindParam(':idTarjeta', $idTarjeta, PDO::PARAM_INT);
+
+            // Ejecutar la consulta
+            $stmt->execute();
+
+            // Obtener todas las filas de resultados
+            $tarjeta = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $tarjeta;
+        } catch (Exception $e) {
+            // Capturar y mostrar el error si ocurre
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    // Función para comprobar si la tarjeta existe
+    /* public function tarjetaExiste($numeroTarjeta, $caducidad, $idUsuario)
     {
         // Comprobar si existe una tarjeta con el mismo número y CCV para el usuario actual
-        $sql = "SELECT * FROM `tarjeta` WHERE `numeroTarjeta` = :numeroTarjeta AND `ccv` = :ccv AND `idUsuario` = :idUsuario";
+        $sql = "SELECT * FROM `tarjeta` WHERE `numeroTarjeta` = :numeroTarjeta AND `fechaCaducidad` = :caducidad AND `idUsuario` = :idUsuario";
         $stmt = $this->conexion->prepare($sql);
         $stmt->bindParam(':numeroTarjeta', $numeroTarjeta, PDO::PARAM_STR);
-        $stmt->bindParam(':ccv', $ccv, PDO::PARAM_STR);
+        $stmt->bindParam(':caducidad', $caducidad);
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
 
         $stmt->execute();
-
         // Si se encuentra alguna tarjeta, devolvemos true (existe)
         return $stmt->rowCount() > 0;
-    }
+    } */
 
+    public function tarjetaExiste($numeroTarjeta, $caducidad, $idUsuario)
+    {
+        try {
+            // Comprobar si existe una tarjeta con el mismo número y fecha de caducidad para el usuario actual
+            $sql = "SELECT 1 FROM `tarjeta` WHERE `numeroTarjeta` = :numeroTarjeta AND `fechaCaducidad` = :caducidad AND `idUsuario` = :idUsuario";
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindParam(':numeroTarjeta', $numeroTarjeta, PDO::PARAM_STR);
+            $stmt->bindParam(':caducidad', $caducidad, PDO::PARAM_STR);
+            $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            // Si se encuentra alguna tarjeta, devolvemos true (existe)
+            return $stmt->fetch() !== false;
+        } catch (PDOException $e) {
+            // Manejo de errores
+            error_log("Error en tarjetaExiste: " . $e->getMessage());
+            return false;
+        }
+    }
 
 
     /* ----JUEGOS--- */
@@ -401,12 +420,7 @@ class Database
         }
     }
 
-    /**
-     * Obtener el último juego introducido en la base de datos.
-     *
-     * @return array|false Título del último juego o false en caso de error.
-     */
-
+    // Obtener el último juego introducido en la BBDD
     public function obtenerUltimoJuego()
     {
         try {
@@ -529,7 +543,8 @@ class Database
             j.anio, 
             j.ruta, 
             j.descripcion, 
-            j.portada, 
+            j.portada,
+            j.precio,
             GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
             GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
             true AS comprado
@@ -572,7 +587,8 @@ class Database
                     j.anio, 
                     j.ruta, 
                     j.descripcion, 
-                    j.portada, 
+                    j.portada,
+                    j.precio,
                     GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
                     GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
                     true AS prestado
@@ -613,7 +629,8 @@ class Database
                     j.anio, 
                     j.ruta, 
                     j.descripcion, 
-                    j.portada, 
+                    j.portada,
+                    j.precio,
                     GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
                     GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas,
                     true AS regalado
@@ -639,14 +656,79 @@ class Database
     }
 
 
+    /* ------SERIALIZE DEL CARRITO------------ */
+
+    public function obtenerJuegosDelCarrito($idCarrito)
+    {
+        try {
+            $query = "SELECT j.idJuego, j.titulo,j.desarrollador,j.distribuidor, j.anio,j.ruta,j.descripcion,j.portada, j.precio
+                  FROM carritoJuego cj
+                  INNER JOIN juego j ON cj.idJuego = j.idJuego
+                  WHERE cj.idCarrito = :idCarrito";
+
+            $stmt = $this->conexion->prepare($query);
+            $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);  // Devuelve todos los resultados en formato asociativo
+        } catch (Exception $e) {
+            echo "Error al obtener juegos del carrito: " . $e->getMessage();
+            return [];
+        }
+    }
+
+
+    public function verificarJuegoEnCarrito($idCarrito, $idJuego)
+    {
+        $query = "SELECT COUNT(*) FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function agregarJuegoAlCarrito($idCarrito, $idJuego)
+    {
+        $query = "INSERT INTO carritoJuego (idCarrito, idJuego) VALUES (:idCarrito, :idJuego)";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function eliminarJuegoDelCarrito($idCarrito, $idJuego)
+    {
+        $query = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function vaciarCarrito($idCarrito)
+    {
+        $query = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(':idCarrito', $idCarrito, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+    function obtenerJuegoPorId($idJuego)
+    {
+        $sql = "SELECT *
+                FROM juego 
+                WHERE idJuego = :idJuego";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
     /* ----CARRITO---- */
 
-    /**
-     * Obtener el carrito de un usuario o crearlo si no existe.
-     *
-     * @param int $idUsuario ID del usuario.
-     * @return int|false ID del carrito o false en caso de error.
-     */
+    /* Obtenemos el carrito o lo creamos si no existe--CREATE y READ */
+
     function obtenerCarrito($idUsuario)
     {
         try {
@@ -681,16 +763,10 @@ class Database
         }
     }
 
+    /* Funcion para verificar si el juego ya esta en el carrito.
+    No podemos repetir el mismo juego en el carrito debido a la estructura de la BBDD */
 
-    /**
-     * Verifica si un juego ya está en el carrito del usuario.
-     * No se permite repetir el mismo juego en el carrito debido a la estructura de la base de datos.
-     *
-     * @param int $idCarrito ID del carrito del usuario.
-     * @param int $idJuego ID del juego a verificar.
-     * @return bool Devuelve true si el juego ya está en el carrito, false en caso contrario.
-     */
-    function verificarJuegoEnCarrito($idCarrito, $idJuego)
+    /* function verificarJuegoEnCarrito($idCarrito, $idJuego)
     {
         try {
             $sql = "SELECT COUNT(*) AS total FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
@@ -703,16 +779,10 @@ class Database
         } catch (Exception $e) {
             return "Error: " . $e->getMessage();
         }
-    }
+    } */
 
-    /**
-     * Agrega un juego al carrito del usuario.
-     *
-     * @param int $idCarrito ID del carrito del usuario.
-     * @param int $idJuego ID del juego a agregar.
-     * @return string Mensaje de éxito o error.
-     */
-    function anadirJuegoAlCarrito($idCarrito, $idJuego)
+    /* MODIFY Carrito */
+    /* function anadirJuegoAlCarrito($idCarrito, $idJuego)
     {
         try {
             $sql = "INSERT INTO carritojuego (idCarrito, idJuego) VALUES (:idCarrito, :idJuego)";
@@ -727,15 +797,11 @@ class Database
         } catch (Exception $e) {
             return "Error: " . $e->getMessage();
         }
-    }
+    } */
 
-    /**
-     * Obtiene los juegos dentro de un carrito específico.
-     *
-     * @param int $idCarrito ID del carrito del usuario.
-     * @return array|false Devuelve un array con los juegos del carrito o false en caso de error.
-     */
-    function obtenerJuegosDelCarrito($idCarrito)
+
+
+    /*     function obtenerJuegosDelCarrito($idCarrito)
     {
         try {
             $sql = "SELECT j.idJuego, j.titulo, j.desarrollador, j.distribuidor, j.anio, j.ruta, j.descripcion, j.portada
@@ -750,16 +816,11 @@ class Database
             error_log("Error en la base de datos: " . $e->getMessage());
             return false;
         }
-    }
+    } */
 
-    /**
-     * Elimina un juego específico del carrito del usuario.
-     *
-     * @param int $idCarrito ID del carrito del usuario.
-     * @param int $idJuego ID del juego a eliminar.
-     * @return string Mensaje de éxito o error.
-     */
-    public function eliminarJuegoCarrito($idCarrito, $idJuego)
+    /* Eliminar 1 juego del carrito */
+
+    /* public function eliminarJuegoCarrito($idCarrito, $idJuego)
     {
         try {
             $sql = "DELETE FROM carritoJuego WHERE idCarrito = :idCarrito AND idJuego = :idJuego";
@@ -771,14 +832,8 @@ class Database
         } catch (Exception $e) {
             return "Error en la base de datos: " . $e->getMessage();
         }
-    }
+    } */
 
-    /**
-     * Elimina todos los juegos dentro de un carrito específico.
-     *
-     * @param int $idCarrito ID del carrito del usuario.
-     * @return bool Devuelve true si la operación fue exitosa, false en caso de error.
-     */
     public function eliminarTodosLosJuegosCarrito($idCarrito)
     {
         try {
@@ -793,13 +848,9 @@ class Database
         }
     }
 
-    /**
-     * Verifica si un usuario ha comprado un juego en particular.
-     *
-     * @param int $idUsuario ID del usuario.
-     * @param int $idJuego ID del juego.
-     * @return bool Devuelve true si el usuario ha comprado el juego, false en caso contrario.
-     */
+
+
+    /* Devuelve true/false dependiendo de si encuentra el juego en posesion de un usuario en concreto */
     public function esJuegoComprado($idUsuario, $idJuego)
     {
         try {
@@ -900,7 +951,8 @@ class Database
                     j.anio, 
                     j.ruta, 
                     j.descripcion, 
-                    j.portada, 
+                    j.portada,
+                    j.precio,
                     GROUP_CONCAT(DISTINCT g.genero SEPARATOR ', ') AS generos,
                     GROUP_CONCAT(DISTINCT s.nombre SEPARATOR ', ') AS sistemas
                 FROM juego j
@@ -915,32 +967,60 @@ class Database
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log("Error en mostrarJuegos: " . $e->getMessage());
-            return false;
+            // Si hay un error, mostrar el mensaje
+            echo "Error: " . $e->getMessage();
         }
     }
 
-    /**
-     * Agrega un nuevo juego a la base de datos.
-     *
-     * @param string $titulo El título del juego.
-     * @param string $desarrollador El nombre del desarrollador del juego.
-     * @param int $anio El año de lanzamiento del juego.
-     * @param array $generos Un array de IDs de géneros asociados al juego.
-     * @param array $sistemas Un array de IDs de sistemas donde se puede jugar el juego.
-     * @param string $ruta La ruta del archivo relacionado con el juego.
-     * @param string $descripcion Una descripción del juego.
-     * @param string $portada La imagen de portada del juego.
-     * @return void
-     */
-    public function agregarJuego($titulo, $desarrollador, $anio, $generos, $sistemas, $ruta, $descripcion, $portada)
+
+
+    //Agregar un juego nuevo - HEMOS QUITADO LA RUTA PARA QUE FUNCIONE 
+    // public function agregarJuego($titulo, $desarrollador, $distribuidor, $anio, $generos, $sistemas, $ruta, $descripcion, $portada)
+    // {
+    //     try {
+    //         // Consulta SQL actualizada
+    //         $sql = "INSERT INTO `juego` 
+    //         (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `descripcion`, `portada`) 
+    //         VALUES 
+    //         (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :descripcion, :portada)";
+
+    //         // Preparar la consulta
+    //         $stmt = $this->conexion->prepare($sql);
+
+    //         // Asignar valores a las etiquetas
+    //         $stmt->bindParam(':titulo', $titulo);
+    //         $stmt->bindParam(':desarrollador', $desarrollador);
+    //         $stmt->bindParam(':distribuidor', $distribuidor);
+    //         $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+    //         $stmt->bindParam(':descripcion', $descripcion);
+    //         $stmt->bindParam(':portada', $portada);
+    //         $stmt->bindParam(':ruta', $ruta);
+    //         // Ejecutar la consulta
+    //         $stmt->execute();
+
+    //         /* Antes de meter los generos y los sistemas comprobamos que existan */
+    //         /* este array es de ids no de generos */
+    //         if (is_array($generos) && !empty($generos)) {
+    //             $this->anadirGeneroJuego($this->conexion->lastInsertId(), $generos);
+    //         }
+    //         if (is_array($sistemas) && !empty($sistemas)) {
+    //             $this->anadirSistemaJuego($this->conexion->lastInsertId(), $sistemas);
+    //         }
+
+    //         /* faltarian los juegos relacionados */
+    //     } catch (Exception $e) {
+    //         echo "Error: " . $e->getMessage();
+    //     }
+    // }
+
+    public function agregarJuego($titulo, $desarrollador, $anio, $generos, $sistemas, $ruta, $descripcion, $portada, $precio)
     {
         try {
-            // Consulta SQL actualizada
+            // Consulta SQL actualizada para incluir la columna `precio`
             $sql = "INSERT INTO `juego` 
-        (`titulo`, `desarrollador`, `anio`, `ruta`, `descripcion`, `portada`) 
-        VALUES 
-        (:titulo, :desarrollador, :anio, :ruta, :descripcion, :portada)";
+                (`titulo`, `desarrollador`, `anio`, `ruta`, `descripcion`, `portada`, `precio`) 
+                VALUES 
+                (:titulo, :desarrollador, :anio, :ruta, :descripcion, :portada, :precio)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -952,47 +1032,40 @@ class Database
             $stmt->bindParam(':descripcion', $descripcion);
             $stmt->bindParam(':portada', $portada);
             $stmt->bindParam(':ruta', $ruta);
+            $stmt->bindParam(':precio', $precio, PDO::PARAM_STR);  // Precio como string para manejar decimales correctamente
 
             // Ejecutar la consulta
             $stmt->execute();
 
-            // Obtén el último ID insertado
+            // Obtener el último ID insertado
             $lastId = $this->conexion->lastInsertId();
 
-            // Añadir géneros asociados al juego
+            // Verificar y añadir géneros
             if (is_array($generos) && !empty($generos)) {
                 $this->anadirGeneroJuego($lastId, $generos);
             }
 
-            // Añadir sistemas asociados al juego
+            // Verificar y añadir sistemas
             if (is_array($sistemas) && !empty($sistemas)) {
                 $this->anadirSistemaJuego($lastId, $sistemas);
             }
+
+            /* Faltarían los juegos relacionados, si los hay */
         } catch (Exception $e) {
-            echo "Error: Agregar juego" . $e->getMessage();
+            echo "Error: Agregar juego - " . $e->getMessage();
         }
     }
 
-    /**
-     * Carga un juego desde un archivo JSON o XML y lo agrega a la base de datos.
-     *
-     * @param string $titulo El título del juego.
-     * @param string $desarrollador El nombre del desarrollador del juego.
-     * @param string $distribuidor El nombre del distribuidor del juego.
-     * @param int $anio El año de lanzamiento del juego.
-     * @param string $ruta La ruta del archivo relacionado con el juego.
-     * @param string $descripcion Una descripción del juego.
-     * @param string $portada La imagen de portada del juego.
-     * @return void
-     */
-    public function cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada)
+
+    // Cargar juego desde un archivo externo JSON o XML
+    public function cargarJuego($titulo, $desarrollador, $distribuidor, $anio, $ruta, $descripcion, $portada, $precio)
     {
         try {
-            // Consulta SQL para insertar el juego
+            // Consulta SQL actualizada para incluir `precio`
             $sql = "INSERT INTO `juego` 
-        (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `descripcion`, `portada`) 
-        VALUES 
-        (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :descripcion, :portada)";
+                (`titulo`, `desarrollador`, `distribuidor`, `anio`, `ruta`, `descripcion`, `portada`, `precio`) 
+                VALUES 
+                (:titulo, :desarrollador, :distribuidor, :anio, :ruta, :descripcion, :portada, :precio)";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -1005,6 +1078,7 @@ class Database
             $stmt->bindParam(':descripcion', $descripcion);
             $stmt->bindParam(':portada', $portada);
             $stmt->bindParam(':ruta', $ruta);
+            $stmt->bindParam(':precio', $precio, PDO::PARAM_STR);  // Precio como string para manejar decimales
 
             // Ejecutar la consulta
             $stmt->execute();
@@ -1013,29 +1087,21 @@ class Database
         }
     }
 
-    /**
-     * Edita un juego en la base de datos.
-     *
-     * @param int $idJuego El ID del juego a editar.
-     * @param string $desarrollador El nombre del desarrollador del juego.
-     * @param string $distribuidor El nombre del distribuidor del juego.
-     * @param int $anio El año de lanzamiento del juego.
-     * @param string $portada La nueva portada del juego.
-     * @param string $descripcion Una nueva descripción del juego.
-     * @return void
-     */
-    public function editarJuego($idJuego, $desarrollador, $distribuidor, $anio, $portada, $descripcion)
+
+    // Editar juego
+    public function editarJuego($idJuego, $desarrollador, $distribuidor, $anio, $portada, $descripcion, $precio)
     {
         try {
-            // Consulta SQL para actualizar el juego
+            // Consulta SQL actualizada para incluir el precio
             $sql = "UPDATE `juego`
-            SET 
-                `desarrollador` = :desarrollador,
-                `distribuidor` = :distribuidor,
-                `anio` = :anio,
-                `portada` = :portada,
-                `descripcion` = :descripcion
-            WHERE `idJuego` = :idJuego"; // Se utiliza el idJuego como clave primaria.
+                SET 
+                    `desarrollador` = :desarrollador,
+                    `distribuidor` = :distribuidor,
+                    `anio` = :anio,
+                    `portada` = :portada,
+                    `descripcion` = :descripcion,
+                    `precio` = :precio                        
+                WHERE `idJuego` = :idJuego";
 
             // Preparar la consulta
             $stmt = $this->conexion->prepare($sql);
@@ -1046,6 +1112,7 @@ class Database
             $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
             $stmt->bindParam(':portada', $portada);
             $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':precio', $precio, PDO::PARAM_STR);  // Precio como string para manejar decimales
             $stmt->bindParam(':idJuego', $idJuego, PDO::PARAM_INT);
 
             // Ejecutar la consulta
@@ -1055,12 +1122,9 @@ class Database
         }
     }
 
-    /**
-     * Elimina un juego de la base de datos.
-     *
-     * @param int $idJuego El ID del juego a eliminar.
-     * @return void
-     */
+
+
+    // Eliminar juego 
     public function eliminarJuego($idJuego)
     {
         try {
@@ -1682,6 +1746,7 @@ class Database
                     j.ruta, 
                     j.descripcion, 
                     j.portada, 
+                    j.precio,
                     GROUP_CONCAT(g.genero SEPARATOR ', ') AS generos
                 FROM 
                     juego j
@@ -1762,14 +1827,12 @@ class Database
         }
     }
 
-    /**
-     * Destructor de la clase.
-     *
-     * Este método se ejecuta al finalizar la ejecución de la web. Su función es cerrar la conexión 
-     * a la base de datos para evitar errores de conexión cuando la conexión se realiza muchas veces rápidamente.
-     *
-     * @return void
-     */
+
+
+
+
+    // Este metodo se ejecuta al finalizar la ejecución de la web,
+    // Eliminamos la conexión para que no dé error de conexión si se ejecuta muchas veces rapido
     function __destruct()
     {
         $this->conexion = null;

@@ -20,8 +20,10 @@ include __DIR__ . '/../common/controlSesion.php';
     <p class="errores"><?= !$error  ? $data1 : $error ?></p>
 
 
-
-    <?php var_dump($data3); ?>
+    <?php /*var_dump($data);*/
+    //var_dump($_SESSION['carrito']);
+    
+    ?>
     <h2>Catálogo</h2>
     <main class="contenido_principal">
         <aside class="filtros">
@@ -117,8 +119,8 @@ include __DIR__ . '/../common/controlSesion.php';
                     <p>Fecha de Lanzamiento: ${juegoSeleccionado.anio}</p>
                     <p>Género: ${juegoSeleccionado.generos}</p>
                     <p>Desarrollador: ${juegoSeleccionado.desarrollador}</p>
-                    
                     <p>Sistemas: ${juegoSeleccionado.sistemas}</p>
+                    <p><span>Precio</span>: ${juegoSeleccionado.precio} €</p>
                     
                 `;
                 } else {
