@@ -1,6 +1,7 @@
 <?php
 include __DIR__ . '/../common/controlSesion.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

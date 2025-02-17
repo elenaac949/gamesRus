@@ -23,7 +23,10 @@ body {
     display: flex;
     flex-direction: column;
     background-color: #f4f4f9;
-    padding-top: 20vh; /* Ajusta según la altura del header */
+    padding-top: 20vh; 
+}
+main{
+    flex: 1;
 }
 
 header {
@@ -170,39 +173,72 @@ nav form input[type="submit"]:hover::after {
     color: #7209b7;
 }
 
+/* Estilo footer */
 
 footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    background-image: linear-gradient(to bottom, #3a0ca3, #4361ee);
-    color: #f4f4f9;
-    padding: 20px 40px;
-    border-top: 2px solid #4361ee;
+    background-image: linear-gradient(to bottom, var(--color-violeta), var(--color-azul));
+    color: var(--color-texto-claro);
+    padding: 40px 60px;
+    border-top: 2px solid var(--color-azul);
     flex-wrap: wrap;
+    font-family: "Poppins", sans-serif;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
 }
 
 footer .logo h3 {
-    font-size: 1.5em;
+    font-size: 1.8em;
     margin: 0;
-    color: #f72585;
+    color: var(--color-rosa);
+    font-weight: 600;
+    
 }
 
 footer .redes_sociales {
     display: flex;
+    flex-direction: column;
     gap: 15px;
-    align-items: center;
+    align-items: flex-start;
 }
 
-footer .redes_sociales a {
+footer .redes_sociales h3 {
     font-size: 1.2em;
-    color: #f4f4f9;
-    text-decoration: none;
-    transition: color 0.3s ease;
+    color: var(--color-texto-claro);
+    margin-bottom: 10px;
+    font-weight: 500;
 }
 
-footer .redes_sociales a:hover {
-    color: #4cc9f0;
+footer .redes_sociales form input[type="submit"] {
+    font-size: 1em;
+    cursor: pointer;
+    color: var(--color-texto-claro);
+    background: transparent;
+    border: none;
+    padding: 8px 0;
+    text-transform: capitalize;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+footer .redes_sociales form input[type="submit"]:hover {
+    color: var(--color-celeste);
+}
+
+footer .redes_sociales form input[type="submit"]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background: var(--color-celeste);
+    transition: width 0.3s ease;
+}
+
+footer .redes_sociales form input[type="submit"]:hover::after {
+    width: 100%;
 }
 
 footer .mas_informacion {
@@ -211,16 +247,45 @@ footer .mas_informacion {
     gap: 10px;
 }
 
-footer .mas_informacion a {
-    color: #f4f4f9;
-    text-decoration: none;
-    font-size: 0.95em;
-    transition: color 0.3s ease;
+footer .mas_informacion h3 {
+    font-size: 1.2em;
+    color: var(--color-texto-claro);
+    margin-bottom: 10px;
+    font-weight: 500;
 }
 
-footer .mas_informacion a:hover {
-    color: #f72585;
+footer .mas_informacion form input[type="submit"] {
+    font-size: 1em;
+    cursor: pointer;
+    color: var(--color-texto-claro);
+    background: transparent;
+    border: none;
+    padding: 8px 0;
+    text-transform: capitalize;
+    transition: color 0.3s ease;
+    position: relative;
 }
+
+footer .mas_informacion form input[type="submit"]:hover {
+    color: var(--color-rosa);
+}
+
+footer .mas_informacion form input[type="submit"]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background: var(--color-rosa);
+    transition: width 0.3s ease;
+}
+
+footer .mas_informacion form input[type="submit"]:hover::after {
+    width: 100%;
+}
+
+
 
 /* Scrollbar personalizado */
 ::-webkit-scrollbar {

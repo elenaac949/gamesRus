@@ -65,8 +65,8 @@ class Controlador
             'mobyGames' => 'mobyGames',
             'btn_subir_archivo' => 'subirArchivos',
             'btn_filtrar_juegos' => 'filtrar',
+            'btn_volver'=>'irABiblioteca'
         ];
-
 
         $this->procesarAcciones($_POST, $accionesPost);
     }
@@ -81,13 +81,20 @@ class Controlador
                 } else {
                     $this->$metodo();
                 }
-                return; // Terminamos después de la acción.
+                return; 
             }
         }
 
-        // Si no se encuentra ninguna acción válida
-        echo "Acción no encontrada.";
+        $this->error="Se ha producido un error.";
+        Vista::MuestraPaginaError($this->data, $this->error);
     }
+
+
+    public function mostrarError()
+    {
+        Vista::MuestraPaginaError($this->data, $this->error);
+    }
+
 
 
     public function mobyGames($urlMobyGames)
@@ -106,7 +113,7 @@ class Controlador
         $this->procesarAcciones($_GET, $accionesGet);
     }
 
-
+   
 
     public function irAlRegistro()
     {
@@ -246,7 +253,7 @@ class Controlador
             }
         }
         //$this->action = 'login';
-       /*  $this->sincronizarCarrito(); */
+        /*  $this->sincronizarCarrito(); */
         Vista::MuestraLogin($this->data);
         return;
     }
@@ -723,7 +730,7 @@ class Controlador
     public function sincronizarCarrito()
     {
         if (!isset($_SESSION['idUsuario'])) {
-            return; 
+            return;
         }
 
         global $baseDatos;
