@@ -893,7 +893,9 @@ class Controlador
             $idTarjeta = $_POST['tarjeta'];
             $tarjetas = $baseDatos->obtenerTarjeta($idTarjeta);
             $fechaCaducidad = $tarjetas[0]['fechaCaducidad'];
-            list($anioCad, $mesCad, $diaCad) = explode('-', $fechaCaducidad);
+            /* list($anioCad, $mesCad, $diaCad) = explode('-', $fechaCaducidad); */
+            list($anioCad, $mesCad, $diaCad) = array_map('intval', explode('-', $fechaCaducidad));
+
 
             $url = 'http://localhost/gamesRus/servidorSOAP.php';
             $uri = 'http://localhost/gamesRus/';
@@ -906,20 +908,20 @@ class Controlador
 
                 $fechaValida = $cliente->esFechaCaducidadValida($diaCad, $mesCad, $anioCad);
                 if (!$fechaValida) {
-                    $this->error = "La fecha de caducidad es inválida.";
+                    /* $this->error = "La fecha de caducidad es inválida."; */
+                    $this->error = var_dump($diaCad,$mesCad,$anioCad);
+
                     $this->irAlPago();
                     return;
                 }
             } catch (SoapFault $e) {
                 $this->error = "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
             }
-            //comprobar si esta caducada solo
-
+            
 
             //guardar los datos pertineentes en sesion--> nos ahorramos el paso si los guardo en sesion direcramene
             if (isset($_POST['juegosRegalados']) && is_array($_POST['juegosRegalados'])) {
                 $juegosRegalados = $_POST['juegosRegalados'];
-                //var_dump($juegosRegalados);
             } else {
                 $juegosRegalados = []; // Si no hay juegos regalados, inicializamos el array vacío
             }
@@ -927,7 +929,6 @@ class Controlador
             // Recoger los usuarios a los que se regaló los juegos (array de nombres)
             if (isset($_POST['usuariosRegalados']) && is_array($_POST['usuariosRegalados'])) {
                 $usuariosRegalados = $_POST['usuariosRegalados'];
-                //var_dump($usuariosRegalados);
             } else {
                 $usuariosRegalados = []; // Si no hay usuarios, inicializamos el array vacío
             }
@@ -966,9 +967,6 @@ class Controlador
         $idCarrito = $baseDatos->obtenerCarrito($_SESSION['idUsuario']);
         $juegos = $baseDatos->obtenerJuegosDelCarrito($idCarrito);
 
-        //echo $idCarrito . "<br>";
-        //var_dump($juegos);
-
         if (!empty($juegos)) {
             foreach ($juegos as $juego) {
                 if (isset($juego['idJuego'])) {
@@ -983,8 +981,9 @@ class Controlador
                         $idUsuarioRegala = $_SESSION['idUsuario'];
 
                         $idUsuarioRecibe = $baseDatos->obtenerIdUsuario($nombreUsuarioRegalado);
+
                         if ($idUsuarioRecibe == null) {
-                            $this->error = "Ese usuario no existe.";
+                            $this->error = "Este usuario no existe.";
                         } else {
                             if ($baseDatos->existeUsuario($nombreUsuarioRegalado, '')) {
                                 if ($idUsuarioRegala != $idUsuarioRecibe) {
@@ -994,6 +993,7 @@ class Controlador
                                         //$baseDatos->comprarJuego($idUsuarioRecibe, $idJuego);
                                         $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
                                         $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+                                        unset($_SESSION['carrito']);
                                     } else {
                                         $this->error .= "<br>$titulo ya ha existe en la biblioteca del usuario.<br>";
                                     }
@@ -1002,7 +1002,7 @@ class Controlador
                                 }
                             }
                         }
-                    } else {
+                    } else {//en caso de que no se regale el juego, primero comprobamos que yel usuario no lo tenga
                         if (!$baseDatos->esJuegoComprado($_SESSION['idUsuario'], $idJuego) && !$baseDatos->esJuegoRegalado($_SESSION['idUsuario'], $idJuego)) {
                             $baseDatos->comprarJuego($_SESSION['idUsuario'], $idJuego);
                             $baseDatos->agnadirJuegoAUsuario($_SESSION['idUsuario'], $idJuego);
@@ -1017,10 +1017,10 @@ class Controlador
                 }
             }
         } else {
-            $this->error = "No hay nada que pagar";
+            $this->error = "No hay nada que pagar.";
         }
 
-        // Redirigir o mostrar el carrito
+
         $this->irAlCarrito();
     }
 
