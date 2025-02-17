@@ -1219,7 +1219,9 @@ class Controlador
             $idTarjeta = $_POST['tarjeta'];
             $tarjetas = $baseDatos->obtenerTarjeta($idTarjeta);
             $fechaCaducidad = $tarjetas[0]['fechaCaducidad'];
-            list($anioCad, $mesCad, $diaCad) = explode('-', $fechaCaducidad);
+            /* list($anioCad, $mesCad, $diaCad) = explode('-', $fechaCaducidad); */
+            list($anioCad, $mesCad, $diaCad) = array_map('intval', explode('-', $fechaCaducidad));
+
 
             $url = 'http://localhost/gamesRus/servidorSOAP.php';
             $uri = 'http://localhost/gamesRus/';
@@ -1232,7 +1234,9 @@ class Controlador
 
                 $fechaValida = $cliente->esFechaCaducidadValida($diaCad, $mesCad, $anioCad);
                 if (!$fechaValida) {
-                    $this->error = "La fecha de caducidad es inválida.";
+                    /* $this->error = "La fecha de caducidad es inválida."; */
+                    $this->error = var_dump($diaCad,$mesCad,$anioCad);
+
                     $this->irAlPago();
                     return;
                 }
@@ -1279,9 +1283,10 @@ class Controlador
     public function irAlPago()
     {
         $idUsuario = $_SESSION['idUsuario'];
-        if (isset($_SESSION['carrito'])) {
+        if (isset($_SESSION['carrito']) && sizeof($_SESSION['carrito'])!=0) {
             global $baseDatos;
             $this->data = $baseDatos->mostrarTarjetas($idUsuario);
+            var_dump($_SESSION);
             Vista::MuestraPago($this->data, $this->error);
         } else {
             $this->error = "No tienes nada en el carrito.";
