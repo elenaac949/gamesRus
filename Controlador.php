@@ -5,18 +5,69 @@ require_once "vista.php";
 require_once "bbdd.php";
 include "./env/conf.env";
 
+/**
+ * Controlador
+ */
 class Controlador
 {
-    // Con action controlamos la navegación de páginas
+       
+    /**
+     * Controlamos la navegación de páginas 
+     * 
+     * action
+     *
+     * @var mixed
+     */
     private $action;
-    // Con data controlamos los mensajes y errores (Crear una para errores?)
-    private $data;
-    private $data1;
-    private $data2;
-    private $data3;
-    private $data4;
+   
+    /**
+     *  Controlamos los mensajes con las variables data
+     * 
+     * data
+     *
+     * @var mixed
+     */
+    private $data;    
+    /**
+     * data1
+     *
+     * @var mixed
+     */
+    private $data1;    
+    /**
+     * data2
+     *
+     * @var mixed
+     */
+    private $data2;    
+    /**
+     * data3
+     *
+     * @var mixed
+     */
+    private $data3;    
+    /**
+     * data4
+     *
+     * @var mixed
+     */
+    private $data4;    
+    /**
+     * Controlamos los errores
+     * 
+     * error
+     *
+     * @var mixed
+     */
     private $error;
 
+
+        
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         session_start();
@@ -33,7 +84,14 @@ class Controlador
             exit; // Detenemos la ejecución tras mostrar la página inicial.
         }
     }
-
+    
+    /**
+     * Manejador de todos los post de la aplicacion
+     * 
+     * handlePost
+     *
+     * @return void
+     */
     public function handlePost()
     {
         $accionesPost = [
@@ -70,7 +128,14 @@ class Controlador
 
         $this->procesarAcciones($_POST, $accionesPost);
     }
-
+    
+    /**
+     * procesarAcciones POST y GET
+     *
+     * @param  mixed $datos
+     * @param  mixed $acciones
+     * @return void
+     */
     private function procesarAcciones($datos, $acciones)
     {
         foreach ($acciones as $key => $metodo) {
@@ -89,14 +154,27 @@ class Controlador
         echo "Acción no encontrada.";
     }
 
-
+    
+    /**
+     * mobyGames
+     *
+     * @param  mixed $urlMobyGames
+     * @return void
+     */
     public function mobyGames($urlMobyGames)
     {
         echo file_get_contents($urlMobyGames);
         die();
     }
 
-
+    
+    /**
+     * Maneja las acciones Get de la aplicacion
+     * 
+     * handleGet
+     *
+     * @return void
+     */
     public function handleGet()
     {
         $accionesGet = [
@@ -107,13 +185,23 @@ class Controlador
     }
 
 
-
+    
+    /**
+     * irAlRegistro
+     *
+     * @return void
+     */
     public function irAlRegistro()
     {
         // $this->action = 'registro';
         Vista::MuestraRegistro($this->data);
     }
-
+    
+    /**
+     * irABiblioteca
+     *
+     * @return void
+     */
     public function irABiblioteca()
     {
         if (isset($_POST['btn_mostrar_detalles'])) {
@@ -124,10 +212,15 @@ class Controlador
         }
 
         Vista::MuestraBiblioteca($this->data, $this->data1, $this->error);
-        //$this->action = 'biblioteca';
+        
     }
 
-    //Función que muestra la biblioteca - si eres admin muestra todo, si no muestra los juegos del usuario
+    /**
+     * Mostramos la biblioteca 
+     * datosBiblioteca
+     *
+     * @return void
+     */
     private function datosBiblioteca()
     {
         global $baseDatos;
