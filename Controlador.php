@@ -1293,7 +1293,6 @@ class Controlador
         if (isset($_SESSION['carrito']) && sizeof($_SESSION['carrito'])!=0) {
             global $baseDatos;
             $this->data = $baseDatos->mostrarTarjetas($idUsuario);
-            var_dump($_SESSION);
             Vista::MuestraPago($this->data, $this->error);
         } else {
             $this->error = "No tienes nada en el carrito.";
