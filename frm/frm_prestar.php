@@ -23,7 +23,6 @@ include __DIR__ . '/../common/controlSesion.php';
     <main class="contenido_principal">
         <section class="vista-formulario">
             <h2>Préstamo de juegos</h2>
-            <?php var_dump($data) ?>
             <?php /*var_dump($_POST)*/ ?>
             <form action="#" method="post" name="formulario_prestar_juego">
                 <input type="hidden" name="idJuego" id="" value="<?= $_POST['idJuegoCatalogo'] ?>">
