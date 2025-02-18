@@ -12,8 +12,9 @@
 
 <body>
     <?php
-    include './common/header.php';
+    include './common/cabecera.php';
     ?>
+
     <main class="container">
         <h1>Términos y Condiciones</h1>
         <p>Bienvenido a <strong>GamesRus</strong>. Al acceder y utilizar nuestro sitio web, aceptas cumplir con los siguientes términos y condiciones. Si no estás de acuerdo con alguno de estos términos, te recomendamos que no utilices nuestro sitio.</p>
@@ -45,10 +46,8 @@
         <h2>9. Contacto</h2>
         <p>Si tienes alguna pregunta sobre estos términos y condiciones, puedes contactarnos a través de <a href="mailto:soporte@gamesrus.com">soporte@gamesrus.com</a>.</p>
 
-        <div class="footer">
-            <p>&copy; 2023 GamesRus. Todos los derechos reservados.</p>
-        </div>
     </main>
+
     <?php
     include './common/footer.php';
     ?>

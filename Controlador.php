@@ -128,7 +128,10 @@ class Controlador
             'mobyGames' => 'mobyGames',
             'btn_subir_archivo' => 'subirArchivos',
             'btn_filtrar_juegos' => 'filtrar',
-            'btn_volver'=>'irABiblioteca'
+            'btn_volver'=>'irABiblioteca',
+            'btn_sobreNosotros'=>'irSobreNosotros',
+            'btn_terminos_condiciones'=>'irTerminosCondiciones',
+            'btn_politica_cookies'=>'irCookies'
         ];
 
         $this->procesarAcciones($_POST, $accionesPost);
@@ -1640,6 +1643,20 @@ class Controlador
         }
         $this->irABiblioteca();
     }*/
+
+
+    public function irSobreNosotros(){
+        Vista::MuestraSobreNosotras();
+    }
+
+    public function irTerminosCondiciones(){
+        Vista::MuestraTerminosCondiciones();
+    }
+
+    public function irCookies(){
+        Vista::MuestraCookies();
+    }
+
 }
 
 

@@ -5,7 +5,9 @@
     <div class="redes_sociales">
         <h3>Redes Sociales</h3>
         <form action="" method="post">
-            <input type="submit" name="instagram" value="Instagram">
+            <input type="submit" name="instagram" value="Instagram | ">
+            <input type="submit" name="tiktok" value="TikTok | ">
+            <input type="submit" name="Twitter" value="Twitter">
         </form>
     </div>
     <div class="mas_informacion">

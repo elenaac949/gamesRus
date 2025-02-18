@@ -22,6 +22,15 @@ p {
     margin-bottom: 15px;
 }
 
+ul {
+    margin-bottom: 15px;
+    padding-left: 20px;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
 a {
     color: var(--color-azul);
     text-decoration: none;
@@ -42,56 +51,44 @@ a:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.footer {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 0.9em;
-    color: var(--color-violeta);
-}
 
-/* Media Queries para responsividad */
+/* Media Queries  */
 @media (max-width: 768px) {
     h1 {
-        font-size: 2em;
+        font-size: 2em; 
     }
 
     h2 {
-        font-size: 1.5em;
+        font-size: 1.5em; 
     }
 
     p {
-        font-size: 0.9em;
+        font-size: 0.9em; 
     }
 
     .container {
-        padding: 15px;
-        /* Padding reducido */
+        padding: 15px; 
     }
 
-    .footer {
-        font-size: 0.8em;
-    }
+    
 }
 
 @media (max-width: 480px) {
     h1 {
-        font-size: 1.8em;
+        font-size: 1.8em; 
     }
 
     h2 {
-        font-size: 1.3em;
+        font-size: 1.3em; 
     }
 
     p {
-        font-size: 0.8em;
+        font-size: 0.8em; 
     }
 
     .container {
-        padding: 10px;
-        /* Padding reducido */
+        padding: 10px; 
     }
 
-    .footer {
-        font-size: 0.7em;
-    }
+    
 }
