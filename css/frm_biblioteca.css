@@ -103,15 +103,15 @@ dialog {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); 
     border: none;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     padding: 20px;
     background: white;
-    width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     text-align: center;
+    justify-content: center;
 }
 
 dialog::backdrop {
@@ -121,7 +121,9 @@ dialog::backdrop {
 #contenido_detalles {
     display: flex;
     flex-wrap: wrap;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .detalles_juego {
@@ -154,6 +156,7 @@ dialog::backdrop {
 .imagen img {
     width: 100%;
     max-width: 300px;
+    margin: auto;
 }
 
 .descripcion {

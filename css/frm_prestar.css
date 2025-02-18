@@ -1,6 +1,6 @@
 main {
     flex: 1;
-    display:flex;
+    display: flex;
 }
 
 section {
@@ -13,7 +13,6 @@ section {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     color: #3a0ca3;
-    /* max-height: 80vh; */
 }
 
 section h2 {
@@ -25,7 +24,8 @@ section h2 {
 }
 
 section form {
-    width: 60%;
+    width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -47,14 +47,14 @@ section form select {
 }
 
 section form input[type="text"]:focus,
-section form select option {
+section form select:focus {
     border-color: #4cc9f0;
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
 }
 
-
 section form input[type="submit"] {
-    width: 30%;
+    width: 100%;
+    max-width: 200px;
     align-self: center;
     font-size: 1.1em;
     cursor: pointer;
@@ -76,4 +76,46 @@ section form input[type="submit"]:hover {
 section form input[type="submit"]:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    section h2 {
+        font-size: 1.5rem;
+    }
+
+    section form {
+        width: 90%;
+    }
+
+    section form input[type="text"],
+    section form select {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    section form input[type="submit"] {
+        font-size: 1em;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    section h2 {
+        font-size: 1.2rem;
+    }
+
+    section form {
+        width: 100%;
+    }
+
+    section form input[type="text"],
+    section form select {
+        font-size: 0.8em;
+        padding: 6px;
+    }
+
+    section form input[type="submit"] {
+        font-size: 0.9em;
+        padding: 6px 10px;
+    }
 }

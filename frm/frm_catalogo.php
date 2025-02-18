@@ -8,9 +8,10 @@ include __DIR__ . '/../common/controlSesion.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="/gamesRus/css/general.css">
     <link rel="stylesheet" href="/gamesRus/css/frm_catalogo.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -19,11 +20,6 @@ include __DIR__ . '/../common/controlSesion.php';
     ?>
     <p class="errores"><?= !$error  ? $data1 : $error ?></p>
 
-
-    <?php /*var_dump($data);*/
-    //var_dump($_SESSION['carrito']);
-    
-    ?>
     <h2>Catálogo</h2>
     <main class="contenido_principal">
         <aside class="filtros">
@@ -113,15 +109,20 @@ include __DIR__ . '/../common/controlSesion.php';
                 if (juegoSeleccionado) {
                     // Mostramos los datos del juego en el contenedor dinámico
                     contenidoDetalles.innerHTML = `
-                    <h3>${juegoSeleccionado.titulo}</h3>
+                    <div class="imagen">
                     <img src="${juegoSeleccionado.portada}" alt="${juegoSeleccionado.titulo}">
-                    <p>Descripción: ${juegoSeleccionado.descripcion}</p>                    
-                    <p>Fecha de Lanzamiento: ${juegoSeleccionado.anio}</p>
-                    <p>Género: ${juegoSeleccionado.generos}</p>
-                    <p>Desarrollador: ${juegoSeleccionado.desarrollador}</p>
-                    <p>Sistemas: ${juegoSeleccionado.sistemas}</p>
+                    </div>
+                    <div class="detalles">
+                    <h3>${juegoSeleccionado.titulo}</h3>
+                    <p><span>Fecha de Lanzamiento</span>: ${juegoSeleccionado.anio}</p>
+                    <p><span>Género</span>: ${juegoSeleccionado.generos}</p>
+                    <p><span>Desarrollador</span>: ${juegoSeleccionado.desarrollador}</p>                    
+                    <p><span>Sistemas</span>: ${juegoSeleccionado.sistemas}</p>
                     <p><span>Precio</span>: ${juegoSeleccionado.precio} €</p>
-                    
+                    </div>
+                    <div class="descripcion">
+                    <p><span>Descripción</span>: ${juegoSeleccionado.descripcion}</p>
+                    </div>                    
                 `;
                 } else {
                     contenidoDetalles.innerHTML = "<p>Juego no encontrado.</p>";

@@ -168,20 +168,77 @@ dialog {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); 
     border: none;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     padding: 20px;
     background: white;
-    width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     text-align: center;
+    justify-content: center;
 }
 
 dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+#contenido_detalles {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.detalles_juego {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.detalles {
+    width: auto;
+    display: block;
+    align-content: center;
+    margin: 0 auto;
+    text-align: start;
+    font-size: 1.2em;
+}
+
+.detalles p {
+    margin-bottom: 6px;
+}
+
+.detalles h3 {
+    color: var(--color-violeta);
+    font-weight: bolder;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.imagen img {
+    width: 100%;
+    max-width: 300px;
+    margin: auto;
+}
+
+.descripcion {
+    margin-top: 10px;
+    width: 100%;
+}
+
+span {
+    font-weight: bold;
+    color: #7209b7;
+}
+
+.descripcion p {
+    font-size: 1.2em;
+    text-align: justify;
+}
+
 
 button {
     margin-top: 10px;
@@ -200,11 +257,11 @@ button:hover {
 /* Media Queries para responsividad */
 @media (max-width: 768px) {
     .contenido_principal {
-        grid-template-columns: 1fr; /* Una columna en tablets y móviles */
+        grid-template-columns: 1fr; 
     }
 
     .filtros {
-        position: static; /* Filtros no pegajosos en móviles */
+        position: static; 
     }
 
     .vista_juegos {
@@ -213,15 +270,15 @@ button:hover {
     }
 
     .juego {
-        width: 45%; /* Dos columnas en tablets */
+        width: 45%; 
     }
     .nombre_juego p {
-        font-size: 1em; /* Tamaño de fuente reducido */
+        font-size: 1em; 
     }
 
     .botones_juego input {
-        font-size: 0.8em; /* Tamaño de fuente reducido */
-        padding: 8px 12px; /* Padding reducido */
+        font-size: 0.8em; 
+        padding: 8px 12px; 
     }
 }
 
@@ -253,20 +310,23 @@ button:hover {
     }
 
     .juego {
-        width: 100%; /* Una columna en móviles */
+        width: 100%; 
     }
 
     .nombre_juego p {
-        font-size: 0.9em; /* Tamaño de fuente más pequeño */
+        font-size: 0.9em; 
     }
 
     .botones_juego {
-        flex-direction: column; /* Botones apilados verticalmente */
-        gap: 8px; /* Espaciado reducido */
+        flex-direction: column; 
+        gap: 8px; 
     }
 
     .botones_juego input {
-        font-size: 0.7em; /* Tamaño de fuente más pequeño */
-        padding: 6px 10px; /* Padding reducido */
+        font-size: 0.7em; 
+        padding: 6px 10px; 
+    }
+    .detalles_juego {
+        flex-direction: column;
     }
 }
