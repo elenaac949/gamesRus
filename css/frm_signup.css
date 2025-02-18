@@ -12,10 +12,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background: url('/gamesRus/img/fondo.jpg') no-repeat;
-    background-size: cover;
-    background-position: center;
+    height: 100vh;
+    background: #000 url('/gamesRus/img/fondoBueno1.jpeg') no-repeat center center/cover;
     color: #fff;
     text-align: center;
 }
