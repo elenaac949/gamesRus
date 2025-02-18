@@ -1,4 +1,4 @@
-h2{
+h2 {
     font-size: 2em;
     font-weight: bold;
     color: #7209b7;
@@ -15,33 +15,11 @@ main {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 10px;
-}
-
-
-/* Estilos para el área de pago */
-main {
     position: relative;
 }
 
-/* .total_pago {
-    width: 20%;
-    height: 20%;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    
-    position: fixed; 
-    top: 35%;
-    right: 10%;
-    z-index: 10;
-} */
-
 .total_pago {
-    margin-top:10px;
+    margin-top: 10px;
     width: 20%;
     height: 10%;
     padding: 10px;
@@ -49,20 +27,19 @@ main {
     flex-direction: column;
     justify-self: start;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    justify-content:center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    justify-content: center;
     align-items: center;
 }
+
 #precio_total {
-    font-size: 1.5rem;    
-    font-weight: bold;      
-    color: #333;            
-    margin-bottom: 15px;    
-    text-align: center;     
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
-
-/* Contenedor de juegos en el carrito */
 .juegos_carrito {
     width: 40vw;
     display: flex;
@@ -71,7 +48,6 @@ main {
     border-radius: 8px;
     padding: 30px;
 }
-
 
 .juego {
     display: grid;
@@ -83,13 +59,11 @@ main {
 }
 
 .juego img {
-
     max-width: 100%;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Contenedor de título y botones de cada juego */
 .titulo_botones {
     display: flex;
     flex-direction: column;
@@ -97,7 +71,6 @@ main {
     gap: 10px;
 }
 
-/* Estilo para el título del juego */
 .titulo_botones p {
     font-size: 1.2rem;
     font-weight: 600;
@@ -105,7 +78,6 @@ main {
     margin-bottom: 10px;
 }
 
-/* Estilo para los botones de los juegos */
 .botones_juego {
     display: flex;
     justify-content: space-between;
@@ -141,9 +113,6 @@ button:hover {
 }
 
 dialog {
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
     margin: auto;
     border: none;
     padding: 40px 50px;
@@ -153,16 +122,7 @@ dialog {
     font-weight: 600;
     color: #3a0ca3;
     gap: 10px;
-
-
 }
-
-/* dialog form {
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    gap: 18px;
-} */
 
 dialog menu {
     display: flex;
@@ -185,4 +145,71 @@ dialog input[type="text"] {
 dialog input[type="text"]:focus {
     border-color: #4cc9f0;
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .total_pago {
+        width: 80%;
+        margin-top: 20px;
+    }
+
+    .juegos_carrito {
+        width: 80%;
+    }
+
+    .juego {
+        grid-template-columns: 1fr;
+    }
+
+    .botones_juego {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    dialog {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .total_pago {
+        width: 100%;
+    }
+
+    .juegos_carrito {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .juego {
+        padding: 10px;
+    }
+
+    .titulo_botones p {
+        font-size: 1rem;
+    }
+
+    main input[type="submit"],
+    button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+
+    dialog {
+        padding: 15px;
+    }
+
+    dialog input[type="text"] {
+        font-size: 0.9em;
+        padding: 8px;
+    }
 }

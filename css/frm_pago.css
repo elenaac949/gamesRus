@@ -12,11 +12,9 @@ main {
     flex: 1;
     margin: 30px;
     border-radius: 8px;
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
     padding: 10px;
 }
 
-/* Tarjetas */
 section.tarjetas {
     padding: 20px;
     background: #ffffff;
@@ -38,7 +36,6 @@ section.tarjetas h3 {
     margin-bottom: 20px;
 }
 
-/* Formulario añadir tarjeta */
 .anadir_tarjetas {
     flex: 1;
     min-width: 300px;
@@ -62,7 +59,7 @@ section.tarjetas .form_anadir_tarjeta .datos {
     gap: 15px;
 }
 
-section.tarjetas .form_anadir_tarjeta .datos .dato {
+section.tarjetas .form_anadir_tarjeta .dato {
     flex: 1;
     min-width: 140px;
     display: flex;
@@ -106,7 +103,6 @@ section.tarjetas .form_anadir_tarjeta .boton input[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-/* Seleccionar tarjeta */
 #seleccionar_tarjetas {
     flex: 1;
     min-width: 300px;
@@ -155,7 +151,6 @@ section.tarjetas .form_anadir_tarjeta .boton input[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     section.tarjetas {
         flex-direction: column;
@@ -169,5 +164,31 @@ section.tarjetas .form_anadir_tarjeta .boton input[type="submit"]:hover {
 
     section.tarjetas .form_anadir_tarjeta .datos {
         flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.5em;
+    }
+
+    section.tarjetas h3 {
+        font-size: 1.5rem;
+    }
+
+    .anadir_tarjetas,
+    #seleccionar_tarjetas {
+        min-width: 100%;
+    }
+
+    section.tarjetas .form_anadir_tarjeta .dato input,
+    section.tarjetas .form_anadir_tarjeta .dato select {
+        font-size: 0.9em;
+    }
+
+    section.tarjetas .form_anadir_tarjeta .boton input[type="submit"],
+    #seleccionar_tarjetas input[type="submit"] {
+        font-size: 1em;
+        width: 100%;
     }
 }

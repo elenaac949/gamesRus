@@ -156,7 +156,7 @@ class Controlador
             $this->data1 = $baseDatos->obtenerDatosJuegoConGenero($idJuego);
 
             if (!$this->data1) {
-                $this->data1 = "No se encontraron detalles para el ID proporcionado.";
+                $this->data1 = "No se han encontraron detalles para el ID proporcionado.";
             }
             exit;
         } else {

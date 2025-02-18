@@ -36,7 +36,6 @@ include __DIR__ . '/../common/controlSesion.php';
             </form>
         </aside>
         <section>
-
             <p class="errores">
                 <?php
 
