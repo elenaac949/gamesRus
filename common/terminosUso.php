@@ -44,7 +44,7 @@
         <p>Estos términos y condiciones se rigen por las leyes de [país o región]. Cualquier disputa relacionada con el uso de este sitio estará sujeta a la jurisdicción exclusiva de los tribunales de [ciudad o región].</p>
 
         <h2>9. Contacto</h2>
-        <p>Si tienes alguna pregunta sobre estos términos y condiciones, puedes contactarnos a través de <a href="mailto:soporte@gamesrus.com">soporte@gamesrus.com</a>.</p>
+        <p>Si tienes alguna pregunta sobre estos términos y condiciones, puedes contactarnos a través de 
 
     </main>
 
