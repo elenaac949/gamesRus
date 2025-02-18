@@ -9,6 +9,7 @@ include __DIR__ . '/../common/controlSesion.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de error</title>
     <link rel="stylesheet" href="/gamesRus/css/general.css">
+    <link rel="stylesheet" href="/gamesRus/css/error.css">
 </head>
 
 <body>
