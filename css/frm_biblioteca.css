@@ -1,6 +1,6 @@
 main {
     flex: 1;
-
+    padding: 20px;
 }
 
 h2 {
@@ -15,7 +15,7 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 5%;
+    gap: 20px;
     padding: 1% 2%;
     background-color: #f4f4f9;
 }
@@ -26,27 +26,26 @@ h2 {
     flex-wrap: wrap;
     justify-content: flex-start;
     background-color: #ffffff;
-    padding: 5%;
+    padding: 20px;
     border-radius: 10px;
     width: 100%;
-    gap: 3%;
+    gap: 20px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-
 }
-
 
 .juego {
     display: flex;
     flex-direction: column;
     border: 2px solid #4361ee;
     border-radius: 10px;
-    width: 280px;
+    width: 100%;
+    max-width: 280px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    padding: 1%;
+    padding: 10px;
     margin-bottom: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -71,10 +70,9 @@ h2 {
 
 .botones_juego {
     margin-top: auto;
-    /* Empuja este elemento hacia la parte inferior del contenedor */
     display: grid;
-    grid-column: 1fr 1fr;
-    grid-row: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 10px;
     margin-bottom: 10px;
 }
@@ -95,35 +93,11 @@ h2 {
     font-size: 0.9em;
     cursor: pointer;
     transition: background-color 0.3s ease;
-
 }
 
 .botones_juego input:hover {
     background-color: #4cc9f0;
 }
-
-/* .boton_administrador {
-    margin-top: 10px;
-    text-align: center;
-} */
-
-/* .boton_administrador input {
-    background-color: #f72585;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.boton_administrador input:hover {
-    background-color: #7209b7;
-} */
-
-
-
 
 dialog {
     position: fixed;
@@ -135,9 +109,9 @@ dialog {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     padding: 20px;
     background: white;
-    width: 80%;
+    width: 90%;
+    max-width: 500px;
     text-align: center;
-    max-width: fit-content;
 }
 
 dialog::backdrop {
@@ -155,24 +129,22 @@ dialog::backdrop {
     display: flex;
     flex-direction: row;
     gap: 10px;
-
 }
 
-.detalles{
+.detalles {
     width: auto;
-    display: block;   
+    display: block;
     align-content: center;
     margin: 0 auto;
     text-align: start;
     font-size: 1.2em;
-    
 }
 
-.detalles p{
+.detalles p {
     margin-bottom: 6px;
 }
 
-.detalles h3{
+.detalles h3 {
     color: var(--color-violeta);
     font-weight: bolder;
     font-size: 2.5rem;
@@ -180,8 +152,8 @@ dialog::backdrop {
 }
 
 .imagen img {
-    width: 300px;
-
+    width: 100%;
+    max-width: 300px;
 }
 
 .descripcion {
@@ -212,4 +184,50 @@ button {
 
 button:hover {
     background: #4cc9f0;
+}
+
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .vista_juegos {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .juego {
+        width: 45%;
+    }
+
+    .detalles_juego {
+        flex-direction: column;
+    }
+
+    .imagen img {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .vista_juegos {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .juego {
+        width: 100%;
+    }
+
+    .detalles_juego {
+        flex-direction: column;
+    }
+
+    .imagen img {
+        max-width: 100%;
+    }
 }

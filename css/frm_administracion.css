@@ -156,3 +156,58 @@ details ul li {
     /* Cambia el color del checkbox */
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    section h2 {
+        font-size: 1.5rem; 
+    }
+
+    section form {
+        width: 90%; 
+    }
+
+    section form input[type="text"],
+    section form input[type="date"],
+    section form textarea,
+    section form select {
+        font-size: 0.9em; 
+        padding: 8px; 
+    }
+
+    section form input[type="submit"] {
+        font-size: 1em; 
+        padding: 8px 12px; 
+    }
+
+    .genero_lista,
+    .sistema_lista {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+@media (max-width: 480px) {
+    section h2 {
+        font-size: 1.2rem; 
+    }
+
+    section form {
+        width: 100%; 
+    }
+
+    section form input[type="text"],
+    section form input[type="date"],
+    section form textarea,
+    section form select {
+        font-size: 0.8em; 
+        padding: 6px; 
+    }
+
+    section form input[type="submit"] {
+        font-size: 0.9em; 
+        padding: 6px 10px; 
+    }
+
+    .genero_lista,
+    .sistema_lista {
+        grid-template-columns: repeat(1, 1fr); 
+    }
+}

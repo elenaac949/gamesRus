@@ -1,4 +1,3 @@
-/* Estilos generales */
 main {
     display: flex;
     flex-direction: column;
@@ -25,7 +24,6 @@ section h3 {
     margin-bottom: 15px;
 }
 
-/* Formularios */
 section form {
     display: flex;
     flex-direction: column;
@@ -88,7 +86,6 @@ section form input[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-/* Tarjetas */
 section.tarjetas {
     padding: 20px;
     background: #ffffff;
@@ -103,7 +100,6 @@ section.tarjetas h3 {
     color: #7209b7;
     text-align: center;
     margin-bottom: 20px;
-    
 }
 
 section.tarjetas table {
@@ -132,9 +128,6 @@ section.tarjetas .mostrar_tarjetas {
     margin-bottom: 30px;
 }
 
-/* Botones de eliminar y añadir tarjeta */
-
-
 section.tarjetas .form_anadir_tarjeta {
     display: flex;
     flex-direction: column;
@@ -158,7 +151,6 @@ section.tarjetas .form_anadir_tarjeta .boton {
     justify-content: center;
 }
 
-/* Sección de botones específicos */
 section.actualizar_datos form input[type="submit"],
 section.borrar_cuenta form input[type="submit"] {
     width: 20%;
@@ -192,8 +184,6 @@ section.borrar_cuenta form input[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-
-/* Contenedor principal de las tarjetas */
 .mostrar_tarjetas {
     padding: 20px;
     background: #ffffff;
@@ -210,7 +200,6 @@ section.borrar_cuenta form input[type="submit"]:hover {
     margin-bottom: 20px;
 }
 
-/* Tabla de tarjetas */
 .mostrar_tarjetas table {
     width: 100%;
     border-collapse: collapse;
@@ -233,20 +222,11 @@ section.borrar_cuenta form input[type="submit"]:hover {
     background-color: #ffffff;
 }
 
-/* formulario de cada tarjeta */
-/* .mostrar_tarjetas .form_mostrar_tarjeta {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-} */
-
 .mostrar_tarjetas .form_mostrar_tarjeta td {
     padding: 10px;
     vertical-align: middle;
 }
 
-/* CCV */
 .form_mostrar_tarjeta input[type="text"] {
     font-size: 1em;
     padding: 8px;
@@ -264,7 +244,6 @@ section.borrar_cuenta form input[type="submit"]:hover {
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
 }
 
-/* Estilo para las opciones de fecha (mes y año) */
 .mostrar_tarjetas select {
     font-size: 1em;
     padding: 8px;
@@ -282,7 +261,6 @@ section.borrar_cuenta form input[type="submit"]:hover {
     box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
 }
 
-/* Estilo para los botones de eliminar y editar */
 .mostrar_tarjetas .editar-eliminar {
     display: flex;
     gap: 10px;
@@ -310,5 +288,107 @@ section.borrar_cuenta form input[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
+@media (max-width: 768px) {
+    section h3 {
+        font-size: 1.5rem;
+    }
+
+    section.tarjetas h3 {
+        font-size: 1.5rem;
+    }
+
+    section form input[type="text"],
+    section form input[type="email"],
+    section form input[type="tel"],
+    section form select {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    section form input[type="submit"] {
+        font-size: 1em;
+        padding: 8px 12px;
+    }
 
 
+
+    section.tarjetas .form_anadir_tarjeta .datos {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    section.tarjetas .form_anadir_tarjeta .dato {
+        margin: 0;
+    }
+
+    .mostrar_tarjetas table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .mostrar_tarjetas th,
+    .mostrar_tarjetas td {
+        min-width: 120px;
+    }
+
+    .mostrar_tarjetas .form_mostrar_tarjeta input[type="text"] {
+        width: 80px;
+        font-size: 0.9em;
+    }
+
+    .mostrar_tarjetas select {
+        font-size: 0.9em;
+    }
+
+    .mostrar_tarjetas .btn_eliminar_tarjeta,
+    .mostrar_tarjetas .btn_editar_tarjeta, 
+    .borrar_cuenta .btn_eliminar_cuenta,
+    .actualizar_datos .btn_actualizar_datos {
+        width: 100px;
+        font-size: 1em;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    section h3 {
+        font-size: 1.2rem;
+    }
+
+    section.tarjetas h3 {
+        font-size: 1.2rem;
+    }
+
+    section form input[type="text"],
+    section form input[type="email"],
+    section form input[type="tel"],
+    section form select {
+        font-size: 0.8em;
+        padding: 6px;
+    }
+
+    section form input[type="submit"] {
+        font-size: 0.9em;
+        padding: 6px 10px;
+    }
+
+    .mostrar_tarjetas h3 {
+        font-size: 1.2rem;
+    }
+
+    .mostrar_tarjetas .form_mostrar_tarjeta input[type="text"] {
+        width: 70px;
+        font-size: 0.8em;
+    }
+
+    .mostrar_tarjetas select {
+        font-size: 0.8em;
+    }
+
+    .mostrar_tarjetas .btn_eliminar_tarjeta,
+    .mostrar_tarjetas .btn_editar_tarjeta {
+        width: 80px;
+        font-size: 0.9em;
+        padding: 6px 10px;
+    }
+}

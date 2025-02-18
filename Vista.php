@@ -133,4 +133,9 @@ class Vista
   public static function MuestraPago($data, $error){
     include "./frm/frm_pago.php";
   }
+
+
+  public static function MuestraPaginaError($data,$error){
+    include "./common/error.php";
+  }
 }

@@ -12,26 +12,26 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('/gamesRus/img/fondo2.avif') repeat;
+    background: url('/gamesRus/img/fondoBueno1.jpeg') repeat;
     background-size: cover;
     background-position: center;
-
 }
 
 .layout {
-    width: 30%;
+    width: 90%;
+    max-width: 500px;
     color: #fff;
     background-color: transparent;
-    /* border: 2px solid rgba(255, 255, 255, 0.2); */
     border: none;
     backdrop-filter: blur(20px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    padding: 30px 40px;
+    padding: 20px;
+    margin: 20px;
 }
 
 .layout h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     text-align: center;
 }
 
@@ -58,7 +58,7 @@ form {
     padding: 20px;
     padding-right: 50px;
     color: #fff;
-    font-size: 1.3rem;
+    font-size: 1rem;
 }
 
 .input-box input::placeholder {
@@ -71,13 +71,13 @@ form {
     right: 1%;
     top: 25%;
     transform: translate(-50%);
-    font-size: 1.7rem;
+    font-size: 1.5rem;
 }
 
 .layout .remember-forgot {
     display: flex;
     justify-content: space-between;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin: -15px 0 15px;
 }
 
@@ -95,39 +95,95 @@ form {
     text-decoration: underline;
 }
 
-/* QUEE ESTA PASANDOOOOOOOO */
-.enviar, .boton-registro{
-    width: 200px;
+.enviar, .boton-registro {
+    width: 100%;
+    max-width: 200px;
     height: 45px;
     background-color: #fff;
     border: none;
     outline: none;
     border-radius: 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #333;
     font-weight: 600;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.enviar{
+
+.enviar {
     align-self: center;
 }
 
-.boton-registro{
-    width: 100px;
-    font-size: 1rem;
+.boton-registro {
+    width: 100%;
+    max-width: 100px;
+    font-size: 0.9rem;
     margin-top: 5px;
 }
-.link-registro{
+
+.link-registro {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.enviar, .boton-registro:hover {
+
+.enviar:hover, .boton-registro:hover {
     transform: scale(0.98);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
 
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+    .layout {
+        width: 95%;
+        padding: 15px;
+    }
 
+    .layout h1 {
+        font-size: 1.2rem;
+    }
 
+    .input-box input {
+        font-size: 0.9rem;
+    }
+
+    .input-box i {
+        font-size: 1.2rem;
+    }
+
+    .remember-forgot {
+        font-size: 0.8rem;
+    }
+
+    .enviar, .boton-registro {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .layout {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .layout h1 {
+        font-size: 1rem;
+    }
+
+    .input-box input {
+        font-size: 0.8rem;
+    }
+
+    .input-box i {
+        font-size: 1rem;
+    }
+
+    .remember-forgot {
+        font-size: 0.7rem;
+    }
+
+    .enviar, .boton-registro {
+        font-size: 0.8rem;
+    }
+}

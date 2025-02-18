@@ -3,12 +3,17 @@
         <h3>GamesRus</h3>
     </div>
     <div class="redes_sociales">
-
+        <h3>Redes Sociales</h3>
+        <form action="" method="post">
+            <input type="submit" name="instagram" value="Instagram">
+        </form>
     </div>
     <div class="mas_informacion">
-        <a href="">Sobre Nosotras</a>
-        <a href="">Autoras</a>
-        <a href="">Terminos y Condiciones</a>
-        <a href="">Política de Cookies</a>
+        <h3>Información de interés</h3>
+        <form action="" method="post">
+            <input type="submit" name="btn_sobreNosotros" value="Sobre Nosotras | ">
+            <input type="submit" name="btn_terminos_condiciones" value="Términos y condiciones | ">
+            <input type="submit" name="btn_politica_cookies" value="Política de cookies">
+        </form>
     </div>
 </footer>

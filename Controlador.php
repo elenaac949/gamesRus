@@ -128,8 +128,8 @@ class Controlador
             'mobyGames' => 'mobyGames',
             'btn_subir_archivo' => 'subirArchivos',
             'btn_filtrar_juegos' => 'filtrar',
+            'btn_volver'=>'irABiblioteca'
         ];
-
 
         $this->procesarAcciones($_POST, $accionesPost);
     }
@@ -158,9 +158,16 @@ class Controlador
             }
         }
 
-        // Si no se encuentra ninguna acción válida
-        echo "Acción no encontrada.";
+        $this->error="Se ha producido un error.";
+        Vista::MuestraPaginaError($this->data, $this->error);
     }
+
+
+    public function mostrarError()
+    {
+        Vista::MuestraPaginaError($this->data, $this->error);
+    }
+
 
 
     /**
@@ -196,7 +203,7 @@ class Controlador
         $this->procesarAcciones($_GET, $accionesGet);
     }
 
-
+   
 
     /**
      * Redirige a la página de registro.
@@ -270,7 +277,7 @@ class Controlador
             $this->data1 = $baseDatos->obtenerDatosJuegoConGenero($idJuego);
 
             if (!$this->data1) {
-                $this->data1 = "No se encontraron detalles para el ID proporcionado.";
+                $this->data1 = "No se han encontraron detalles para el ID proporcionado.";
             }
             exit;
         } else {

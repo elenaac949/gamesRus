@@ -1,18 +1,18 @@
 main {
     flex: 1;
-
+    padding: 20px;
 }
 
 .contenido_principal {
     display: grid;
-    grid-template-columns: 1fr 5fr;
-    gap: 5%;
+    grid-template-columns: 1fr 3fr; /* Dos columnas: filtros y juegos */
+    gap: 20px;
     padding: 1% 2%;
     background-color: #f4f4f9;
 }
 
-h2{
-    font-size: 2em;
+h2 {
+    font-size: 1.5em;
     font-weight: bold;
     color: #7209b7;
     margin-top: 20px;
@@ -21,9 +21,9 @@ h2{
 
 .filtros {
     position: sticky;
-    top: 20vh; /* Ajusta esto a la altura de tu header */
+    top: 20vh;
     background-color: #ffffff;
-    padding: 3%;
+    padding: 20px;
     border-radius: 10px;
     height: fit-content;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -31,9 +31,7 @@ h2{
     display: flex;
     flex-direction: column;
     gap: 15px;
-    padding: 20px;
 }
-
 
 .formulario_filtrar {
     display: flex;
@@ -42,8 +40,7 @@ h2{
 }
 
 .formulario_filtrar input[type="number"],
-.formulario_filtrar select
-{
+.formulario_filtrar select {
     font-size: 1em;
     padding: 10px;
     border: 1px solid #ddd;
@@ -55,20 +52,15 @@ h2{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.formulario_filtrar ::placeholder{
+.formulario_filtrar ::placeholder {
     color: #3a0ca3;
 }
 
-.formulario_filtrar label{
+.formulario_filtrar label {
     font-size: 1em;
     font-weight: bold;
     color: #3a0ca3;
 }
-
-/* .formulario_filtrar  select {
-   border-color: #4cc9f0;
-   box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
-} */
 
 .formulario_filtrar input[type="submit"] {
     background-color: #4361ee;
@@ -90,7 +82,6 @@ h4 {
     font-size: 1.2em;
     font-weight: bold;
     color: #7209b7;
-    
 }
 
 .vista_juegos {
@@ -99,10 +90,10 @@ h4 {
     flex-wrap: wrap;
     justify-content: space-around;
     background-color: #ffffff;
-    padding: 5%;
+    padding: 20px;
     border-radius: 10px;
     width: 100%;
-    gap: 3%;
+    gap: 20px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -111,14 +102,14 @@ h4 {
 .juego {
     display: flex;
     flex-direction: column;
-    /* Asegura que los elementos se alineen verticalmente */
     border: 2px solid #4361ee;
     border-radius: 10px;
-    width: 280px;
+    width: 100%;
+    max-width: 280px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    padding: 1%;
+    padding: 10px;
     margin-bottom: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -143,13 +134,11 @@ h4 {
 
 .botones_juego {
     margin-top: auto;
-    /* Empuja este elemento hacia la parte inferior del contenedor */
     display: flex;
     justify-content: center;
     align-self: flex-end;
     gap: 10px;
     margin-bottom: 10px;
-    /* Opcional: Espacio interno extra abajo */
 }
 
 .botones_juego form {
@@ -175,27 +164,6 @@ h4 {
     background-color: #4cc9f0;
 }
 
-/* .boton_administrador {
-    margin-top: 10px;
-    text-align: center;
-}
-
-.boton_administrador input {
-    background-color: #f72585;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.boton_administrador input:hover {
-    background-color: #7209b7;
-} */
-
-
 dialog {
     position: fixed;
     top: 50%;
@@ -206,15 +174,16 @@ dialog {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     padding: 20px;
     background: white;
-    width: 80%;
+    width: 90%;
+    max-width: 500px;
     text-align: center;
-  }
+}
 
-  dialog::backdrop {
+dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
-  }
+}
 
-  button {
+button {
     margin-top: 10px;
     padding: 10px 20px;
     background: #4361ee;
@@ -222,11 +191,82 @@ dialog {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
+}
 
-  button:hover {
+button:hover {
     background: #4cc9f0;
-  }
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+    .contenido_principal {
+        grid-template-columns: 1fr; /* Una columna en tablets y móviles */
+    }
+
+    .filtros {
+        position: static; /* Filtros no pegajosos en móviles */
+    }
+
+    .vista_juegos {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .juego {
+        width: 45%; /* Dos columnas en tablets */
+    }
+    .nombre_juego p {
+        font-size: 1em; /* Tamaño de fuente reducido */
+    }
+
+    .botones_juego input {
+        font-size: 0.8em; /* Tamaño de fuente reducido */
+        padding: 8px 12px; /* Padding reducido */
+    }
+}
 
 
 
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .filtros {
+        padding: 10px;
+    }
+
+    .formulario_filtrar input[type="number"],
+    .formulario_filtrar select {
+        font-size: 0.8em;
+        padding: 6px;
+    }
+
+    .formulario_filtrar input[type="submit"] {
+        font-size: 0.7em;
+        padding: 6px 10px;
+    }
+
+    .vista_juegos {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .juego {
+        width: 100%; /* Una columna en móviles */
+    }
+
+    .nombre_juego p {
+        font-size: 0.9em; /* Tamaño de fuente más pequeño */
+    }
+
+    .botones_juego {
+        flex-direction: column; /* Botones apilados verticalmente */
+        gap: 8px; /* Espaciado reducido */
+    }
+
+    .botones_juego input {
+        font-size: 0.7em; /* Tamaño de fuente más pequeño */
+        padding: 6px 10px; /* Padding reducido */
+    }
+}
