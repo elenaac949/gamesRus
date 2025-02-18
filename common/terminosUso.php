@@ -6,64 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Términos y Condiciones - GamesRus</title>
     <link rel="stylesheet" href="/gamesRus/css/general.css">
-    <style>
-        body {
-            font-family: "Poppins", sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--color-fondo-claro);
-            color: var(--color-violeta);
-        }
+    <link rel="stylesheet" href="/gamesRus/css/terminosUso.css">
 
-        h1,
-        h2 {
-            color: var(--color-rosa);
-        }
-
-        h1 {
-            font-size: 2.5em;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 1.8em;
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 1em;
-            margin-bottom: 15px;
-        }
-
-        a {
-            color: var(--color-azul);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        a:hover {
-            color: var(--color-celeste);
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: var(--color-texto-claro);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 0.9em;
-            color: var(--color-violeta);
-        }
-    </style>
 </head>
 
 <body>

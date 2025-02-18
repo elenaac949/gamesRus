@@ -453,11 +453,11 @@ class Controlador
                     return;
                 } else {
                     // Mensaje de error si la contraseña es incorrecta
-                    $this->data = 'Contraseña incorrecta';
+                    $this->data = 'Contraseña incorrecta.';
                 }
             } else {
                 // Mensaje de error si el usuario no existe
-                $this->data = 'Usuario no existe';
+                $this->data = 'Este usuario no existe.';
             }
         }
         // Muestra la vista de login con el mensaje de error correspondiente
@@ -538,7 +538,7 @@ class Controlador
     {
         session_destroy();
         //$this->action = 'login';
-        $this->data = 'Sesión cerrada';
+        $this->data = 'Sesión cerrada.';
         Vista::MuestraLogin($this->data);
     }
 
@@ -654,15 +654,15 @@ class Controlador
                         $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioPresta, $idUsuarioRecibe);
                     }
 
-                    $this->error = 'Juego prestado correctamente';
+                    $this->error = 'El juego se ha prestado correctamente.';
                 } else {
-                    $this->error = "No te puedes prestar a ti mismo";
+                    $this->error = "No te puedes auto-prestar un juego.";
                 }
                 // Redirige a la biblioteca del usuario
                 $this->irABiblioteca();
             } else {
                 // Mensaje de error si el usuario receptor no existe
-                $this->error = 'Error: El usuario ' . $nick . ' no existe';
+                $this->error = 'Error: El usuario ' . $nick . ' no existe.';
                 Vista::MuestraPrestar($this->data, $this->error);
             }
         }
@@ -702,7 +702,7 @@ class Controlador
                 // Actualizar los juegos prestados/regalados.
                 $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRecibe, $idUsuarioPresta);
             }
-            $this->error = "Préstamos finalizados.";
+            $this->error = "Préstamo(s) finalizados.";
         }
     }
 
@@ -731,12 +731,12 @@ class Controlador
                     // Regalar el juego y actualizar la base de datos.
                     $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
                     $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRegala, $idUsuarioRecibe);
-                    $this->data1 = 'Regalo para ' . $nick;
+                    $this->data1 = 'Regalo para ' . $nick.'.';
                 } else {
-                    $this->error = "Prueba otra vez";
+                    $this->error = "Prueba otra vez.";
                 }
             } else {
-                $this->error = 'Error: El usuario ' . $nick . ' no existe';
+                $this->error = 'Error: El usuario ' . $nick . ' no existe.';
             }
         }
         $this->irABiblioteca();
@@ -975,7 +975,7 @@ class Controlador
                 $this->error = "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
             }
         } else {
-            $this->error = "Revisa la información";
+            $this->error = "Revisa la información.";
         }
         $this->irAlPerfil();
     }
@@ -1010,7 +1010,7 @@ class Controlador
 
                 // Añadir juego a la base de datos
                 $baseDatos->agregarJuego($titulo, $desarrollador, $lanzamiento, $generos, $sistemas, $ruta, $descripcion, $portada, $precio);
-                $this->error = 'Juego añadido correctamente';
+                $this->error = 'Juego añadido correctamente.';
             } else {
                 $this->error = 'Datos incompletos.';
             }
@@ -1051,7 +1051,7 @@ class Controlador
 
                 // Editar juego en la base de datos
                 $baseDatos->editarJuego($idJuego, $desarrollador, $distribuidor, $lanzamiento, $portada, $descripcion, $precio);
-                $this->error = 'Juego editado correctamente';
+                $this->error = 'Juego editado correctamente.';
             } else {
                 $this->error = 'Datos incompletos.';
             }
@@ -1354,10 +1354,10 @@ class Controlador
                                         $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
                                         $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
                                     } else {
-                                        $this->error .= "<br>$titulo ya ha existe en la biblioteca del usuario.<br>";
+                                        $this->error .= "<br>$titulo ya ha existe en la biblioteca.<br>";
                                     }
                                 } else {
-                                    $this->error = "No te puedes regalar a ti mismo";
+                                    $this->error = "No te puedes auto-regalar.";
                                 }
                             }
                         }
@@ -1370,13 +1370,13 @@ class Controlador
                             unset($_SESSION['carrito']);
                             $this->error = "Pago realizado con éxito";
                         } else {
-                            $this->error .= "<br>$titulo ya ha los tienes. Eliminalo del carrito o tramitalo como regalo.<br>";
+                            $this->error .= "<br>$titulo ya ha lo tienes. Eliminalo del carrito o tramitalo como regalo.<br>";
                         }
                     }
                 }
             }
         } else {
-            $this->error = "No hay nada que pagar";
+            $this->error = "No hay nada que pagar.";
         }
 
         // Redirigir o mostrar el carrito
@@ -1423,7 +1423,7 @@ class Controlador
 
             // Verificar si se ha cargado correctamente
             if ($xml === false) {
-                $this->error = "No existen datos en el archivo";
+                $this->error = "No existen datos en el archivo.";
             } else {
 
                 // Mostrar el contenido del XML 
@@ -1588,7 +1588,7 @@ class Controlador
             $this->data = $baseDatos->filtrarJuegos($genero, $sistema, $fecha);
         } else {
             $this->data = []; // Evita errores si la vista espera este array
-            $this->error = "No se ha podido filtrar";
+            $this->error = "No se ha podido filtrar.";
         }
 
         Vista::MuestraCatalogo($this->data, $this->data1, $this->data2, $this->data3, $this->data4, $this->error);
