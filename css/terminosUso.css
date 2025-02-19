@@ -32,9 +32,35 @@ a:hover {
     color: var(--color-celeste);
 }
 
+ul {
+    list-style-type: none; 
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    font-size: 1em; 
+    line-height: 1.6; 
+    margin-bottom: 15px; 
+    color: var(--color-texto); 
+}
+
+ul li strong {
+    color: var(--color-rosa); 
+    font-weight: bold;
+}
+
+
+ul li:hover {
+    background-color: var(--color-celeste); 
+    color: white;
+    border-radius: 5px; 
+    transition: all 0.3s ease; 
+}
+
 .container {
     margin-top: 20vh;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
     background-color: var(--color-texto-claro);
@@ -42,12 +68,7 @@ a:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.footer {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 0.9em;
-    color: var(--color-violeta);
-}
+
 
 /* Media Queries para responsividad */
 @media (max-width: 768px) {
@@ -88,7 +109,6 @@ a:hover {
 
     .container {
         padding: 10px;
-        /* Padding reducido */
     }
 
     .footer {

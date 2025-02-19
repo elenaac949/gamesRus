@@ -995,7 +995,6 @@ class Controlador
      */
     public function anadirNuevoJuego()
     {
-        var_dump($_POST);
         global $baseDatos;
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
