@@ -20,7 +20,7 @@ include __DIR__ . '/../common/controlSesion.php';
 
     <main>
 
-        <img src="/gamesRus/img/error.webp" alt="Imagen de dificultades tecnicas.">
+        <img src="/gamesRus/img/error.webp" alt="Dificultades técnicas. Perrito de los Simpsons desenchufando un cable.">
 
         <form action="" method="post">
             <input type="submit" name="btn_volver" value="Volver a la Biblioteca">

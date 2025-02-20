@@ -24,7 +24,7 @@ include __DIR__ . '/../common/controlSesion.php';
             <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
                 <?php foreach ($_SESSION['carrito'] as $idJuego => $juego): ?>
                     <div class="juego">
-                        <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo $juego['titulo']; ?>">
+                        <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo "Portada de :".$juego['titulo']; ?>">
                         <div class="titulo_botones">
                             <p><?php echo $juego['titulo']; ?></p>
                             <p><?php echo $juego['precio'] . " €"; ?></p>
