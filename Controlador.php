@@ -128,10 +128,10 @@ class Controlador
             'mobyGames' => 'mobyGames',
             'btn_subir_archivo' => 'subirArchivos',
             'btn_filtrar_juegos' => 'filtrar',
-            'btn_volver'=>'irABiblioteca',
-            'btn_sobreNosotros'=>'irSobreNosotros',
-            'btn_terminos_condiciones'=>'irTerminosCondiciones',
-            'btn_politica_cookies'=>'irCookies'
+            'btn_volver' => 'irABiblioteca',
+            'btn_sobreNosotros' => 'irSobreNosotros',
+            'btn_terminos_condiciones' => 'irTerminosCondiciones',
+            'btn_politica_cookies' => 'irCookies'
         ];
 
         $this->procesarAcciones($_POST, $accionesPost);
@@ -161,7 +161,7 @@ class Controlador
             }
         }
 
-        $this->error="Se ha producido un error.";
+        $this->error = "Se ha producido un error.";
         Vista::MuestraPaginaError($this->data, $this->error);
     }
 
@@ -206,7 +206,7 @@ class Controlador
         $this->procesarAcciones($_GET, $accionesGet);
     }
 
-   
+
 
     /**
      * Redirige a la página de registro.
@@ -734,7 +734,7 @@ class Controlador
                     // Regalar el juego y actualizar la base de datos.
                     $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
                     $baseDatos->actualizarJuegosPrestadosRegalados($idJuego, $idUsuarioRegala, $idUsuarioRecibe);
-                    $this->data1 = 'Regalo para ' . $nick.'.';
+                    $this->data1 = 'Regalo para ' . $nick . '.';
                 } else {
                     $this->error = "Prueba otra vez.";
                 }
@@ -1244,7 +1244,7 @@ class Controlador
                 $fechaValida = $cliente->esFechaCaducidadValida($diaCad, $mesCad, $anioCad);
                 if (!$fechaValida) {
                     /* $this->error = "La fecha de caducidad es inválida."; */
-                    $this->error = var_dump($diaCad,$mesCad,$anioCad);
+                    $this->error = var_dump($diaCad, $mesCad, $anioCad);
 
                     $this->irAlPago();
                     return;
@@ -1252,23 +1252,6 @@ class Controlador
             } catch (SoapFault $e) {
                 $this->error = "<p>Error en la validación de la tarjeta: " . $e->getMessage() . "</p>";
             }
-
-            // Recoger los juegos regalados (si existen) y los usuarios destinatarios
-            if (isset($_POST['juegosRegalados']) && is_array($_POST['juegosRegalados'])) {
-                $juegosRegalados = $_POST['juegosRegalados'];
-            } else {
-                $juegosRegalados = []; // Inicializar array vacío si no hay juegos regalados
-            }
-
-            if (isset($_POST['usuariosRegalados']) && is_array($_POST['usuariosRegalados'])) {
-                $usuariosRegalados = $_POST['usuariosRegalados'];
-            } else {
-                $usuariosRegalados = []; // Inicializar array vacío si no hay usuarios destinatarios
-            }
-
-            // Guardar la información en la sesión
-            $_SESSION['juegosRegalados'] = $juegosRegalados;
-            $_SESSION['usuariosRegalados'] = $usuariosRegalados;
 
             // Proceder con el pago
             $this->pagarCompra();
@@ -1292,9 +1275,27 @@ class Controlador
     public function irAlPago()
     {
         $idUsuario = $_SESSION['idUsuario'];
-        if (isset($_SESSION['carrito']) && sizeof($_SESSION['carrito'])!=0) {
+        if (isset($_SESSION['carrito']) && sizeof($_SESSION['carrito']) != 0) {
             global $baseDatos;
             $this->data = $baseDatos->mostrarTarjetas($idUsuario);
+
+            // Recoger los juegos regalados (si existen) y los usuarios destinatarios
+            if (isset($_POST['juegosRegalados']) && is_array($_POST['juegosRegalados'])) {
+                $juegosRegalados = $_POST['juegosRegalados'];
+            } else {
+                $juegosRegalados = []; // Inicializar array vacío si no hay juegos regalados
+            }
+
+            if (isset($_POST['usuariosRegalados']) && is_array($_POST['usuariosRegalados'])) {
+                $usuariosRegalados = $_POST['usuariosRegalados'];
+            } else {
+                $usuariosRegalados = []; // Inicializar array vacío si no hay usuarios destinatarios
+            }
+
+            // Guardar la información en la sesión
+            $_SESSION['juegosRegalados'] = $juegosRegalados;
+            $_SESSION['usuariosRegalados'] = $usuariosRegalados;
+
             Vista::MuestraPago($this->data, $this->error);
         } else {
             $this->error = "No tienes nada en el carrito.";
@@ -1354,6 +1355,10 @@ class Controlador
                                         //$baseDatos->comprarJuego($idUsuarioRecibe, $idJuego);
                                         $baseDatos->agnadirRegalo($idUsuarioRegala, $idUsuarioRecibe, $idJuego);
                                         $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
+                                        unset($_SESSION['carrito']);
+                                        unset($_SESSION['juegosRegalados']);
+                                        unset($_SESSION['usuariosRegalados']);
+                                        $this->error = "Pago realizado con éxito";
                                     } else {
                                         $this->error .= "<br>$titulo ya ha existe en la biblioteca.<br>";
                                     }
@@ -1369,6 +1374,9 @@ class Controlador
                             $baseDatos->eliminarTodosLosJuegosCarrito($idCarrito);
                             // Limpiar el carrito de la sesión
                             unset($_SESSION['carrito']);
+                            unset($_SESSION['juegosRegalados']);
+                            unset($_SESSION['usuariosRegalados']);
+
                             $this->error = "Pago realizado con éxito";
                         } else {
                             $this->error .= "<br>$titulo ya ha lo tienes. Eliminalo del carrito o tramitalo como regalo.<br>";
@@ -1644,18 +1652,20 @@ class Controlador
     }*/
 
 
-    public function irSobreNosotros(){
+    public function irSobreNosotros()
+    {
         Vista::MuestraSobreNosotras();
     }
 
-    public function irTerminosCondiciones(){
+    public function irTerminosCondiciones()
+    {
         Vista::MuestraTerminosCondiciones();
     }
 
-    public function irCookies(){
+    public function irCookies()
+    {
         Vista::MuestraCookies();
     }
-
 }
 
 

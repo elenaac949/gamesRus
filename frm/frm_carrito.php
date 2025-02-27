@@ -19,7 +19,7 @@ include __DIR__ . '/../common/controlSesion.php';
     <p class="errores"><?= $error ?></p>
     <h2>Carrito</h2>
     <main>
-        <?php /*var_dump($data);*/ ?>
+        <?php /* var_dump($_SESSION); */?>
         <section class="juegos_carrito">
             <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
                 <?php foreach ($_SESSION['carrito'] as $idJuego => $juego): ?>
@@ -170,6 +170,7 @@ include __DIR__ . '/../common/controlSesion.php';
             nombreUsuario.value = '';
             dialogo.close();
         });
+
     </script>
 </body>
 
