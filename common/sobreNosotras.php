@@ -15,7 +15,7 @@
 
     <main class="container">
         <h1>Sobre Nosotros</h1>
-        <img src="/gamesRus/img/shakira.jpeg" alt="Shakira con ordenador." class="imagen-equipo">
+        <img src="/gamesRus/img/shakira.jpeg" alt="Iagen de Shakira con ordenador." class="imagen-equipo">
     </main>
 
     <?php include './common/footer.php'; ?>

@@ -19,12 +19,12 @@ include __DIR__ . '/../common/controlSesion.php';
     <p class="errores"><?= $error ?></p>
     <h2>Carrito</h2>
     <main>
-        <?php /*var_dump($data);*/ ?>
+        <?php /* var_dump($_SESSION); */?>
         <section class="juegos_carrito">
             <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
                 <?php foreach ($_SESSION['carrito'] as $idJuego => $juego): ?>
                     <div class="juego">
-                        <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo $juego['titulo']; ?>">
+                        <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo "Portada de :".$juego['titulo']; ?>">
                         <div class="titulo_botones">
                             <p><?php echo $juego['titulo']; ?></p>
                             <p><?php echo $juego['precio'] . " €"; ?></p>
@@ -170,6 +170,7 @@ include __DIR__ . '/../common/controlSesion.php';
             nombreUsuario.value = '';
             dialogo.close();
         });
+
     </script>
 </body>
 

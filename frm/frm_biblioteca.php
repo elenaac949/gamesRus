@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php foreach ($data as $juego): ?>
                 <div class="juego">
                     <div class="imagen_juego">
-                        <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo $juego['titulo']; ?>">
+                        <img src="<?php echo $juego['portada'] ?? 'https://placehold.co/200x100' ?>" alt="<?php echo "Portada de: ".$juego['titulo']; ?>">
                     </div>
                     <div class="nombre_juego">
                         <p><?php echo $juego['titulo']; ?></p>
